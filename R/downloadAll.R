@@ -30,21 +30,20 @@ dataFolder <- "./rawdata/"
 # newMAEO function
 newMAEO <- function(datasets, rundate, analyzedate, datadir) {
   # dd <- paste(getwd(), "/data", sep = "")
-  dd <- datadir
-  if(!dir.exists(dd)){
-    dir.create(dd)
+  if(!dir.exists(datadir)){
+    dir.create(datadir)
   }
-  for(i in ds) {
+  for(i in datasets) {
     cn <- tolower(i)
-    fp <- file.path(dd, paste0(cn, ".Rda"))
+    fp <- file.path(datadir, paste0(cn, ".Rda"))
     if(file.exists(fp)) {
       load(fp)
     } else {
-      co <- getFirehoseData(i, runDate = rd, gistic2_Date = ad, RNAseq_Gene = TRUE, Clinic = TRUE,
-                            miRNASeq_Gene = TRUE, RNAseq2_Gene_Norm = TRUE, CNA_SNP = TRUE,
-                            CNV_SNP = TRUE, CNA_Seq = TRUE, CNA_CGH = TRUE, Methylation = TRUE,
-                            Mutation = TRUE, mRNA_Array = TRUE, miRNA_Array = TRUE, RPPA = TRUE,
-                            RNAseqNorm = TRUE, RNAseq2Norm = TRUE, forceDownload = FALSE,
+      co <- getFirehoseData(i, runDate = rundate, gistic2_Date = analyzedate, RNAseq_Gene = TRUE,
+                            Clinic = TRUE, miRNASeq_Gene = TRUE, RNAseq2_Gene_Norm = TRUE,
+                            CNA_SNP = TRUE, CNV_SNP = TRUE, CNA_Seq = TRUE, CNA_CGH = TRUE,
+                            Methylation = TRUE, Mutation = TRUE, mRNA_Array = TRUE, miRNA_Array = TRUE,
+                            RPPA = TRUE, RNAseqNorm = TRUE, RNAseq2Norm = TRUE, forceDownload = FALSE,
                             destdir = datadir, fileSizeLimit = 500000, getUUIDs = FALSE)
       save(co, file = fp)
     }
