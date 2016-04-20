@@ -1,0 +1,84 @@
+# Author: Lucas Schiffer
+# install devtools
+install.packages("devtools", repos = "http://cran.r-project.org")
+
+# install bioconductor
+source("https://bioconductor.org/biocLite.R")
+biocLite()
+
+# install MultiAssayExperiment
+BiocInstaller::biocLite("schifferl/MultiAssayExperiment")
+library(MultiAssayExperiment)
+
+# install RTCGAToolbox
+BiocInstaller::biocLite("schifferl/RTCGAToolbox")
+library(RTCGAToolbox)
+
+# install TCGAmisc
+BiocInstaller::biocLite("waldronlab/TCGAmisc")
+library(TCGAmisc)
+
+# newMAEO variables
+ds <- getFirehoseDatasets()[c(1:5, 7:9, 12:14, 16:31, 33:38)]
+rd <- getFirehoseRunningDates()[1]
+ad <- getFirehoseAnalyzeDates()[1]
+
+badDatasets <- c("COADREAD", "GBMLGG", "KIPAN", "STES", "FPPP")
+goodDatasets <- getFirehoseDatasets()[!(getFirehoseDatasets() %in% badDatasets)]
+dataFolder <- "./rawdata/"
+
+# newMAEO function
+newMAEO <- function(ds, rd, ad, datadir) {
+  # dd <- paste(getwd(), "/data", sep = "")
+  setwd(datadir)
+  dd <- datadir
+  if(!dir.exists(dd)){
+    dir.create(dd)
+  }
+  for(i in ds) {
+    cn <- tolower(i)
+    fp <- file.path(dd, paste0(cn, ".Rda"))
+    if(file.exists(fp)) {
+      load(fp)
+    } else {
+      co <- getFirehoseData(i, runDate = rd, gistic2_Date = ad, RNAseq_Gene = TRUE, Clinic = TRUE,
+                            miRNASeq_Gene = TRUE, RNAseq2_Gene_Norm = TRUE, CNA_SNP = TRUE,
+                            CNV_SNP = TRUE, CNA_Seq = TRUE, CNA_CGH = TRUE, Methylation = TRUE,
+                            Mutation = TRUE, mRNA_Array = TRUE, miRNA_Array = TRUE, RPPA = TRUE,
+                            RNAseqNorm = TRUE, RNAseq2Norm = TRUE, forceDownload = FALSE,
+                            destdir = datadir, fileSizeLimit = 500000, getUUIDs = FALSE)
+      save(co, file = fp)
+    }
+    # pd <- DataFrame(extract(co, NULL, clinical = TRUE))
+    pd <- co@Clinical
+    rownames(pd) <- TCGAmisc::barcode(rownames(pd))
+    el <- list()
+    nl <- list()
+    for(i in slotNames(co)[5:17]) {
+      push2el <- TRUE
+      tryCatch({
+        assign(i, TCGAmisc::extract(co, i))
+      }, error = function(e) {
+        push2el <<- FALSE
+      }, finally = {
+        if(push2el == TRUE){
+          nl <- c(nl, i)
+          el <- c(el, get(i))
+        }
+      })
+    }
+    names(el) <- nl
+    # pd <- TCGAmisc::matchClinical(el, pd)
+    nel <- Elist(el)
+    cel <- TCGAmisc::cleanExpList(nel, pd)
+    map <- TCGAmisc::generateTCGAmap(cel, pd)
+    MAEOname <- paste(cn, "MAEO", sep = "")
+    assign(paste(cn, "MAEO", sep = ""), MultiAssayExperiment(Elist = cel, pData = pd, sampleMap = map),
+           envir = .GlobalEnv)
+    # cat(get(MAEOname), file=file.path(datadir, "MAEOlist.txt"), sep="\n")
+    # save(list = MAEOname, file = file.path(datadir, paste0(cn, "MAEO.Rda")))
+  }
+}
+
+# call newMAEO
+newMAEO(goodDatasets, rd, ad, dataFolder)

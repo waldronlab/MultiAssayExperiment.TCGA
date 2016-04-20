@@ -13,3 +13,7 @@ coad <- getFirehoseData("COAD", runDate = rD, gistic2_Date = gD, destdir = "./ra
                         CNA_CGH = TRUE, Methylation = TRUE, Mutation = TRUE,
                         mRNA_Array = TRUE, miRNA_Array = TRUE, RPPA = TRUE,
                         fileSizeLimit = 50000)
+
+clinical_coad <- extract(coad, "none", clinical = TRUE)
+
+targets <- slotNames(prad)[c(5:7, 13,14)]
