@@ -28,9 +28,8 @@ goodDatasets <- getFirehoseDatasets()[!(getFirehoseDatasets() %in% badDatasets)]
 dataFolder <- "./rawdata/"
 
 # newMAEO function
-newMAEO <- function(ds, rd, ad, datadir) {
+newMAEO <- function(datasets, rundate, analyzedate, datadir) {
   # dd <- paste(getwd(), "/data", sep = "")
-  setwd(datadir)
   dd <- datadir
   if(!dir.exists(dd)){
     dir.create(dd)
