@@ -5,3 +5,4 @@
 .Ruserdata
 *.txt
 rawdata/*
+*.tar.gz
