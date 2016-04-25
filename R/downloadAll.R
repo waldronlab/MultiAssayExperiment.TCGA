@@ -23,7 +23,7 @@ ds <- getFirehoseDatasets()[c(1:5, 7:9, 12:14, 16:31, 33:38)]
 rd <- getFirehoseRunningDates()[1]
 ad <- getFirehoseAnalyzeDates()[1]
 
-badDatasets <- c("COADREAD", "GBMLGG", "KIPAN", "STES", "FPPP")
+badDatasets <- c("COADREAD", "GBMLGG", "KIPAN", "STES", "FPPP", "CNTL")
 goodDatasets <- getFirehoseDatasets()[!(getFirehoseDatasets() %in% badDatasets)]
 dataFolder <- "./rawdata/"
 
