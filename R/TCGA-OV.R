@@ -15,7 +15,7 @@ ovca <- getFirehoseData("OV", runDate = rD, destdir = "./rawdata",
                         CNV_SNP=TRUE,
                         CNA_Seq = TRUE,
                         CNA_CGH = TRUE,
-                        # Methylation = TRUE, # Not working with extract
+                        Methylation = TRUE,
                         Mutation = TRUE,
                         mRNA_Array = TRUE,
                         miRNA_Array = TRUE,
