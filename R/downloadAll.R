@@ -52,7 +52,8 @@ newMAEO <- function(datasets, rundate, analyzedate, datadir) {
     rownames(pd) <- TCGAmisc::barcode(rownames(pd))
     el <- list()
     nl <- list()
-    for(i in slotNames(co)[5:17]) {
+    targets <- c(slotNames(co)[c(5:16)], "gistica", "gistict")
+    for(i in targets) {
       push2el <- TRUE
       tryCatch({
         assign(i, TCGAmisc::extract(co, i))
