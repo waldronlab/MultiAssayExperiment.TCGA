@@ -1,5 +1,6 @@
 library(MultiAssayExperiment)
 library(RTCGAToolbox)
+library(TCGAmisc)
 
 rD <- getFirehoseRunningDates(last = 1)
 ## run date: 20151101
@@ -13,20 +14,31 @@ ovca <- getFirehoseData("OV", runDate = rD, destdir = "./rawdata",
                         RNAseq2_Gene_Norm=TRUE,
                         CNA_SNP = TRUE,
                         CNV_SNP=TRUE,
-                        CNA_Seq = TRUE,
+                        CNA_Seq = TRUE, # not available from RTCGAToolbox
                         CNA_CGH = TRUE,
                         Methylation = TRUE,
                         Mutation = TRUE,
                         mRNA_Array = TRUE,
                         miRNA_Array = TRUE,
-                        RPPA = TRUE,
+                        RPPA_Array = TRUE,
                         fileSizeLimit = 50000,
                         RNAseqNorm = "raw_counts",
                         RNAseq2Norm = "normalized_count")
 
 clinical_ovca <- ovca@Clinical
 rownames(clinical_ovca) <- gsub("\\.", "-", rownames(clinical_ovca))
+clinical_ovca <- readr::type_convert(clinical_ovca)
 
 targets <- c(slotNames(ovca)[c(5:16)], "gistica", "gistict")
 
-dataList <- lapply(targets, function(x) {TCGAmisc::extract(ovca, x)})
+dataList <- lapply(targets, function(x) {try(TCGAmisc::extract(ovca, x))})
+names(dataList) <- targets
+
+dataFull <- Filter(function(x){class(x)!="try-error"}, dataList)
+ExpList <- Elist(dataFull)
+NewElist <- cleanExpList(ExpList, clinical_ovca)
+NewMap <- generateTCGAmap(NewElist, clinical_ovca)
+
+ovMAEO <- MultiAssayExperiment(NewElist, clinical_ovca, NewMap)
+saveRDS(ovMAEO, file = "./rawdata/ovMAEO.rds", compress = "bzip2")
+## ovMAEO <- readRDS("./rawdata/ovMAEO.rds")
