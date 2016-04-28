@@ -7,6 +7,7 @@ rD <- getFirehoseRunningDates(last = 1)
 gD <- getFirehoseAnalyzeDates(last = 1)
 ## gistic date: 20150821
 
+## about 578 patients in the data (affymetrix)
 ovca <- getFirehoseData("OV", runDate = rD, destdir = "./rawdata",
                         gistic2_Date = gD,
                         RNAseq_Gene=TRUE,
@@ -24,6 +25,8 @@ ovca <- getFirehoseData("OV", runDate = rD, destdir = "./rawdata",
                         fileSizeLimit = 50000,
                         RNAseqNorm = "raw_counts",
                         RNAseq2Norm = "normalized_count")
+
+# save(ovca, file = "rawdata/ovca.Rda")
 
 clinical_ovca <- ovca@Clinical
 rownames(clinical_ovca) <- gsub("\\.", "-", rownames(clinical_ovca))
