@@ -1,6 +1,6 @@
 library(MultiAssayExperiment)
 library(RTCGAToolbox)
-library(TCGAmisc)
+library(BiocInterfaces)
 
 rD <- getFirehoseRunningDates(last = 1)
 ## run date: 20151101
@@ -31,13 +31,13 @@ clinical_coad <- readr::type_convert(clinical_coad)
 
 targets <- c(slotNames(coad)[c(5:16)], "gistica", "gistict")
 
-dataList <- lapply(targets, function(x) {try(TCGAmisc::extract(coad, x))})
+dataList <- lapply(targets, function(x) {try(BiocInterfaces::TCGAextract(coad, x))})
 names(dataList) <- targets
 
 dataFull <- Filter(function(x){class(x)!="try-error"}, dataList)
 ExpList <- Elist(dataFull)
-NewElist <- cleanExpList(ExpList, clinical_coad)
-NewMap <- generateTCGAmap(NewElist, clinical_coad)
+NewElist <- TCGAcleanExpList(ExpList, clinical_coad)
+NewMap <- TCGAgenerateMap(NewElist, clinical_coad)
 
 coadMAEO <- MultiAssayExperiment(NewElist, clinical_coad, NewMap)
 saveRDS(coadMAEO, file = "./rawdata/coadMAEO.rds", compress = "bzip2")

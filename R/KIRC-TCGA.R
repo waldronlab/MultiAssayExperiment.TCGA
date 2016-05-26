@@ -1,6 +1,6 @@
 library(MultiAssayExperiment)
 library(RTCGAToolbox)
-library(TCGAmisc)
+library(BiocInterfaces)
 
 rD <- getFirehoseRunningDates(last = 1)
 ## run date: 20151101
@@ -31,13 +31,13 @@ clinical_kirc <- readr::type_convert(clinical_kirc)
 
 targets <- c(slotNames(kirc)[c(5:16)], "gistica", "gistict")
 
-dataList <- lapply(targets, function(x) {try(TCGAmisc::extract(kirc, x))})
+dataList <- lapply(targets, function(x) {try(BiocInterfaces::TCGAextract(kirc, x))})
 names(dataList) <- targets
 
 dataFull <- Filter(function(x){class(x)!="try-error"}, dataList)
 ExpList <- Elist(dataFull)
-NewElist <- cleanExpList(ExpList, clinical_kirc)
-NewMap <- generateTCGAmap(NewElist, clinical_kirc)
+NewElist <- TCGAcleanExpList(ExpList, clinical_kirc)
+NewMap <- TCGAgenerateMap(NewElist, clinical_kirc)
 
 kircMAEO <- MultiAssayExperiment(NewElist, clinical_kirc, NewMap)
 saveRDS(kircMAEO, file = "./rawdata/kircMAEO.rds", compress = "bzip2")

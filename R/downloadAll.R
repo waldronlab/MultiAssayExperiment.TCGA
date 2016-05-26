@@ -14,17 +14,17 @@ library(MultiAssayExperiment)
 BiocInstaller::biocLite("schifferl/RTCGAToolbox")
 library(RTCGAToolbox)
 
-# install TCGAmisc
-BiocInstaller::biocLite("waldronlab/TCGAmisc")
-library(TCGAmisc)
+# install BiocInterfaces
+BiocInstaller::biocLite("waldronlab/BiocInterfaces")
+library(BiocInterfaces)
 
 # newMAEO variables
 ds <- getFirehoseDatasets()[c(1:5, 7:9, 12:14, 16:31, 33:38)]
 rd <- getFirehoseRunningDates()[1]
 ad <- getFirehoseAnalyzeDates()[1]
 
-badDatasets <- c("COADREAD", "GBMLGG", "KIPAN", "STES", "FPPP", "CNTL")
-goodDatasets <- getFirehoseDatasets()[!(getFirehoseDatasets() %in% badDatasets)]
+mergedDatasets <- c("COADREAD", "GBMLGG", "KIPAN", "STES", "FPPP", "CNTL")
+availDatasets <- getFirehoseDatasets()[!(getFirehoseDatasets() %in% mergedDatasets)]
 dataFolder <- "./rawdata/"
 
 # newMAEO function
@@ -47,16 +47,16 @@ newMAEO <- function(datasets, rundate, analyzedate, datadir) {
                             destdir = datadir, fileSizeLimit = 500000, getUUIDs = FALSE)
       save(co, file = fp)
     }
-    # pd <- DataFrame(extract(co, NULL, clinical = TRUE))
+    # pd <- DataFrame(TCGAextract(co, NULL, clinical = TRUE))
     pd <- co@Clinical
-    rownames(pd) <- TCGAmisc::barcode(rownames(pd))
+    rownames(pd) <- BiocInterfaces::TCGAbarcode(rownames(pd))
     el <- list()
     nl <- list()
     targets <- c(slotNames(co)[c(5:16)], "gistica", "gistict")
     for(i in targets) {
       push2el <- TRUE
       tryCatch({
-        assign(i, TCGAmisc::extract(co, i))
+        assign(i, BiocInterfaces::TCGAextract(co, i))
       }, error = function(e) {
         push2el <<- FALSE
       }, finally = {
@@ -67,10 +67,10 @@ newMAEO <- function(datasets, rundate, analyzedate, datadir) {
       })
     }
     names(el) <- nl
-    # pd <- TCGAmisc::matchClinical(el, pd)
+    # pd <- BiocInterfaces::TCGAmatchClinical(el, pd)
     nel <- Elist(el)
-    cel <- TCGAmisc::cleanExpList(nel, pd)
-    map <- TCGAmisc::generateTCGAmap(cel, pd)
+    cel <- BiocInterfaces::TCGAcleanExpList(nel, pd)
+    map <- BiocInterfaces::TCGAgenerateMap(cel, pd)
     MAEOname <- paste(cn, "MAEO", sep = "")
     assign(paste(cn, "MAEO", sep = ""), MultiAssayExperiment(Elist = cel, pData = pd, sampleMap = map),
            envir = .GlobalEnv)
@@ -80,4 +80,4 @@ newMAEO <- function(datasets, rundate, analyzedate, datadir) {
 }
 
 # call newMAEO
-newMAEO(goodDatasets, rd, ad, dataFolder)
+newMAEO(availDatasets, rd, ad, dataFolder)
