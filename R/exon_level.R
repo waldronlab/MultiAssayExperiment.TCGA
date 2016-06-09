@@ -18,6 +18,6 @@ lapply(availDatasets, function(disease) {
 
 diseaseFolders <- dir(file.path(dataFolder), full.names = TRUE)
 downloadedDx <- basename(diseaseFolders)
+names(diseaseFolders) <- downloadedDx
 
 TCGAexons <- lapply(diseaseFolders, TCGAexonToGRangesList)
-names(TCGAexons) <- downloadedDx

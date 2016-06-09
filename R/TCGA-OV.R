@@ -1,6 +1,7 @@
 library(MultiAssayExperiment)
 library(RTCGAToolbox)
 library(BiocInterfaces)
+library(readr)
 
 rD <- getFirehoseRunningDates(last = 1)
 ## run date: 20151101
@@ -30,11 +31,11 @@ ovca <- getFirehoseData("OV", runDate = rD, destdir = "./rawdata",
 
 clinical_ovca <- ovca@Clinical
 rownames(clinical_ovca) <- gsub("\\.", "-", rownames(clinical_ovca))
-clinical_ovca <- readr::type_convert(clinical_ovca)
+clinical_ovca <- type_convert(clinical_ovca)
 
 targets <- c(slotNames(ovca)[c(5:16)], "gistica", "gistict")
 
-dataList <- lapply(targets, function(x) {try(BiocInterfaces::TCGAextract(ovca, x))})
+dataList <- lapply(targets, function(x) {try(TCGAextract(ovca, x))})
 names(dataList) <- targets
 
 dataFull <- Filter(function(x){class(x)!="try-error"}, dataList)

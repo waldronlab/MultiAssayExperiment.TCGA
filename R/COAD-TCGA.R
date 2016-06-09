@@ -1,6 +1,7 @@
 library(MultiAssayExperiment)
 library(RTCGAToolbox)
 library(BiocInterfaces)
+library(readr)
 
 rD <- getFirehoseRunningDates(last = 1)
 ## run date: 20151101
@@ -27,11 +28,11 @@ coad <- getFirehoseData("COAD", runDate = rD, destdir = "./rawdata",
 
 clinical_coad <- coad@Clinical
 rownames(clinical_coad) <- gsub("\\.", "-", rownames(clinical_coad))
-clinical_coad <- readr::type_convert(clinical_coad)
+clinical_coad <- type_convert(clinical_coad)
 
 targets <- c(slotNames(coad)[c(5:16)], "gistica", "gistict")
 
-dataList <- lapply(targets, function(x) {try(BiocInterfaces::TCGAextract(coad, x))})
+dataList <- lapply(targets, function(x) {try(TCGAextract(coad, x))})
 names(dataList) <- targets
 
 dataFull <- Filter(function(x){class(x)!="try-error"}, dataList)
