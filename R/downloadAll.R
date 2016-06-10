@@ -57,7 +57,7 @@ newMAEO <- function(ds, rd, ad, dd) {
     dataFull <- Filter(function(x){class(x)!="try-error"}, dataList)
     ExpList <- Elist(dataFull)
     NewElist <- TCGAcleanExpList(ExpList, pd)
-    NewMap <- TCGAgenerateMap(NewElist, pd)
+    NewMap <- generateMap(NewElist, pd)
     MAEO <- MultiAssayExperiment(NewElist, pd, NewMap)
     saveRDS(MAEO, file = file.path("./data", paste0(cn, "MAEO.rds"), compress = "bzip2"))
     
