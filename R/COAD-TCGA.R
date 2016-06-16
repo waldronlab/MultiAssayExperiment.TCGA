@@ -38,7 +38,7 @@ names(dataList) <- targets
 dataFull <- Filter(function(x){class(x)!="try-error"}, dataList)
 ExpList <- Elist(dataFull)
 NewElist <- TCGAcleanExpList(ExpList, clinical_coad)
-NewMap <- TCGAgenerateMap(NewElist, clinical_coad)
+NewMap <- generateMap(NewElist, clinical_coad, TCGAbarcode)
 
 coadMAEO <- MultiAssayExperiment(NewElist, clinical_coad, NewMap)
 saveRDS(coadMAEO, file = "./rawdata/coadMAEO.rds", compress = "bzip2")

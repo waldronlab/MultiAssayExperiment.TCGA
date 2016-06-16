@@ -41,7 +41,7 @@ names(dataList) <- targets
 dataFull <- Filter(function(x){class(x)!="try-error"}, dataList)
 ExpList <- Elist(dataFull)
 NewElist <- TCGAcleanExpList(ExpList, clinical_ovca)
-NewMap <- TCGAgenerateMap(NewElist, clinical_ovca)
+NewMap <- generateMap(NewElist, clinical_ovca, TCGAbarcode)
 
 ovMAEO <- MultiAssayExperiment(NewElist, clinical_ovca, NewMap)
 saveRDS(ovMAEO, file = "./rawdata/ovMAEO.rds", compress = "bzip2")

@@ -1,8 +1,0 @@
-install.packages("devtools", repos = "http://cran.r-project.org")
-source("https://bioconductor.org/biocLite.R")
-biocLite()
-BiocInstaller::useDevel()
-BiocInstaller::biocLite("vjcitn/MultiAssayExperiment")
-BiocInstaller::biocLite("LiNk-NY/RTCGAToolbox")
-BiocInstaller::biocLite("waldronlab/BiocInterfaces")
-install.packages("readr", repos = "http://cran.r-project.org")
