@@ -30,19 +30,19 @@ ovca <- getFirehoseData("OV", runDate = rD, destdir = "./rawdata",
 # save(ovca, file = "rawdata/ovca.Rda")
 
 clinical_ovca <- ovca@Clinical
-rownames(clinical_ovca) <- gsub("\\.", "-", rownames(clinical_ovca))
-clinical_ovca <- type_convert(clinical_ovca)
+rownames(clinical_ovca) <- toupper(gsub("\\.", "-", rownames(clinical_ovca)))
+clinical_ovca <- readr::type_convert(clinical_ovca)
 
 targets <- c(slotNames(ovca)[c(5:16)], "gistica", "gistict")
+names(targets) <- targets
 
 dataList <- lapply(targets, function(x) {try(TCGAextract(ovca, x))})
-names(dataList) <- targets
 
 dataFull <- Filter(function(x){class(x)!="try-error"}, dataList)
 ExpList <- Elist(dataFull)
 NewElist <- TCGAcleanExpList(ExpList, clinical_ovca)
-NewMap <- TCGAgenerateMap(NewElist, clinical_ovca)
+NewMap <- generateMap(NewElist, clinical_ovca, TCGAbarcode)
 
 ovMAEO <- MultiAssayExperiment(NewElist, clinical_ovca, NewMap)
-saveRDS(ovMAEO, file = "./rawdata/ovMAEO.rds", compress = "bzip2")
+saveRDS(ovMAEO, file = "./rawdata/ovMAEO2.rds", compress = "bzip2")
 ## ovMAEO <- readRDS("./rawdata/ovMAEO.rds")
