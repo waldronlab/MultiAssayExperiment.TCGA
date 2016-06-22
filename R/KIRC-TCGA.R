@@ -37,7 +37,7 @@ names(dataList) <- targets
 dataFull <- Filter(function(x){class(x)!="try-error"}, dataList)
 ExpList <- Elist(dataFull)
 NewElist <- TCGAcleanExpList(ExpList, clinical_kirc)
-NewMap <- TCGAgenerateMap(NewElist, clinical_kirc)
+NewMap <- generateMap(NewElist, clinical_kirc, TCGAbarcode)
 
 kircMAEO <- MultiAssayExperiment(NewElist, clinical_kirc, NewMap)
 saveRDS(kircMAEO, file = "./rawdata/kircMAEO.rds", compress = "bzip2")
