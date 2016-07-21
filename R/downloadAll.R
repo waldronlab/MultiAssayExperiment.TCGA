@@ -55,7 +55,7 @@ newMAEO <- function(ds, rd, ad, dd) {
     names(targets) <- targets
     dataList <- lapply(targets, function(x) {try(TCGAextract(co, x))})
     dataFull <- Filter(function(x){class(x)!="try-error"}, dataList)
-    ExpList <- Elist(dataFull)
+    ExpList <- ExperimentList(dataFull)
     NewElist <- TCGAcleanExpList(ExpList, pd)
     NewMap <- generateMap(NewElist, pd, TCGAbarcode)
     MAEO <- MultiAssayExperiment(NewElist, pd, NewMap)
