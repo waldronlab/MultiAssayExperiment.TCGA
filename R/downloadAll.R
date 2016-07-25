@@ -1,5 +1,4 @@
 # load libraries
-library(devtools)
 library(MultiAssayExperiment)
 library(RTCGAToolbox)
 library(BiocInterfaces)
@@ -62,11 +61,11 @@ newMAEO <- function(ds, rd, ad, dd) {
     saveRDS(MAEO, file = file.path(dd, paste0(cn, "MAEO.rds")), compress = "bzip2")
     
     # create csv file for unit tests
-    cohort_name <- rep(cn, length(Elist(MAEO)))
+    cohort_name <- rep(cn, length(experiments(MAEO)))
     experiment_name <- names(MAEO)
-    experiment_class <- sapply(Elist(MAEO), class)
-    feature_number <- sapply(Elist(MAEO), dim)[1,]
-    sample_number <- sapply(Elist(MAEO), dim)[2,]
+    experiment_class <- sapply(experiments(MAEO), class)
+    feature_number <- sapply(experiments(MAEO), dim)[1,]
+    sample_number <- sapply(experiments(MAEO), dim)[2,]
     MAEOinfo <- data.frame(cbind(cohort_name, experiment_name, experiment_class, feature_number, sample_number))
     write.table(MAEOinfo, file = "MAEOinfo.csv", sep = ",", append = TRUE, row.names = FALSE, col.names = FALSE)
   }
