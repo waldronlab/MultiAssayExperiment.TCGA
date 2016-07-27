@@ -5,7 +5,7 @@ library(BiocInterfaces)
 library(readr)
 
 # newMAEO variables
-ds <- getFirehoseDatasets()[c(1:5, 7:9, 12:14, 16:31, 33:38)]
+ds <- getFirehoseDatasets()[c(1:2, 4:5, 7:9, 12:14, 16:31, 33:38)]
 rd <- getFirehoseRunningDates()[1]
 ad <- getFirehoseAnalyzeDates()[1]
 dd <- "data"
@@ -19,9 +19,11 @@ newMAEO <- function(ds, rd, ad, dd) {
   if(!dir.exists(dd)) {
     dir.create(dd)
   }
+  
   for(i in ds) {
     cn <- tolower(i)
     fp <- file.path(dd, paste0(cn, ".rds"))
+    
     if(file.exists(fp)) {
       co <- readRDS(fp)
     } else {
@@ -47,6 +49,7 @@ newMAEO <- function(ds, rd, ad, dd) {
                             getUUIDs = FALSE)
       saveRDS(co, file = fp, compress = "bzip2")
     }
+    
     pd <- co@Clinical
     rownames(pd) <- toupper(gsub("\\.", "-", rownames(pd)))
     pd <- type_convert(pd)
@@ -54,13 +57,51 @@ newMAEO <- function(ds, rd, ad, dd) {
     names(targets) <- targets
     dataList <- lapply(targets, function(x) {try(TCGAextract(co, x))})
     dataFull <- Filter(function(x){class(x)!="try-error"}, dataList)
+    assayNames <- names(dataFull)
+    
+    if("CNASNP" %in% assayNames) {
+      source_file <- getFileNames("ACC", rd, CNA_SNP = TRUE)
+      genome_build <- gsub("(^.+)_(hg[0-9]{2})_(.+$)", "\\2", x = source_file, ignore.case = TRUE)
+      genome(dataFull$CNASNP) <- genome_build
+      source_file <- as.list(source_file)
+      names(source_file) <- "source_file"
+      metadata(dataFull$CNASNP) <- c(metadata(dataFull$CNASNP), source_file)
+    }
+    
+    if("CNVSNP" %in% assayNames) {
+      source_file <- getFileNames(i, rd, CNV_SNP = TRUE)
+      genome_build <- gsub("(^.+)_(hg[0-9]{2})_(.+$)", "\\2", x = source_file, ignore.case = TRUE)
+      genome(dataFull$CNVSNP) <- genome_build
+      source_file <- as.list(source_file)
+      names(source_file) <- "source_file"
+      metadata(dataFull$CNVSNP) <- c(metadata(dataFull$CNVSNP), source_file)
+    }
+    
+    if("CNASeq" %in% assayNames) {
+      source_file <- getFileNames(i, rd, CNA_Seq = TRUE)
+      genome_build <- gsub("(^.+)_(hg[0-9]{2})_(.+$)", "\\2", x = source_file, ignore.case = TRUE)
+      genome(dataFull$CNASeq) <- genome_build
+      source_file <- as.list(source_file)
+      names(source_file) <- "source_file"
+      metadata(dataFull$CNASeq) <- c(metadata(dataFull$CNASeq), source_file)
+    }
+    
+    if("CNACGH" %in% assayNames) {
+      source_file <- getFileNames(i, rd, CNA_CGH = TRUE)
+      genome_build <- gsub("(^.+)_(hg[0-9]{2})_(.+$)", "\\2", x = source_file, ignore.case = TRUE)
+      genome(dataFull$CNACGH) <- genome_build
+      source_file <- as.list(source_file)
+      names(source_file) <- "source_file"
+      metadata(dataFull$CNACGH) <- c(metadata(dataFull$CNACGH), source_file)
+    }
+    
     ExpList <- ExperimentList(dataFull)
     NewElist <- TCGAcleanExpList(ExpList, pd)
     NewMap <- generateMap(NewElist, pd, TCGAbarcode)
     MAEO <- MultiAssayExperiment(NewElist, pd, NewMap)
     saveRDS(MAEO, file = file.path(dd, paste0(cn, "MAEO.rds")), compress = "bzip2")
     
-    # create csv file for unit tests
+    # add lines to csv file for unit tests
     cohort_name <- rep(cn, length(experiments(MAEO)))
     experiment_name <- names(MAEO)
     experiment_class <- sapply(experiments(MAEO), class)
