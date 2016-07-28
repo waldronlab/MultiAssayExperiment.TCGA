@@ -5,7 +5,7 @@ library(BiocInterfaces)
 library(readr)
 
 # newMAEO variables
-ds <- getFirehoseDatasets()[c(1:2, 4:5, 7:9, 12:14, 16:31, 33:38)]
+ds <- getFirehoseDatasets()[1]
 rd <- getFirehoseRunningDates()[1]
 ad <- getFirehoseAnalyzeDates()[1]
 dd <- "data"
