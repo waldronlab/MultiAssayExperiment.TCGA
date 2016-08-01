@@ -5,7 +5,7 @@ library(BiocInterfaces)
 library(readr)
 
 # newMAEO variables
-ds <- getFirehoseDatasets()[c(1:2, 4:5, 7:9, 12:14, 16:31, 33:38)]
+ds <- getFirehoseDatasets()[c(1:3, 4:5, 7:9, 12:14, 16:31, 33:38)]
 rd <- getFirehoseRunningDates()[1]
 ad <- getFirehoseAnalyzeDates()[1]
 dd <- "data"
@@ -23,6 +23,7 @@ newMAEO <- function(ds, rd, ad, dd) {
   }
   
   for(i in ds) {
+    message("\n######\n", "\nProcessing ", i, " : )\n", "\n######\n")
     cn <- tolower(i)
     fp <- file.path(dd, paste0(cn, ".rds"))
     
@@ -57,8 +58,8 @@ newMAEO <- function(ds, rd, ad, dd) {
     pd <- type_convert(pd)
     targets <- c(slotNames(co)[c(5:16)], "gistica", "gistict")
     names(targets) <- targets
-    dataList <- lapply(targets, function(x) {try(TCGAextract(co, x))})
-    dataFull <- Filter(function(x){class(x)!="try-error"}, dataList)
+    dataList <- lapply(targets, function(x) {tryCatch({TCGAextract(co, x)}, error = function(e) {message(x, " does not contain any data!")})})
+    dataFull <- Filter(function(x){class(x)!="NULL"}, dataList)
     assayNames <- names(dataFull)
     
     if("CNASNP" %in% assayNames) {
