@@ -7,7 +7,7 @@ rD <- getFirehoseRunningDates(last = 1)
 gD <- getFirehoseAnalyzeDates(last = 1)
 ## gistic date: 20150821
 
-coad <- getFirehoseData("KIRC", runDate = rD, destdir = "./rawdata",
+coad <- getFirehoseData("KIRC", runDate = rD, destdir = "./inst/extdata",
                         gistic2_Date = gD,
                         RNAseq_Gene=TRUE,
                         miRNASeq_Gene=TRUE,
@@ -40,5 +40,5 @@ NewElist <- TCGAcleanExpList(ExpList, clinical_kirc)
 NewMap <- generateMap(NewElist, clinical_kirc, TCGAbarcode)
 
 kircMAEO <- MultiAssayExperiment(NewElist, clinical_kirc, NewMap)
-saveRDS(kircMAEO, file = "./rawdata/kircMAEO.rds", compress = "bzip2")
-## kircMAEO <- readRDS("./rawdata/kircMAEO.rds")
+saveRDS(kircMAEO, file = "./inst/extdata/kircMAEO.rds", compress = "bzip2")
+## kircMAEO <- readRDS("./inst/extdata/kircMAEO.rds")

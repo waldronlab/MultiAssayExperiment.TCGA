@@ -9,7 +9,7 @@ gD <- getFirehoseAnalyzeDates(last = 1)
 ## gistic date: 20150821
 
 ## about 578 patients in the data (affymetrix)
-ovca <- getFirehoseData("OV", runDate = rD, destdir = "./rawdata",
+ovca <- getFirehoseData("OV", runDate = rD, destdir = "./inst/extdata",
                         gistic2_Date = gD,
                         RNAseq_Gene=TRUE,
                         miRNASeq_Gene=TRUE,
@@ -27,7 +27,7 @@ ovca <- getFirehoseData("OV", runDate = rD, destdir = "./rawdata",
                         RNAseqNorm = "raw_counts",
                         RNAseq2Norm = "normalized_count")
 
-# save(ovca, file = "rawdata/ovca.Rda")
+# save(ovca, file = "inst/extdata/ovca.Rda")
 
 clinical_ovca <- ovca@Clinical
 rownames(clinical_ovca) <- toupper(gsub("\\.", "-", rownames(clinical_ovca)))
@@ -44,5 +44,5 @@ NewElist <- TCGAcleanExpList(ExpList, clinical_ovca)
 NewMap <- generateMap(NewElist, clinical_ovca, TCGAbarcode)
 
 ovMAEO <- MultiAssayExperiment(NewElist, clinical_ovca, NewMap)
-saveRDS(ovMAEO, file = "./rawdata/ovMAEO2.rds", compress = "bzip2")
-## ovMAEO <- readRDS("./rawdata/ovMAEO.rds")
+saveRDS(ovMAEO, file = "./inst/extdata/ovMAEO2.rds", compress = "bzip2")
+## ovMAEO <- readRDS("./inst/extdata/ovMAEO.rds")

@@ -8,7 +8,7 @@ rD <- getFirehoseRunningDates(last = 1)
 gD <- getFirehoseAnalyzeDates(last = 1)
 ## gistic date: 20150821
 
-coad <- getFirehoseData("COAD", runDate = rD, destdir = "./rawdata",
+coad <- getFirehoseData("COAD", runDate = rD, destdir = "./inst/extdata",
                         gistic2_Date = gD,
                         RNAseq_Gene=TRUE,
                         miRNASeq_Gene=TRUE,
@@ -41,5 +41,5 @@ NewElist <- TCGAcleanExpList(ExpList, clinical_coad)
 NewMap <- generateMap(NewElist, clinical_coad, TCGAbarcode)
 
 coadMAEO <- MultiAssayExperiment(NewElist, clinical_coad, NewMap)
-saveRDS(coadMAEO, file = "./rawdata/coadMAEO.rds", compress = "bzip2")
-## coadMAEO <- readRDS("./rawdata/coadMAEO.rds")
+saveRDS(coadMAEO, file = "./inst/extdata/coadMAEO.rds", compress = "bzip2")
+## coadMAEO <- readRDS("./inst/extdata/coadMAEO.rds")

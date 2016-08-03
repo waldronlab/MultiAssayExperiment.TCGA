@@ -6,3 +6,5 @@
 *.txt
 rawdata/*
 *.tar.gz
+*.xlsx
+*.csv
