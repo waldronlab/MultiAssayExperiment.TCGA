@@ -8,3 +8,5 @@ rawdata/*
 *.tar.gz
 *.xlsx
 *.csv
+*.[Rr]da
+*.[Rr]ds
