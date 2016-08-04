@@ -13,3 +13,4 @@ rawdata/*
 *.csv
 *.[Rr]da
 *.[Rr]ds
+.httr-oauth

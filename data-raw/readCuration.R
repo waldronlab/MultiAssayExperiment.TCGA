@@ -24,7 +24,9 @@ dflist <- lapply(dflist, function(x) {
 subTypeFiles <- list.files(file.path("./inst", "extdata",
                                      "allsubtypes"), full.names = TRUE)
 
-lapply(dflist[1], function(smalldf) {
+subtypes <- lapply(subTypeFiles, read.csv, header = TRUE)
+
+lapply(dflist, function(smalldf) {
     shortFileName <- names(smalldf)[2]
     diseaseCode <- gsub("\\.csv", "", shortFileName)
     xlDx <- gsub("\\.csv", "", basename(subTypeFiles)) %>% strsplit(., "_")
