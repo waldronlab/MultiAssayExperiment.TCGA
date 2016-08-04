@@ -6,6 +6,10 @@ library(BiocInterfaces)
 rD <- getFirehoseRunningDates(last = 1)
 ## 20151101
 
+if (!file.exists("./inst/extdata/Clinical")) {
+    dir.create("./inst/extdata/Clinical/", recursive = TRUE)
+}
+
 excludeDatasets <- c("COADREAD", "GBMLGG", "KIPAN", "STES", "FPPP")
 diseases <- getFirehoseDatasets()[!(getFirehoseDatasets() %in% excludeDatasets)]
 
