@@ -1,6 +1,6 @@
 ## Script meant to be run interactively
 
-BiocInstaller::biocLite("karthik/rdrop2")
+# BiocInstaller::biocLite("karthik/rdrop2")
 
 library(rdrop2)
 library(dplyr)

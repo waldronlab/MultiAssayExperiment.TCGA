@@ -23,17 +23,29 @@ dflist <- lapply(dflist, function(x) {
 # Use list of data.frames to extract relevant columns
 subTypeFiles <- list.files(file.path("./inst", "extdata",
                                      "allsubtypes"), full.names = TRUE)
-
+names(subTypeFiles) <- basename(subTypeFiles)
 subtypes <- lapply(subTypeFiles, read.csv, header = TRUE)
 
-lapply(dflist, function(smalldf) {
-    shortFileName <- names(smalldf)[2]
-    diseaseCode <- gsub("\\.csv", "", shortFileName)
-    xlDx <- gsub("\\.csv", "", basename(subTypeFiles)) %>% strsplit(., "_")
-    xlIndex <- match(diseaseCode, xlDx)
-    clinical <- read.csv(subTypeFiles[xlIndex], header = TRUE)
-    clinical[, smalldf[[2]]]
-})
+dflist <- dflist[names(subtypes)]
 
-clinfiles <- dir(file.path("./inst", "extdata", "Clinical"), full.names = TRUE)
+## Code to subset relevant columns (dflist needs barcode column)
+## Not working due to mismatches
+mapply(function(dfs, annotes) {
+    targetColumns <- make.names(annotes[[2]])
+    if (!all(targetColumns %in% names(dfs)))
+        warning(names(annotes), " don't match")
+    return(dfs[, targetColumns])
+}, dfs = subtypes, annotes = dflist, SIMPLIFY = FALSE)
+
+## How to figure out which datasets don't have matching columns
+## List of lists (each inner list has names in dataset and names that were
+## supposed to match)
+Filter(function(x) !is.null(x), mapply(function(dfs, annotes){
+    targetColumns <- make.names(annotes[[2]])
+    if (!all(targetColumns %in% names(dfs)))
+        return(list(df_names = sort(names(dfs)),
+                    target_names = sort(
+                        targetColumns[!targetColumns %in% names(dfs)])))
+}, dfs = subtypes, annotes = dflist, SIMPLIFY = FALSE))
+
 
