@@ -24,18 +24,12 @@ dflist <- lapply(dflist, function(x) {
 subTypeFiles <- list.files(file.path("./inst", "extdata",
                                      "allsubtypes"), full.names = TRUE)
 names(subTypeFiles) <- basename(subTypeFiles)
-subtypes <- lapply(subTypeFiles, read.csv, header = TRUE)
+subtypes <- lapply(subTypeFiles, function(file) {
+    print(paste(basename(file), "successful"))
+    read.csv(file, header = TRUE)
+})
 
 dflist <- dflist[names(subtypes)]
-
-## Code to subset relevant columns (dflist needs barcode column)
-## Not working due to mismatches
-mapply(function(dfs, annotes) {
-    targetColumns <- make.names(annotes[[2]])
-    if (!all(targetColumns %in% names(dfs)))
-        warning(names(annotes), " don't match")
-    return(dfs[, targetColumns])
-}, dfs = subtypes, annotes = dflist, SIMPLIFY = FALSE)
 
 ## How to figure out which datasets don't have matching columns
 ## List of lists (each inner list has names in dataset and names that were
@@ -48,4 +42,13 @@ Filter(function(x) !is.null(x), mapply(function(dfs, annotes){
                         targetColumns[!targetColumns %in% names(dfs)])))
 }, dfs = subtypes, annotes = dflist, SIMPLIFY = FALSE))
 
+## Run last!
+## Code to subset relevant columns (dflist needs barcode column)
+## Not working due to mismatches
+mapply(function(dfs, annotes) {
+    targetColumns <- make.names(annotes[[2]])
+    if (!all(targetColumns %in% names(dfs)))
+        warning(names(annotes), " don't match")
+    return(dfs[, targetColumns])
+}, dfs = subtypes, annotes = dflist, SIMPLIFY = FALSE)
 
