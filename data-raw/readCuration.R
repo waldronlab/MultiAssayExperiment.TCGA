@@ -2,7 +2,7 @@ library(readxl)
 library(dplyr)
 
 # Readlines from TXT file
-ST = readLines("./data-raw/Subtypes.txt")
+ST = readLines("./data-raw/subtypes_curation.txt")
 
 # Create a list of data.frames
 dflist <- list()
