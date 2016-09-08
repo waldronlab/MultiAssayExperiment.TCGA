@@ -2,11 +2,11 @@ library(readxl)
 library(dplyr)
 
 # Readlines from TXT file
-ST = readLines("./data-raw/subtypes_curation.txt", n=51)
+ST = readLines("./data-raw/Subtypes.txt")
 
 # Create a list of data.frames
 dflist <- list()
-for (i in seq(from=1, to=51, by=3)) {
+for (i in seq(from=1, to=57, by=3)) {
     print(i)
     df = as.data.frame(strsplit(ST[c(i, i+1)], "\t"), stringsAsFactors = FALSE)
     colnames(df) = t(df[1, ])
@@ -24,18 +24,13 @@ dflist <- lapply(dflist, function(x) {
 subTypeFiles <- list.files(file.path("./inst", "extdata",
                                      "allsubtypes"), full.names = TRUE)
 names(subTypeFiles) <- basename(subTypeFiles)
-subtypes <- lapply(subTypeFiles, read.csv, header = TRUE)
+subtypes <- lapply(subTypeFiles, function(x) {
+  print(basename(x))
+  read.csv(x, header = TRUE)
+})
 
 dflist <- dflist[names(subtypes)]
 
-## Code to subset relevant columns (dflist needs barcode column)
-## Not working due to mismatches
-mapply(function(dfs, annotes) {
-    targetColumns <- make.names(annotes[[2]])
-    if (!all(targetColumns %in% names(dfs)))
-        warning(names(annotes), " don't match")
-    return(dfs[, targetColumns])
-}, dfs = subtypes, annotes = dflist, SIMPLIFY = FALSE)
 
 ## How to figure out which datasets don't have matching columns
 ## List of lists (each inner list has names in dataset and names that were
@@ -48,4 +43,12 @@ Filter(function(x) !is.null(x), mapply(function(dfs, annotes){
                         targetColumns[!targetColumns %in% names(dfs)])))
 }, dfs = subtypes, annotes = dflist, SIMPLIFY = FALSE))
 
+## Code to subset relevant columns (dflist needs barcode column)
+## Not working due to mismatches
+mapply(function(dfs, annotes) {
+  targetColumns <- make.names(annotes[[2]])
+  if (!all(targetColumns %in% names(dfs)))
+    warning(names(annotes), " don't match")
+  return(dfs[, targetColumns])
+}, dfs = subtypes, annotes = dflist, SIMPLIFY = FALSE)
 
