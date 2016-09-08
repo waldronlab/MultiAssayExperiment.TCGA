@@ -2,11 +2,11 @@ library(readxl)
 library(dplyr)
 
 # Readlines from TXT file
-ST = readLines("./data-raw/subtypes_curation.txt", n=51)
+ST = readLines("./data-raw/subtypes_curation.txt")
 
 # Create a list of data.frames
 dflist <- list()
-for (i in seq(from=1, to=51, by=3)) {
+for (i in seq(from=1, to=57, by=3)) {
     print(i)
     df = as.data.frame(strsplit(ST[c(i, i+1)], "\t"), stringsAsFactors = FALSE)
     colnames(df) = t(df[1, ])
