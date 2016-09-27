@@ -34,7 +34,7 @@ dflist <- dflist[names(subtypes)]
 ## How to figure out which datasets don't have matching columns
 ## List of lists (each inner list has names in dataset and names that were
 ## supposed to match)
-Filter(function(x) !is.null(x), mapply(function(dfs, annotes){
+Filter(function(x) !is.null(x), mapply(function(dfs, annotes) {
     targetColumns <- make.names(annotes[[2]])
     if (!all(targetColumns %in% names(dfs)))
         return(list(df_names = sort(names(dfs)),
@@ -42,7 +42,6 @@ Filter(function(x) !is.null(x), mapply(function(dfs, annotes){
                         targetColumns[!targetColumns %in% names(dfs)])))
 }, dfs = subtypes, annotes = dflist, SIMPLIFY = FALSE))
 
-## Run last!
 ## Code to subset relevant columns (dflist needs barcode column)
 ExtractedColumns <- mapply(function(dfs, annotes) {
     targetColumns <- make.names(annotes[[2]])
@@ -58,6 +57,9 @@ if (!dir.exists("inst/extdata/curatedSubtypes"))
 
 ## Create all curated subtype CSV files
 invisible(lapply(seq_along(ExtractedColumns), function(i, disease, data) {
-    write.csv(x = data[[i]], file = file.path("inst", "extdata", "curatedSubtypes",
-                                     paste0(disease[[i]], "_subtypes.csv")))
-}, disease = gsub(".csv", "", names(ExtractedColumns)), data = ExtractedColumns))
+    write.csv(x = data[[i]],
+              file = file.path("inst", "extdata", "curatedSubtypes",
+                               paste0(disease[[i]], "_subtypes.csv")),
+              row.names = FALSE)
+}, disease = gsub(".csv", "", names(ExtractedColumns)),
+data = ExtractedColumns))
