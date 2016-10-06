@@ -1,4 +1,5 @@
 library(readxl)
+library(readr)
 library(dplyr)
 
 # Readlines from TXT file
@@ -57,7 +58,7 @@ if (!dir.exists("inst/extdata/curatedSubtypes"))
 
 ## Create all curated subtype CSV files
 invisible(lapply(seq_along(ExtractedColumns), function(i, disease, data) {
-    write.csv(x = data[[i]],
+    write_csv(x = data[[i]],
               file = file.path("inst", "extdata", "curatedSubtypes",
                                paste0(disease[[i]], "_subtypes.csv")),
               row.names = FALSE)

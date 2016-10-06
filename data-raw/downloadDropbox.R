@@ -16,8 +16,12 @@ if (!file.exists("./inst/extdata/allsubtypes/")) {
     dir.create("./inst/extdata/allsubtypes/", recursive = TRUE)
 }
 
-lapply(BoxSubTypes, function(archive) {
+## Download all subtype files
+invisible(lapply(BoxSubTypes, function(archive) {
     drop_get(archive, local_file = file.path("./inst/extdata/allsubtypes/",
                                              basename(archive)),
              overwrite = TRUE)
-})
+}))
+
+## Run brcaMerge to merge BRCA2 to BRCA and remove BRCA2
+souce("data-raw/brcaMerge.R")

@@ -2,6 +2,8 @@
 
 library(readxl)
 library(dplyr)
+library(readr)
+
 skcmdata <- read_excel("data-raw/ExcelPreprocess/mmc2_skcm.xlsx", sheet= "Supplemental Table S1D", skip= 1)
 
-write.csv(skcmdata, file = "./data-raw/ExcelPreprocess/SKCM.csv")
+write_csv(skcmdata, file = "./data-raw/ExcelPreprocess/SKCM.csv")
