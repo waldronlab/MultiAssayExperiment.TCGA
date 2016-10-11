@@ -32,7 +32,7 @@ if (!file.exists("./inst/extdata/TCGA_Curation_Cancer_Types")) {
 }
 
 invisible(lapply(BoxClinicalCuration, function(archive) {
-    drop_get(archive, local_file = file.path("./inst/extdata/TCGA_Curation_Cancer_Types",
+    drop_get(archive, local_file = file.path("./inst/extdata/TCGA_Curation_Cancer_Types/",
                                              basename(archive)),
              overwrite = TRUE)
 }))
