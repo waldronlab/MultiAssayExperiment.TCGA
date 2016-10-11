@@ -58,6 +58,11 @@ listDF4 <- lapply(listDF3, function(df) {
     df[!df[["variable"]] %in% missingColumns,]
 })
 
-lapply(listDF4, function(df) {
+clinicalDFL <- lapply(listDF4, function(df) {
     clinicalData[, df[["variable"]]]
+})
+
+## Not working, columns of different type
+lapply(clinicalDFL, function(df) {
+    Reduce(mergeVecs, df)
 })
