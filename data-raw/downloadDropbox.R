@@ -23,5 +23,19 @@ invisible(lapply(BoxSubTypes, function(archive) {
              overwrite = TRUE)
 }))
 
+
+## Download all curated clinical files
+BoxClinicalCuration <- drop_dir("The Cancer Genome Atlas/TCGA_Clinical_Curation")[["path"]]
+
+if (!file.exists("./inst/extdata/TCGA_Curation_Cancer_Types")) {
+    dir.create("./inst/extdata/TCGA_Curation_Cancer_Types")
+}
+
+invisible(lapply(BoxClinicalCuration, function(archive) {
+    drop_get(archive, local_file = file.path("./inst/extdata/TCGA_Curation_Cancer_Types",
+                                             basename(archive)),
+             overwrite = TRUE)
+}))
+
 ## Run brcaMerge to merge BRCA2 to BRCA and remove BRCA2
-souce("data-raw/brcaMerge.R")
+source("data-raw/brcaMerge.R")
