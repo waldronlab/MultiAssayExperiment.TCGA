@@ -1,4 +1,28 @@
 ## Function to check curation files for errors
+.readClinicalCuration <- function(diseaseCode) {
+    clinicalCuration <- "./inst/extdata/TCGA_Curation_Cancer_Types/"
+    curatePrefix <- "TCGA_Variable_Curation_"
+    stopifnot(S4Vectors::isSingleString(diseaseCode))
+    curatedFile <- readxl::read_excel(file.path(clinicalCuration,
+                                                paste0(curatePrefix,
+                                                       diseaseCode,
+                                                       ".xlsx")), na = " ",
+                                      sheet = 1L)
+    names(curatedFile) <- make.names(names(curatedFile))
+    curatedFile
+}
+
+curateCuration <- function(diseaseCode) {
+    curatedFile <- .readClinicalCuration(diseaseCode = diseaseCode)
+
+    listLines <- split(curatedFile, seq_len(nrow(curatedFile)))
+    logiList <- lapply(listLines, function(singleRowDF) {
+    columnIndex1 <- seq_len(match("priority", tolower(names(singleRowDF)))-1)
+    columnIndex2 <- columnIndex1 + rev(columnIndex1)
+    length(singleRowDF[columnIndex1]) == length(singleRowDF[columnIndex2])
+    })
+    all(unlist(logiList))
+}
 
 ## Helper function stipulation:
 ## * Column lengths must be the same in "Variables" and "Priority"
@@ -12,17 +36,12 @@
 
 checkClinicalCuration <- function(diseaseCode) {
     clinicalLocation <- "./inst/extdata/Clinical/"
-    clinicalCuration <- "./inst/extdata/TCGA_Curation_Cancer_Types/"
-    curatePrefix <- "TCGA_Variable_Curation_"
 
     stopifnot(S4Vectors::isSingleString(diseaseCode))
     readr::read_csv(file.path(clinicalLocation, paste0(diseaseCode, ".csv")))
-    curatedFile <- readxl::read_excel(file.path(clinicalCuration,
-                                                paste0(curatePrefix,
-                                                       diseaseCode,
-                                                       ".xlsx")), na = " ",
-                                      sheet = 1L)
-    names(curatedFile) <- make.names(names(curatedFile))
+
+    curatedFile <- .readClinicalCuration(diseaseCode = diseaseCode)
+
     listLines <- split(curatedFile, seq_len(nrow(curatedFile)))
 
     clinicalData <- readr::read_csv(file.path(clinicalLocation,
