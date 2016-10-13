@@ -20,9 +20,12 @@ curateCuration <- function(diseaseCode) {
 
     listLines <- split(curatedFile, seq_len(nrow(curatedFile)))
     logiList <- lapply(listLines, function(singleRowDF) {
-        columnIndex1 <- seq_len(match("priority", tolower(names(singleRowDF)))-1)
-        columnIndex2 <- columnIndex1 + rev(columnIndex1)
-        length(singleRowDF[columnIndex1]) == length(singleRowDF[columnIndex2])
+        priorityIndex <- match("priority", tolower(names(singleRowDF)))
+        stopifnot(!is.na(priorityIndex), length(priorityIndex) == 1L,
+                  priorityIndex != 0L)
+        columnRange1 <- seq_len(priorityIndex-1)
+        columnRange2 <- priorityIndex:length(singleRowDF)
+        length(singleRowDF[columnRange1]) == length(singleRowDF[columnRange2])
     })
     all(unlist(logiList))
 }
@@ -30,10 +33,13 @@ curateCuration <- function(diseaseCode) {
 ## Helper function stipulation:
 ## * Column lengths must be the same in "Variables" and "Priority"
 .rowToDataFrame <- function(singleRowDF) {
-    columnIndex1 <- seq_len(match("priority", tolower(names(singleRowDF)))-1)
-    columnIndex2 <- columnIndex1 + rev(columnIndex1)
-    data.frame(variable = as.character(singleRowDF[columnIndex1]),
-               priority = as.integer(singleRowDF[columnIndex2]),
+    priorityIndex <- match("priority", tolower(names(singleRowDF)))
+    stopifnot(!is.na(priorityIndex), length(priorityIndex) == 1L,
+              priorityIndex != 0L)
+    columnRange1 <- seq_len(priorityIndex-1)
+    columnRange2 <- columnRange1 + rev(columnRange1)
+    data.frame(variable = as.character(singleRowDF[columnRange1]),
+               priority = as.integer(singleRowDF[columnRange2]),
                stringsAsFactors = FALSE)
 }
 
