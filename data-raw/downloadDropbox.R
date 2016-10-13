@@ -11,6 +11,7 @@ drop_auth()
 drop_acc() %>% select(uid, display_name, email_verified, quota_info.quota)
 
 BoxSubTypes <- rdrop2::drop_dir("The Cancer Genome Atlas/Script/allsubtypes")[["path"]]
+subtypePath <- file.path(".", "inst", "extdata", "allsubtypes")
 
 if (!file.exists("./inst/extdata/allsubtypes/")) {
     dir.create("./inst/extdata/allsubtypes/", recursive = TRUE)
@@ -36,13 +37,14 @@ getSubtypeFile <- function(diseaseCode, overwrite=TRUE) {
 
 ## Download all curated clinical files
 BoxClinicalCuration <- drop_dir("The Cancer Genome Atlas/TCGA_Clinical_Curation")[["path"]]
+clinicalPath <- file.path(".", "inst", "extdata", "TCGA_Curation_Cancer_Types")
 
 if (!file.exists("./inst/extdata/TCGA_Curation_Cancer_Types")) {
     dir.create("./inst/extdata/TCGA_Curation_Cancer_Types")
 }
 
 invisible(lapply(BoxClinicalCuration, function(archive) {
-    drop_get(archive, local_file = file.path("./inst/extdata/TCGA_Curation_Cancer_Types/",
+    drop_get(archive, local_file = file.path(clinicalPath,
                                              basename(archive)),
              overwrite = TRUE)
 }))
@@ -51,9 +53,13 @@ getClinicalFile <- function(diseaseCode, overwrite=TRUE) {
     invisible(BoxClinicalCuration <-
         drop_dir("The Cancer Genome Atlas/TCGA_Clinical_Curation")[["path"]])
     clinicalPath <- file.path(".", "inst", "extdata", "TCGA_Curation_Cancer_Types")
-    clinicalFile <- BoxClinicalCuration[grepl(paste0("TCGA_Variable_Curation_", diseaseCode, ".xlsx"),
-                                              basename(BoxClinicalCuration))]
-    if (rdrop2::drop_get(clinicalFile, local_file = file.path(clinicalPath, basename(clinicalFile)),
+    clinicalFile <-
+        BoxClinicalCuration[grepl(paste0("TCGA_Variable_Curation_",
+                                         diseaseCode, ".xlsx"),
+                                  basename(BoxClinicalCuration))]
+    if (rdrop2::drop_get(clinicalFile,
+                         local_file = file.path(clinicalPath,
+                                                basename(clinicalFile)),
                          overwrite = overwrite))
         message("download successful")
 }
