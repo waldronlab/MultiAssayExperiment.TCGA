@@ -28,7 +28,7 @@ checkClinicalCuration <- function(diseaseCode) {
     clinicalData <- readr::read_csv(file.path(clinicalLocation,
                                               paste0(diseaseCode, ".csv")))
     message("Working on ", diseaseCode)
-    listDF <- apply(curatedFile, 1, .rowToDataFrame)
+    listDF <- lapply(listLines, .rowToDataFrame)
 
     listDF <- lapply(listDF, na.omit)
     curatedLinesNames <- unlist(lapply(listDF, function(df) {
