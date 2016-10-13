@@ -1,4 +1,6 @@
-## Function to check curation files for errors
+## Script for checking clinical data curation for any errors
+
+## Helper function for reading clinical variable curation files
 .readClinicalCuration <- function(diseaseCode) {
     clinicalCuration <- "./inst/extdata/TCGA_Curation_Cancer_Types/"
     curatePrefix <- "TCGA_Variable_Curation_"
@@ -12,14 +14,15 @@
     curatedFile
 }
 
+## Function to check for curation file errors
 curateCuration <- function(diseaseCode) {
     curatedFile <- .readClinicalCuration(diseaseCode = diseaseCode)
 
     listLines <- split(curatedFile, seq_len(nrow(curatedFile)))
     logiList <- lapply(listLines, function(singleRowDF) {
-    columnIndex1 <- seq_len(match("priority", tolower(names(singleRowDF)))-1)
-    columnIndex2 <- columnIndex1 + rev(columnIndex1)
-    length(singleRowDF[columnIndex1]) == length(singleRowDF[columnIndex2])
+        columnIndex1 <- seq_len(match("priority", tolower(names(singleRowDF)))-1)
+        columnIndex2 <- columnIndex1 + rev(columnIndex1)
+        length(singleRowDF[columnIndex1]) == length(singleRowDF[columnIndex2])
     })
     all(unlist(logiList))
 }
@@ -34,18 +37,19 @@ curateCuration <- function(diseaseCode) {
                stringsAsFactors = FALSE)
 }
 
+## This function reads in both variable curation and clinical data and checks
+## to see what columns in the variable curation are extraneous
 checkClinicalCuration <- function(diseaseCode) {
-    clinicalLocation <- "./inst/extdata/Clinical/"
-
     stopifnot(S4Vectors::isSingleString(diseaseCode))
-    readr::read_csv(file.path(clinicalLocation, paste0(diseaseCode, ".csv")))
+
+    clinicalLocation <- "./inst/extdata/Clinical/"
+    clinicalData <- readr::read_csv(file.path(clinicalLocation,
+                                              paste0(diseaseCode, ".csv")))
 
     curatedFile <- .readClinicalCuration(diseaseCode = diseaseCode)
 
     listLines <- split(curatedFile, seq_len(nrow(curatedFile)))
 
-    clinicalData <- readr::read_csv(file.path(clinicalLocation,
-                                              paste0(diseaseCode, ".csv")))
     message("Working on ", diseaseCode)
     listDF <- lapply(listLines, .rowToDataFrame)
 
