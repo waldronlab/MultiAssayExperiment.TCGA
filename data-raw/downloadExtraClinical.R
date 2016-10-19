@@ -1,4 +1,4 @@
-extraClinicalData <- function(diseaseCode) {
+downloadExtraClinical <- function(diseaseCode) {
     adt <- "20151101"
     dset <- diseaseCode
     cl_url <- "http://gdac.broadinstitute.org/runs/stddata__"
