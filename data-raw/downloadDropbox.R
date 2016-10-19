@@ -37,10 +37,10 @@ getSubtypeFile <- function(diseaseCode, overwrite=TRUE) {
 
 ## Download all curated clinical files
 BoxClinicalCuration <- drop_dir("The Cancer Genome Atlas/TCGA_Clinical_Curation")[["path"]]
-clinicalPath <- file.path(".", "inst", "extdata", "TCGA_Curation_Cancer_Types")
+clinicalPath <- file.path(".", "inst", "extdata", "TCGA_Clinical_Curation")
 
-if (!file.exists("./inst/extdata/TCGA_Curation_Cancer_Types")) {
-    dir.create("./inst/extdata/TCGA_Curation_Cancer_Types")
+if (!file.exists("./inst/extdata/TCGA_Clinical_Curation")) {
+    dir.create("./inst/extdata/TCGA_Clinical_Curation")
 }
 
 invisible(lapply(BoxClinicalCuration, function(archive) {
@@ -52,7 +52,7 @@ invisible(lapply(BoxClinicalCuration, function(archive) {
 getClinicalFile <- function(diseaseCode, overwrite=TRUE) {
     invisible(BoxClinicalCuration <-
         drop_dir("The Cancer Genome Atlas/TCGA_Clinical_Curation")[["path"]])
-    clinicalPath <- file.path(".", "inst", "extdata", "TCGA_Curation_Cancer_Types")
+    clinicalPath <- file.path(".", "inst", "extdata", "TCGA_Clinical_Curation")
     clinicalFile <-
         BoxClinicalCuration[grepl(paste0("TCGA_Variable_Curation_",
                                          diseaseCode, ".xlsx"),

@@ -23,7 +23,7 @@ mergeVecs <- function(x1, x2, prioritize=TRUE) {
 }
 
 diseaseCode <- "BRCA"
-filePath <- paste0("./inst/extdata/TCGA_Curation_Cancer_Types/TCGA_Variable_Curation_", diseaseCode, ".xlsx")
+filePath <- paste0("./inst/extdata/TCGA_Clinical_Curation/TCGA_Variable_Curation_", diseaseCode, ".xlsx")
 curatedLines <- readxl::read_excel(path = filePath, na = " ", sheet = 1L)
 names(curatedLines) <- make.names(names(curatedLines))
 

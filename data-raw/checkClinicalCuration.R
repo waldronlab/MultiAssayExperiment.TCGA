@@ -2,7 +2,7 @@
 
 ## Helper function for reading clinical variable curation files
 .readClinicalCuration <- function(diseaseCode) {
-    clinicalCuration <- "./inst/extdata/TCGA_Curation_Cancer_Types/"
+    clinicalCuration <- "./inst/extdata/TCGA_Clinical_Curation/"
     curatePrefix <- "TCGA_Variable_Curation_"
     stopifnot(S4Vectors::isSingleString(diseaseCode))
     curatedFile <- readxl::read_excel(file.path(clinicalCuration,
