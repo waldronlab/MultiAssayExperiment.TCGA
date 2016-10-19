@@ -11,11 +11,22 @@ drop_auth()
 drop_acc() %>% select(uid, display_name, email_verified, quota_info.quota)
 
 BoxSubTypes <- rdrop2::drop_dir("The Cancer Genome Atlas/Script/allsubtypes")[["path"]]
-subtypePath <- file.path(".", "inst", "extdata", "allsubtypes")
+BoxClinicalData <- rdrop2::drop_dir("The Cancer Genome Atlas/Clinical/data")[["path"]]
+BoxClinicalCuration <- rdrop2::drop_dir("The Cancer Genome Atlas/TCGA_Clinical_Curation")[["path"]]
 
-if (!file.exists("./inst/extdata/allsubtypes/")) {
-    dir.create("./inst/extdata/allsubtypes/", recursive = TRUE)
-}
+extData <- "./inst/extdata/"
+subtypePath <- "allsubtypes"
+# clinicalDataPath <- "Clinical" ## download using downloadClinicalData.R file
+clinicalCurationPath <- "TCGA_Clinical_Curation"
+
+## Build folders
+invisible(lapply(list(subtypePath, clinicalDataPath, clinicalCurationPath),
+                 function(folder, basefolder) {
+                     if (!file.exists(file.path(basefolder, folder))) {
+                         dir.create(file.path(basefolder, folder),
+                                    recursive = TRUE)
+                     }
+                 }, basefolder = extData))
 
 ## Download all subtype files
 invisible(lapply(BoxSubTypes, function(archive) {
@@ -23,6 +34,13 @@ invisible(lapply(BoxSubTypes, function(archive) {
              overwrite = TRUE)
 }))
 
+invisible(lapply(BoxClinicalCuration, function(archive) {
+    drop_get(archive, local_file = file.path(clinicalPath,
+                                             basename(archive)),
+             overwrite = TRUE)
+}))
+
+## Individual diseaseCode function
 getSubtypeFile <- function(diseaseCode, overwrite=TRUE) {
     invisible(BoxSubTypes <-
         rdrop2::drop_dir("The Cancer Genome Atlas/Script/allsubtypes")[["path"]])
@@ -35,20 +53,7 @@ getSubtypeFile <- function(diseaseCode, overwrite=TRUE) {
         message("download successful")
 }
 
-## Download all curated clinical files
-BoxClinicalCuration <- drop_dir("The Cancer Genome Atlas/TCGA_Clinical_Curation")[["path"]]
-clinicalPath <- file.path(".", "inst", "extdata", "TCGA_Clinical_Curation")
-
-if (!file.exists("./inst/extdata/TCGA_Clinical_Curation")) {
-    dir.create("./inst/extdata/TCGA_Clinical_Curation")
-}
-
-invisible(lapply(BoxClinicalCuration, function(archive) {
-    drop_get(archive, local_file = file.path(clinicalPath,
-                                             basename(archive)),
-             overwrite = TRUE)
-}))
-
+## Individual diseaseCode function
 getClinicalFile <- function(diseaseCode, overwrite=TRUE) {
     invisible(BoxClinicalCuration <-
         drop_dir("The Cancer Genome Atlas/TCGA_Clinical_Curation")[["path"]])
