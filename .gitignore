@@ -14,3 +14,4 @@ rawdata/*
 *.[Rr]da
 *.[Rr]ds
 .httr-oauth
+.~lock.*
