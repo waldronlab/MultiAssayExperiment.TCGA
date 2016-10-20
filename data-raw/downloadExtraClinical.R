@@ -1,4 +1,4 @@
-downloadExtraClinical <- function(diseaseCode) {
+.downloadExtraClinical <- function(diseaseCode) {
     adt <- "20151101"
     dset <- diseaseCode
     cl_url <- "http://gdac.broadinstitute.org/runs/stddata__"
@@ -27,4 +27,34 @@ downloadExtraClinical <- function(diseaseCode) {
     }
     extracl <- extracl[,!grepl("patient_barcode", colnames(extracl))]
     extracl
+}
+
+.mergeClinicalData <- function(diseaseCode) {
+extData <- "inst/extdata/"
+basicClinicalPath <- "Clinical/basic/"
+if (!file.exists(file.path(extData, basicClinicalPath)))
+    dir.create(file.path(extData, basicClinicalPath), recursive = TRUE)
+basicClinical <- read.csv(file.path(extData, basicClinicalPath, paste0(diseaseCode, ".csv")),
+                          header = TRUE, stringsAsFactors = FALSE)
+rownames(basicClinical) <- toupper(
+    basicClinical[, grep("patientID",
+                         names(basicClinical),
+                         ignore.case = TRUE,
+                         value = TRUE)]
+)
+extraClinical <- .downloadExtraClinical(diseaseCode)
+enhancedClinical <- merge(basicClinical, extraClinical, "row.names")
+rownames(enhancedClinical) <- enhancedClinical[,"Row.names"]
+
+enhancedClinical <- enhancedClinical[,-c(1,2)]
+enhancedClinical
+}
+
+writeClinicalData <- function(diseaseCode) {
+    dataset <- .mergeClinicalData(diseaseCode)
+    extData <- "inst/extdata"
+    enhancedPath <- "Clinical/enhanced"
+    if (!file.exists(file.path(extData, enhancedPath)))
+        dir.create(file.path(extData, enhancedPath), recursive = TRUE)
+    write.csv(dataset, file = file.path("inst/extdata/Clinical/enhanced", paste0(diseaseCode, ".csv")), row.names = FALSE)
 }
