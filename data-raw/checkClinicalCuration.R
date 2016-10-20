@@ -47,16 +47,15 @@ curateCuration <- function(diseaseCode) {
 ## to see what columns in the variable curation are extraneous
 checkClinicalCuration <- function(diseaseCode) {
     stopifnot(S4Vectors::isSingleString(diseaseCode))
+    message("Working on ", diseaseCode)
 
     clinicalLocation <- "./inst/extdata/Clinical/"
     clinicalData <- readr::read_csv(file.path(clinicalLocation,
                                               paste0(diseaseCode, ".csv")))
 
     curatedFile <- .readClinicalCuration(diseaseCode = diseaseCode)
-
     listLines <- split(curatedFile, seq_len(nrow(curatedFile)))
 
-    message("Working on ", diseaseCode)
     listDF <- lapply(listLines, .rowToDataFrame)
 
     listDF <- lapply(listDF, na.omit)
