@@ -4,7 +4,7 @@ createDirectories <- function() {
         curatedSubtypes = file.path(extData, "curatedSubtypes"),
         subtypePath = file.path(extData, "allsubtypes"),
         clinicalData = file.path(extData, "Clinical"),
-        clinicalCurationPath <- file.path(extData, "TCGA_Clinical_Curation"),
+        clinicalCurationPath = file.path(extData, "TCGA_Clinical_Curation"),
         rawClinical = file.path(clinicalData, "raw"),
         basicClinical = file.path(clinicalData, "basic")
     )
