@@ -36,7 +36,7 @@ saveClinicalFirehose <- function(diseaseCode) {
     runDate <- "20151101"
     TCGAclin <- getFirehoseData(diseaseCode, runDate = runDate, Clinic = TRUE,
                                 destdir = rawClinical)
-    full_TCGAclin <- Clinical(TCGAclin)
+    full_TCGAclin <- TCGAclin@Clinical
     full_TCGAclin <- cbind(patientID = rownames(full_TCGAclin), full_TCGAclin)
     write_csv(full_TCGAclin, path=file.path(basicClinical, paste0(diseaseCode, ".csv")))
 }
