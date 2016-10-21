@@ -29,25 +29,31 @@
     extracl
 }
 
-.mergeClinicalData <- function(diseaseCode) {
-extData <- "inst/extdata/"
-basicClinicalPath <- "Clinical/basic/"
-if (!file.exists(file.path(extData, basicClinicalPath)))
-    dir.create(file.path(extData, basicClinicalPath), recursive = TRUE)
-basicClinical <- read.csv(file.path(extData, basicClinicalPath, paste0(diseaseCode, ".csv")),
-                          header = TRUE, stringsAsFactors = FALSE)
-rownames(basicClinical) <- toupper(
-    basicClinical[, grep("patientID",
-                         names(basicClinical),
-                         ignore.case = TRUE,
-                         value = TRUE)]
-)
-extraClinical <- .downloadExtraClinical(diseaseCode)
-enhancedClinical <- merge(basicClinical, extraClinical, "row.names")
-rownames(enhancedClinical) <- enhancedClinical[,"Row.names"]
+.stdIDs <- function(patientID) {
+    if (grepl("\\.", sample(patientID, 1L)))
+        patientID <- gsub("\\.", "-", patientID)
+    toupper(patientID)
+}
 
-enhancedClinical <- enhancedClinical[,-c(1,2)]
-enhancedClinical
+.mergeClinicalData <- function(diseaseCode) {
+    extData <- "inst/extdata/"
+    basicClinicalPath <- "Clinical/basic/"
+    basicClinical <- read.csv(file.path(extData,
+                                        basicClinicalPath,
+                                        paste0(diseaseCode, ".csv")),
+                              header = TRUE, stringsAsFactors = FALSE)
+    idName <- grep("patientID", names(basicClinical), ignore.case = TRUE,
+                   value = TRUE)
+    stopifnot(S4Vectors::isSingleString(idName))
+    patientIDs <- basicClinical[[idName]]
+    patientIDs <- .stdIDs(patientIDs)
+    rownames(basicClinical) <- patientIDs
+    extraClinical <- .downloadExtraClinical(diseaseCode)
+    enhancedClinical <- merge(basicClinical, extraClinical, "row.names")
+    rownames(enhancedClinical) <- enhancedClinical[,"Row.names"]
+
+    enhancedClinical <- enhancedClinical[,-c(1,2)]
+    enhancedClinical
 }
 
 writeClinicalData <- function(diseaseCode) {
@@ -56,5 +62,8 @@ writeClinicalData <- function(diseaseCode) {
     enhancedPath <- "Clinical/enhanced"
     if (!file.exists(file.path(extData, enhancedPath)))
         dir.create(file.path(extData, enhancedPath), recursive = TRUE)
-    write.csv(dataset, file = file.path("inst/extdata/Clinical/enhanced", paste0(diseaseCode, ".csv")), row.names = FALSE)
+    write.csv(dataset,
+              file = file.path("inst/extdata/Clinical/enhanced",
+                               paste0(diseaseCode, ".csv")),
+              row.names = FALSE)
 }
