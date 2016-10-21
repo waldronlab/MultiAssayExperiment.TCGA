@@ -49,7 +49,7 @@ checkClinicalCuration <- function(diseaseCode) {
     stopifnot(S4Vectors::isSingleString(diseaseCode))
     message("Working on ", diseaseCode)
 
-    clinicalLocation <- "./inst/extdata/Clinical/"
+    clinicalLocation <- "./inst/extdata/Clinical/enhanced/"
     clinicalData <- readr::read_csv(file.path(clinicalLocation,
                                               paste0(diseaseCode, ".csv")))
 
