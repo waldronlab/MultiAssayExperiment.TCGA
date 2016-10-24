@@ -50,9 +50,10 @@
     rownames(basicClinical) <- patientIDs
     extraClinical <- .downloadExtraClinical(diseaseCode)
     enhancedClinical <- merge(basicClinical, extraClinical, "row.names")
-    rownames(enhancedClinical) <- enhancedClinical[,"Row.names"]
-
-    enhancedClinical <- enhancedClinical[,-c(1,2)]
+    enhancedClinical$patientID <- enhancedClinical[["Row.names"]]
+    enhancedClinical <-
+        enhancedClinical[, -match(c("Row.names", "Composite.Element.REF"),
+                                  names(enhancedClinical))]
     enhancedClinical
 }
 
