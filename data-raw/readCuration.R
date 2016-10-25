@@ -1,19 +1,22 @@
 ## Code to subset relevant columns (dflist needs barcode column)
-ExtractedColumns <- mapply(function(dfs, annotes) {
-    targetColumns <- make.names(annotes[[2]])
-    if (!all(targetColumns %in% names(dfs)))
-        warning(names(annotes), " don't match")
-    return(dfs[, targetColumns])
-}, dfs = subtypes, annotes = dflist, SIMPLIFY = FALSE)
+source("data-raw/checkSubtypeCuration.R")
+
+.extractCurationColumns <- function(diseaseCode) {
+    subtypeMap <- .readSubtypeMap(diseaseCode)
+    subtypeData <- .readSubtypeData(diseaseCode)
+    targetColumns <- make.names(subtypeMap[[2L]])
+    stopifnot(all(targetColumns %in% names(subtypeData)))
+    subtypeData[, targetColumns, drop = FALSE]
+}
 
 ## Save each subtype information to its own file
 ## Create all curated subtype CSV files
-invisible(lapply(seq_along(ExtractedColumns), function(i, disease, data) {
-    write_csv(x = data[[i]],
-              path = file.path("inst", "extdata", "curatedSubtypes",
-                               paste0(disease[[i]], "_subtypes.csv")))
-}, disease = gsub(".csv", "", names(ExtractedColumns)),
-data = ExtractedColumns))
+writeSubtypeCuration <- function(diseaseCode) {
+    extractedCols <- .extractCurationColumns(diseaseCode)
+    write_csv(x = extractedCols,
+              path = file.path(dataDirectories()$curatedSubtypes,
+                               paste0(diseaseCode, "_subtypes.csv")))
+}
 
 .findBarcodeCol <- function(DF) {
     apply(DF, 2, function(column) {
