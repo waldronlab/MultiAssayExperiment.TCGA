@@ -2,7 +2,7 @@
 
 .readSubtypeMap <- function(diseaseCode) {
     subtypeMapFile <- file.path(dataDirectories()$curatedMaps,
-                                paste0(diseaseCode, "_SubtypeMap.csv"))
+                                paste0(diseaseCode, "_subtypeMap.csv"))
     readr::read_csv(subtypeMapFile)
 }
 
