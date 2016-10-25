@@ -23,16 +23,20 @@ findCorruptBarcodes <- function(diseaseCode) {
     bcode <- .findBarcodeCol(subtypeData)
     if (!length(bcode)) {
         message("No barcode column found")
-        head(subtypeData, 3)
+        return(head(subtypeData, 3))
     } else {
         message(diseaseCode, "barcodes OK")
     }
+    return(dplyr::data_frame())
 }
 
 curationAvailable <- gsub(".csv", "", names(dflist), fixed = TRUE)
+curationAvailable <- curationAvailable[!curationAvailable == "BRCA2"]
+
+names(curationAvailable) <- curationAvailable
 
 lapply(curationAvailable, findCorruptBarcodes)
 
-ExtractedColumns$COAD.csv$patient
-ExtractedColumns$BLCA.csv$tcgaBarcode
-ExtractedColumns$LUSC.csv$Tumor.ID
+COAD.csv$patient
+BLCA.csv$tcgaBarcode
+LUSC.csv$Tumor.ID
