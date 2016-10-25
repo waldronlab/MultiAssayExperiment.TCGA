@@ -27,7 +27,7 @@ subTypeFiles <- list.files(file.path("./inst", "extdata",
 names(subTypeFiles) <- basename(subTypeFiles)
 subtypes <- lapply(subTypeFiles, function(file) {
     print(paste(basename(file), "successful"))
-    read.csv(file, header = TRUE)
+    read.csv(file, header = TRUE, stringsAsFactors = FALSE)
 })
 
 dflist <- dflist[names(subtypes)]
@@ -63,3 +63,27 @@ invisible(lapply(seq_along(ExtractedColumns), function(i, disease, data) {
                                paste0(disease[[i]], "_subtypes.csv")))
 }, disease = gsub(".csv", "", names(ExtractedColumns)),
 data = ExtractedColumns))
+
+.findBarcodeCol <- function(DF) {
+    apply(DF, 2, function(column) {
+        logicBCode <- grepl("^TCGA", column)
+        logicBCode
+    }) %>% apply(., 2, all) %>% Filter(isTRUE, .) %>% names
+}
+
+ExtractedColumns <- lapply(ExtractedColumns, function(disease) {
+    bcode <- .findBarcodeCol(disease)
+    if (length(bcode)) {
+        disease[[bcode]] <- .stdIDs(disease[[bcode]])
+    }
+    disease
+})
+
+## See what files have corrupt barcodes
+lapply(ExtractedColumns, .findBarcodeCol) %>% Filter(function(x) !length(x), .) %>%
+    names()
+
+ExtractedColumns$COAD.csv$patient
+ExtractedColumns$BLCA.csv$tcgaBarcode
+ExtractedColumns$LUSC.csv$Tumor.ID
+
