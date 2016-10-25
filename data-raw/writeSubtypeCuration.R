@@ -17,27 +17,3 @@ writeSubtypeCuration <- function(diseaseCode) {
               path = file.path(dataDirectories()$curatedSubtypes,
                                paste0(diseaseCode, "_subtypes.csv")))
 }
-
-.findBarcodeCol <- function(DF) {
-    apply(DF, 2, function(column) {
-        logicBCode <- grepl("^TCGA", column)
-        logicBCode
-    }) %>% apply(., 2, all) %>% Filter(isTRUE, .) %>% names
-}
-
-ExtractedColumns <- lapply(ExtractedColumns, function(disease) {
-    bcode <- .findBarcodeCol(disease)
-    if (length(bcode)) {
-        disease[[bcode]] <- .stdIDs(disease[[bcode]])
-    }
-    disease
-})
-
-## See what files have corrupt barcodes
-lapply(ExtractedColumns, .findBarcodeCol) %>% Filter(function(x) !length(x), .) %>%
-    names()
-
-ExtractedColumns$COAD.csv$patient
-ExtractedColumns$BLCA.csv$tcgaBarcode
-ExtractedColumns$LUSC.csv$Tumor.ID
-
