@@ -28,3 +28,5 @@ invisible(lapply(seq_along(dflist), function(i, disease, data) {
                                paste0(disease[[i]], "_subtypeMap.csv")))
 }, disease = gsub(".csv", "", names(dflist)),
 data = dflist))
+
+curationAvailable <- gsub(".csv", "", names(dflist), fixed = TRUE)
