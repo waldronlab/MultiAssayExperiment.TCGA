@@ -26,6 +26,9 @@ names(subtypeData)[mutationRange] <- paste0("Mutation_",
 CNArange <- seq(length(rep(letters, 2))+which(letters=="f"), length(rep(letters, 3))+which(letters=="v"))
 names(subtypeData)[CNArange] <- paste0("CNA_", names(subtypeData[CNArange]))
 
+## Based on results from above
+subtypeData$`Tumor ID` <- gsub("LUSC", "TCGA", subtypeData$`Tumor ID`)
+
 readr::write_csv(subtypeData, path = file.path(dataDirectories()[["subtypePath"]], "LUSC.csv"))
 
 rdrop2::drop_upload(file = file.path(dataDirectories()[["subtypePath"]], "LUSC.csv"),
