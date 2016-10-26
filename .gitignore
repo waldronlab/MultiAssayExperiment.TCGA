@@ -10,6 +10,7 @@ inst/extdata/TCGA_Curation_Cancer_Types/*
 rawdata/*
 *.tar.gz
 *.xlsx
+*.xls
 *.csv
 *.[Rr]da
 *.[Rr]ds
