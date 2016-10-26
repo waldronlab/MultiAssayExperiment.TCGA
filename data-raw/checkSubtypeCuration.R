@@ -7,9 +7,11 @@
 }
 
 .readSubtypeData <- function(diseaseCode) {
-    subtypeDataFile <- file.path(dataDirectories()[["curatedSubtypes"]],
-                                 paste0(diseaseCode, "_subtypes.csv"))
-    readr::read_csv(subtypeDataFile)
+    subtypeDataFile <- file.path(dataDirectories()[["subtypePath"]],
+                                 paste0(diseaseCode, ".csv"))
+    subtypeData <- readr::read_csv(subtypeDataFile)
+    names(subtypeData) <- make.names(names(subtypeData))
+    subtypeData
 }
 
 ## How to figure out which datasets don't have matching columns
