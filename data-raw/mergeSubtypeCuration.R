@@ -25,7 +25,7 @@ findCorruptBarcodes <- function(diseaseCode) {
         message("No barcode column found")
         return(head(subtypeData, 3))
     } else {
-        message(diseaseCode, "barcodes OK")
+        message(diseaseCode, " barcodes OK")
     }
     return(dplyr::data_frame())
 }

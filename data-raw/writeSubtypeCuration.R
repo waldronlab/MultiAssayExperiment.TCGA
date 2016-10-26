@@ -14,6 +14,6 @@ source("data-raw/checkSubtypeCuration.R")
 writeSubtypeCuration <- function(diseaseCode) {
     extractedCols <- .extractCurationColumns(diseaseCode)
     write_csv(x = extractedCols,
-              path = file.path(dataDirectories()$curatedSubtypes,
+              path = file.path(dataDirectories()[["curatedSubtypes"]],
                                paste0(diseaseCode, "_subtypes.csv")))
 }

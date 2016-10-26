@@ -1,13 +1,13 @@
 ## Script to check subtype data against the maps
 
 .readSubtypeMap <- function(diseaseCode) {
-    subtypeMapFile <- file.path(dataDirectories()$curatedMaps,
+    subtypeMapFile <- file.path(dataDirectories()[["curatedMaps"]],
                                 paste0(diseaseCode, "_subtypeMap.csv"))
     readr::read_csv(subtypeMapFile)
 }
 
 .readSubtypeData <- function(diseaseCode) {
-    subtypeDataFile <- file.path(dataDirectories()$curatedSubtypes,
+    subtypeDataFile <- file.path(dataDirectories()[["curatedSubtypes"]],
                                  paste0(diseaseCode, "_subtypes.csv"))
     readr::read_csv(subtypeDataFile)
 }
