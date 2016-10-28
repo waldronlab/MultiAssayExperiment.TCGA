@@ -36,7 +36,3 @@ curationAvailable <- curationAvailable[!curationAvailable == "BRCA2"]
 names(curationAvailable) <- curationAvailable
 
 lapply(curationAvailable, findCorruptBarcodes)
-
-COAD.csv$patient
-BLCA.csv$tcgaBarcode
-LUSC.csv$Tumor.ID
