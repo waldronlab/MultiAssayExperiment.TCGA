@@ -2,9 +2,12 @@
 library(readxl)
 library(readr)
 library(dplyr)
+library(rdrop2)
 
 # Readlines from TXT file
-ST = readLines("./data-raw/subtypes_curation.txt")
+rdrop2::drop_get("The Cancer Genome Atlas/Script/subtypes_curation.txt", local_file =
+                     "data-raw/subtypes_curation.txt", overwrite = TRUE)
+ST = readLines("data-raw/subtypes_curation.txt")
 
 # Create a list of data.frames
 dflist <- list()
