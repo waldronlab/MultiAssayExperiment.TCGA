@@ -35,4 +35,13 @@ curationAvailable <- curationAvailable[!curationAvailable == "BRCA2"]
 
 names(curationAvailable) <- curationAvailable
 
-lapply(curationAvailable, findCorruptBarcodes)
+bcodeRes <- vapply(curationAvailable, FUN = function(dx) {
+    identical(c(0L, 0L), dim(findCorruptBarcodes(dx)))
+}, FUN.VALUE = logical(1L))
+
+stopifnot(all(bcodeRes))
+
+mergeSubtypeClinical <- function(diseaseCode) {
+clinicalData <- readr::read_csv(file.path(dataDirectories()[["clinicalData"]],
+                                              paste0(diseaseCode, ".csv")))
+}
