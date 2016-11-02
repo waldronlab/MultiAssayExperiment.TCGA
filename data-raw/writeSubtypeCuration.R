@@ -1,5 +1,6 @@
 ## Code to subset relevant columns (dflist needs barcode column)
 source("data-raw/checkSubtypeCuration.R")
+source("R/dataDirectories.R")
 
 .extractCurationColumns <- function(diseaseCode) {
     subtypeMap <- .readSubtypeMap(diseaseCode)
