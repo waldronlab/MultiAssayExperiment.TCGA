@@ -4,11 +4,8 @@ ACC.csv	SAMPLE	Histology	C1A/C1B	mRNA_K4	MethyLevel	miRNA cluster	SCNA cluster	p
 BLCA_annotations	Patient_ID	histological_subtypes	diagnosis_subtype										
 BLCA.csv	tcgaBarcode	HistologicalSubtype	DiagnosisSubtype										
 													
-BRCA_annotations	Patient_ID	mrna_subtypes	mrna_subtypes	mrna_subtypes	microrna_subtypes	methylation_subtypes	protein_subtypes	scna_subtypes	integrative_subtypes	integrative_subtypes	integrative_subtypes		
-BRCA.csv	Complete TCGA ID	PAM50 mRNA	SigClust Unsupervised mRNA	SigClust Intrinsic mRNA	miRNA Clusters	methylation Clusters	RPPA Clusters	CN Clusters	Integrated Clusters (with PAM50)	Integrated Clusters (no exp)	Integrated Clusters (unsup exp)		
-													
-BRCA2_annotations	Patient_ID	mrna_subtypes											
-BRCA2.csv	Sample ID	60 Gene-classifier Class Assignment											
+BRCA_annotations	Patient_ID	mrna_subtypes	mrna_subtypes	mrna_subtypes	microrna_subtypes	methylation_subtypes	protein_subtypes	scna_subtypes	integrative_subtypes	integrative_subtypes	integrative_subtypes	mrna_subtypes	
+BRCA.csv	Complete TCGA ID	PAM50 mRNA	SigClust Unsupervised mRNA	SigClust Intrinsic mRNA	miRNA Clusters	methylation Clusters	RPPA Clusters	CN Clusters	Integrated Clusters (with PAM50)	Integrated Clusters (no exp)	Integrated Clusters (unsup exp)	60 Gene-classifier Class Assignment	
 													
 COAD_annotations	Patient_ID	msi	methylation_subtypes	mrna_subtypes	histological_subtypes								
 COAD.csv	patient	MSI_status	methylation_subtype	expression_subtype	histological_type								
@@ -28,6 +25,9 @@ KIRC.csv	Patient	mRNA_cluster	microRNA_cluster
 KIRP_annotations	Patient_ID	histological_subtypes	scna_subtypes	methylation_subtypes	microrna_subtypes	mrna_subtypes	protein_subtypes	integrative_subtypes					
 KIRP.csv	CDE_ID:2673794	tumor_type (KIRP path; USE THIS)	DNA copy cluster (Murray)	Meth Cluster (Laird group)	"miRNA clusters (4 group NMF, Robertson group)"	"mRNA clusters (3 group NMF, Rathmell group)"	RPPA clusters (Rehan Akbani)	"COCA (k=4, Katie Hoadley)"					
 													
+LAML_annotations	Patient_ID	mrna_subtypes	microrna_subtypes										
+LAML.csv	sample.id	mRNA	microRNA										
+													
 LGG_annotations	Patient_ID	methylation_subtypes	mutation_subtypes	histological_subtypes	mrna_subtypes	mrna_subtypes	mrna_subtypes	mrna_subtypes	methylation_subtypes	methylation_subtypes	methylation_subtypes	methylation_subtypes	protein_subtypes
 LGG.csv	Case	MGMT promoter status	IDH/codel subtype	Histology	Original Subtype	Transcriptome Subtype	Pan-Glioma RNA Expression Cluster	IDH-specific RNA Expression Cluster	Pan-Glioma DNA Methylation Cluster	IDH-specific DNA Methylation Cluster	Supervised DNA Methylation Cluster	Random Forest Sturm Cluster	RPPA cluster
 													
@@ -37,8 +37,8 @@ LUAD.csv	Tumor ID	expression_subtype	iCLUSTER output	methylation signature
 LUSC_annotations	Patient_ID	mrna_subtypes	scna_cluster	scna_cluster									
 LUSC.csv	Tumor ID	Expression Subtype	High Level Amplifications	Homozygous Deletions									
 													
-OVC_annotations	Patient_ID	mrna_subtypes											
-OVC.csv	Sample ID	k4											
+OV_annotations	Patient_ID	mrna_subtypes											
+OV.csv	Sample ID	k4											
 													
 PRAD_annotations	Patient_ID	mutation_subtypes	integrative_subtypes	mrna_subtypes	methylation_subtypes	protein_subtypes	microrna_subtypes	scna_cluster					
 PRAD.csv	PATIENT_ID	Subtype	iCluster	mRNA_cluster	methylation_cluster	RPPA_cluster	miRNA_cluster	SCNA_cluster					
