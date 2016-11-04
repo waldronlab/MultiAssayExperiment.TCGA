@@ -1,4 +1,6 @@
 ### Merging subtype files with clinical data
+source("R/dataDirectories.R")
+library(dplyr)
 
 ## Helper for finding barcode column
 .findBarcodeCol <- function(DF) {
@@ -38,6 +40,8 @@ names(curationAvailable) <- curationAvailable
 bcodeRes <- vapply(curationAvailable, FUN = function(dx) {
     identical(c(0L, 0L), dim(findCorruptBarcodes(dx)))
 }, FUN.VALUE = logical(1L))
+
+which(!bcodeRes)
 
 stopifnot(all(bcodeRes))
 
