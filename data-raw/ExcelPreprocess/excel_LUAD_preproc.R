@@ -21,6 +21,9 @@ mutationRange <- seq(excel_position("M"), excel_position("AI"))
 CNARange <- seq(excel_position("AM"), excel_position("BP"))
 FCNARange <- seq(excel_position("BQ"), excel_position("CT"))
 
+CNA_legend <- content[CNARange][[1L]][1:2]
+FCNA_legend <- content[FCNARange][[1L]][1:2]
+
 names(luad)[mutationRange] <- paste0("Mutation_", names(luad[mutationRange]))
 names(luad)[CNARange] <- paste0("CNA_", names(luad[CNARange]))
 names(luad)[FCNARange] <- paste0("FCNA_", names(luad[FCNARange]))
