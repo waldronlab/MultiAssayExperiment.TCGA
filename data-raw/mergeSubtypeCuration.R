@@ -32,6 +32,8 @@ findCorruptBarcodes <- function(diseaseCode) {
     return(dplyr::data_frame())
 }
 
+source("data-raw/readDFList.R")
+
 curationAvailable <- gsub(".csv", "", names(dflist), fixed = TRUE)
 curationAvailable <- curationAvailable[!curationAvailable == "BRCA2"]
 
