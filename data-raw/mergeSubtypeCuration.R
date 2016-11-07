@@ -1,6 +1,9 @@
 ### Merging subtype files with clinical data
-source("R/dataDirectories.R")
 library(dplyr)
+
+source("R/dataDirectories.R")
+source("data-raw/readDFList.R")
+source("data-raw/checkSubtypeCuration.R")
 
 ## Helper for finding barcode column
 .findBarcodeCol <- function(DF) {
@@ -31,8 +34,6 @@ findCorruptBarcodes <- function(diseaseCode) {
     }
     return(dplyr::data_frame())
 }
-
-source("data-raw/readDFList.R")
 
 curationAvailable <- gsub(".csv", "", names(dflist), fixed = TRUE)
 curationAvailable <- curationAvailable[!curationAvailable == "BRCA2"]
