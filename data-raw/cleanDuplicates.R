@@ -23,8 +23,9 @@ cleanDuplicates <- function(dataset) {
     }, x = whichDups, y = uniqueData,
     SIMPLIFY = TRUE)
     removalIdx <- unlist(duplicateOmit)
-    dataset <- dataset[, -removalIdx, drop = FALSE]
-    names(dataset) <- make.unique(names(dataset))
+    if (length(removalIdx))
+        dataset <- dataset[, -removalIdx, drop = FALSE]
 
+    names(dataset) <- make.unique(names(dataset))
     dataset
 }
