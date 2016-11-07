@@ -30,6 +30,12 @@ names(luad)[FCNARange] <- paste0("FCNA_", names(luad[FCNARange]))
 
 luad <- cleanDuplicates(luad)
 
+keepRows <- apply(luad, 1, function(eachRow) {
+    !all(is.na(eachRow))
+})
+
+luad <- luad[keepRows, ]
+
 readr::write_csv(luad, "inst/extdata/allsubtypes/LUAD.csv")
 
 rdrop2::drop_upload(file = file.path(dataDirectories()[["subtypePath"]],
