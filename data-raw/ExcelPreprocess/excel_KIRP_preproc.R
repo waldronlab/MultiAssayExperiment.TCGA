@@ -13,6 +13,7 @@ kirpdata <- read_excel("data-raw/ExcelPreprocess/nejmoa1505917_appendix_3.xlsx",
 anyDuplicated(names(kirpdata))
 
 kirpdata <- cleanDuplicates(kirpdata)
+names(kirpdata) <- gsub("\r|\n", " ", names(kirpdata))
 
 write_csv(kirpdata, path = "inst/extdata/allsubtypes/KIRP.csv")
 
