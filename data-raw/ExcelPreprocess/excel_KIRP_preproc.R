@@ -12,10 +12,10 @@ kirpdata <- read_excel("data-raw/ExcelPreprocess/nejmoa1505917_appendix_3.xlsx",
 
 anyDuplicated(names(kirpdata))
 
-cleanDuplicates(kirpdata)
+kirpdata <- cleanDuplicates(kirpdata)
 
-write_csv(kirpdata, file = "./data-raw/ExcelPreprocess/KIRP.csv")
+write_csv(kirpdata, path = "inst/extdata/allsubtypes/KIRP.csv")
 
-rdrop2::drop_upload("data-raw/ExcelPreprocess/BLCA.csv",
+rdrop2::drop_upload("data-raw/ExcelPreprocess/KIRP.csv",
                     dest = "The Cancer Genome Atlas/Script/allsubtypes/",
                     overwrite = TRUE)
