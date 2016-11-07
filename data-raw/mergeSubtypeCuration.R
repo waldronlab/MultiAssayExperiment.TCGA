@@ -45,10 +45,12 @@ bcodeRes <- vapply(curationAvailable, FUN = function(dx) {
 }, FUN.VALUE = logical(1L))
 
 which(!bcodeRes)
-
 stopifnot(all(bcodeRes))
 
-mergeSubtypeClinical <- function(diseaseCode) {
-clinicalData <- readr::read_csv(file.path(dataDirectories()[["clinicalData"]],
+mergeSubtypeClinical <- function(diseaseCode, curationAvailable) {
+clinicalData <- readr::read_csv(file.path(dataDirectories()[["enhancedClinical"]],
                                               paste0(diseaseCode, ".csv")))
+if (diseaseCode %in% curationAvailable)
+    subtypeCuration <- .readSubtypeData(diseaseCode)
+    BarcodeColName <- .findBarcodeCol(subtypeCuration)
 }

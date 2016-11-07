@@ -11,7 +11,8 @@ dataDirectories <- function(create=FALSE) {
                         clinicalCurationPath =
                             file.path(extData, "TCGA_Clinical_Curation"),
                         rawClinical = file.path(clinicalData, "raw"),
-                        basicClinical = file.path(clinicalData, "basic")
+                        basicClinical = file.path(clinicalData, "basic"),
+                        enhancedClinical = file.path(clinicalData, "enhanced")
     )
     if (create) {
         invisible(lapply(directories,

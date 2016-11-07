@@ -8,7 +8,6 @@ rD <- getFirehoseRunningDates(last = 1)
 excludeDatasets <- c("COADREAD", "GBMLGG", "KIPAN", "STES", "FPPP")
 diseases <- getFirehoseDatasets()[!(getFirehoseDatasets() %in% excludeDatasets)]
 
-
 getClinicalFirehose <- function(diseaseCode, force = FALSE) {
     runDate <- "20151101"
     dirList <- dataDirectories()
