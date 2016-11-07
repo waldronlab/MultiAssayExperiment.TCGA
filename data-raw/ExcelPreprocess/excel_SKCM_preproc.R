@@ -1,10 +1,17 @@
 ## Preprocessing of SKCM
-
 library(readxl)
 library(dplyr)
 library(readr)
 
-skcmdata <- read_excel("data-raw/ExcelPreprocess/mmc2_skcm.xlsx",
-                       sheet= "Supplemental Table S1D", skip= 1)
+source("R/dataDirectories.R")
 
-write_csv(skcmdata, file = "inst/extdata/allsubtypes/SKCM.csv")
+skcmdata <- read_excel("data-raw/ExcelPreprocess/Patient_Info_barcode_Tab_S1D.xlsx",
+                       sheet= "Supplemental Table S1D", skip= 1, na = "-")
+
+stopifnot(!anyDuplicated(names(skcmdata)))
+
+write_csv(skcmdata, path = "inst/extdata/allsubtypes/SKCM.csv")
+
+rdrop2::drop_upload(file = file.path(dataDirectories()[["subtypePath"]], "SKCM.csv"),
+                    dest = "The Cancer Genome Atlas/Script/allsubtypes/",
+                    overwrite = TRUE)
