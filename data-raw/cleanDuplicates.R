@@ -1,35 +1,30 @@
 cleanDuplicates <- function(dataset) {
     ## Duplicate column names
-    dupNames <- names(dataset)[duplicated(names(dataset))]
-    dupIdx <- which(duplicated(names(dataset)))
+    dupNames <- unique(names(dataset)[duplicated(names(dataset))])
+    dupIdx <- match(dupNames, names(dataset))
+    whichDups <- lapply(dupNames, function(duplicate, dat) {
+        which(names(dat) %in% duplicate)
+    }, dat = dataset)
 
-    ## Ensure only duplicated once
-    stopifnot(vapply(dupNames, FUN = function(named) {
-        !(sum(names(dataset) %in% named) > 2)
-    }, FUN.VALUE = logical(1L)))
-
-    sortColsDupIdx <- which(duplicated(sort(names(dataset))))
-    sortColsDupNames <- sort(names(dataset))[duplicated(sort(names(dataset)))]
-    dupCols <- cbind(first = sortColsDupIdx-1, second = sortColsDupIdx)
-
-    listDups <- apply(dupCols, 1, function(x) {
-        dff <- dataset[,sort(names(dataset))]
-        dff[x]
+    uniqueData <- lapply(dupNames, function(duplicate) {
+        dups <- dataset[, which(names(dataset) %in% duplicate)]
+        combos <- gtools::combinations(ncol(dups), 2L)
+        isSame <- apply(combos, 1L, function(colNums) {
+            identical(dups[[colNums[[1L]]]], dups[[colNums[[2L]]]])
+        })
+        equals <- combos[isSame, , drop = FALSE]
+        repeatedCols <- unique(as.vector(equals))
+        Filter(function(vec) {!is.na(vec)},
+               c(setdiff(seq_along(dups), repeatedCols),
+                  repeatedCols[1L]))
     })
+    duplicateOmit <- mapply(function(x, y) {
+        x[-y]
+    }, x = whichDups, y = uniqueData,
+    SIMPLIFY = TRUE)
+    removalIdx <- unlist(duplicateOmit)
+    dataset <- dataset[, -removalIdx, drop = FALSE]
+    names(dataset) <- make.unique(names(dataset))
 
-    names(listDups) <- sortColsDupNames
-
-    result <- cbind.data.frame(dupCols, identical =
-                                   vapply(listDups, FUN = function(dff) {
-                                       identical(dff[[1L]], dff[[2L]])
-                                   }, FUN.VALUE = logical(1L)),
-                               row.names = names(listDups))
-
-    ## Return only rows that have identical data in them
-    result <- subset(result, result[["identical"]])
-
-    ## Keep order and variables that appear first (match reversed names)
-    clearNames <- rev(rev(names(dataset))[-match(rownames(result),
-                                                 rev(names(dataset)))])
-    dataset[, clearNames]
+    dataset
 }
