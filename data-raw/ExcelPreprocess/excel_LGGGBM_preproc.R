@@ -4,7 +4,8 @@ library(readxl)
 library(dplyr)
 library(readr)
 
-gbmxl <- read_excel("data-raw/ExcelPreprocess/mmc2_LGGGBM.xlsx", skip = 1)
+gbmxl <- read_excel("data-raw/ExcelPreprocess/mmc2_LGGGBM.xlsx",
+                    skip = 1, na = "NA")
 gbmxl <- split(gbmxl, gbmxl$Study)
 
 lggdata <- gbmxl[["Brain Lower Grade Glioma"]]
