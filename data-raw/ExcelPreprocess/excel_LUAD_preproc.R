@@ -17,9 +17,9 @@ luad <- readxl::read_excel("data-raw/ExcelPreprocess/lungCarcinoma_LUAD.xlsx",
                            na = "[Not Available]")
 
 ## Excel Cell Ranges (M-AI, AM-BP, BQ-CT)
-mutationRange <- excel_position("M"):excel_position("AI")
-CNARange <- excel_position("AM"):excel_position("BP")
-FCNARange <- excel_position("BQ"):excel_position("CT")
+mutationRange <- seq(excel_position("M"), excel_position("AI"))
+CNARange <- seq(excel_position("AM"), excel_position("BP"))
+FCNARange <- seq(excel_position("BQ"), excel_position("CT"))
 
 names(luad)[mutationRange] <- paste0("Mutation_", names(luad[mutationRange]))
 names(luad)[CNARange] <- paste0("CNA_", names(luad[CNARange]))

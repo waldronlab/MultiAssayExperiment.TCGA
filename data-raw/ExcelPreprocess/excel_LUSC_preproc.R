@@ -1,5 +1,9 @@
-## Read both files in LUSC
+## Curating LUSC original subtype file
 library(readxl)
+
+source("data-raw/ExcelPreprocess/excel_position.R")
+
+## Read both files in LUSC
 studyData <- read_excel("data-raw/ExcelPreprocess/data.file.S7.1.p16.alterations.xls")
 subtypeData <- read_excel("data-raw/ExcelPreprocess/data.file.S7.5.clinical.and.genomic.data.table.xls", skip=3)
 
@@ -16,14 +20,16 @@ names(subtypeData) <- c(names(subtypeData)[seq(ncol(subtypeData)-1)], "Expressio
 
 ## 57th Column or "BE" column
 ## Create sequence denoting mutation results
-mutationRange <- seq(which(letters == "n"),
-                     length(rep(letters, 2))+which(letters=="e"))
+## Excel Range N-BE
+mutationRange <- seq(excel_position("N"),
+                     excel_position("BE"))
 names(subtypeData)[mutationRange] <- paste0("Mutation_",
                                             names(subtypeData[mutationRange]))
 
 ## 58th column or "BF" column
 ## Create sequence denoting CNA results
-CNArange <- seq(length(rep(letters, 2))+which(letters=="f"), length(rep(letters, 3))+which(letters=="v"))
+## Excel Range BF-CV
+CNArange <- seq(excel_position("BF"), excel_position("CV"))
 names(subtypeData)[CNArange] <- paste0("CNA_", names(subtypeData[CNArange]))
 
 ## Based on results from above
