@@ -16,6 +16,6 @@ processedBLCA <- cleanDuplicates(blcaxl)
 ## save as csv file for upload
 write_csv(processedBLCA, path = "inst/extdata/allsubtypes/BLCA.csv")
 
-rdrop2::drop_upload("data-raw/ExcelPreprocess/BLCA.csv",
+rdrop2::drop_upload("inst/extdata/allsubtypes/BLCA.csv",
                     dest = "The Cancer Genome Atlas/Script/allsubtypes/",
                     overwrite = TRUE)
