@@ -44,11 +44,12 @@ source("R/dataDirectories.R")
 }
 
 ## Helper for finding barcode column
+## **Takes the first result!**
 .findBarcodeCol <- function(DF) {
     apply(DF, 2, function(column) {
         logicBCode <- grepl("^TCGA", column)
         logicBCode
-    }) %>% apply(., 2, all) %>% Filter(isTRUE, .) %>% names
+    }) %>% apply(., 2, all) %>% Filter(isTRUE, .) %>% names %>% `[[`(1L)
 }
 
 ## Helper to read small df - subtypeMap
