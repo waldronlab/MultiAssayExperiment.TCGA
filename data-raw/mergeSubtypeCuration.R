@@ -4,14 +4,7 @@ library(dplyr)
 source("R/dataDirectories.R")
 source("data-raw/readDFList.R")
 source("data-raw/checkSubtypeCuration.R")
-
-## Helper for finding barcode column
-.findBarcodeCol <- function(DF) {
-    apply(DF, 2, function(column) {
-        logicBCode <- grepl("^TCGA", column)
-        logicBCode
-    }) %>% apply(., 2, all) %>% Filter(isTRUE, .) %>% names
-}
+source("data-raw/helpers.R")
 
 curateBarcodes <- function(diseaseCode) {
     subtypeData <- .readSubtypeData(diseaseCode)
@@ -47,10 +40,10 @@ bcodeRes <- vapply(curationAvailable, FUN = function(dx) {
 which(!bcodeRes)
 stopifnot(all(bcodeRes))
 
-mergeSubtypeClinical <- function(diseaseCode, curationAvailable) {
-clinicalData <- readr::read_csv(file.path(dataDirectories()[["enhancedClinical"]],
-                                              paste0(diseaseCode, ".csv")))
-if (diseaseCode %in% curationAvailable)
-    subtypeCuration <- .readSubtypeData(diseaseCode)
-    BarcodeColName <- .findBarcodeCol(subtypeCuration)
+## Save final merged datasets
+writeMergedClinical <- function(diseaseCode, curationAvailable) {
+    mergedData <- .mergeSubtypeClinical(diseaseCode, curationAvailable)
+    mergedLocation <- "inst/extdata/Clinical/merged"
+    write_csv(x = mergedData,
+        path = file.path(mergedLocation, paste0(diseaseCode, "_merged.csv")))
 }

@@ -1,18 +1,8 @@
 ## Script for checking clinical data curation for any errors
+library(BiocInterfaces)
+source("R/dataDirectories.R")
+source("data-raw/helpers.R")
 
-## Helper function for reading clinical variable curation files
-.readClinicalCuration <- function(diseaseCode) {
-    clinicalCuration <- "./inst/extdata/TCGA_Clinical_Curation/"
-    curatePrefix <- "TCGA_Variable_Curation_"
-    stopifnot(S4Vectors::isSingleString(diseaseCode))
-    curatedFile <- readxl::read_excel(file.path(clinicalCuration,
-                                                paste0(curatePrefix,
-                                                       diseaseCode,
-                                                       ".xlsx")), na = " ",
-                                      sheet = 1L)
-    names(curatedFile) <- make.names(names(curatedFile))
-    curatedFile
-}
 
 ## Function to check for curation file errors
 curateCuration <- function(diseaseCode) {
@@ -30,30 +20,14 @@ curateCuration <- function(diseaseCode) {
     all(unlist(logiList))
 }
 
-## Helper function stipulation:
-## * Column lengths must be the same in "Variables" and "Priority"
-.rowToDataFrame <- function(singleRowDF) {
-    priorityIndex <- match("priority", tolower(names(singleRowDF)))
-    stopifnot(!is.na(priorityIndex), length(priorityIndex) == 1L,
-              priorityIndex != 0L)
-    columnRange1 <- seq_len(priorityIndex-1)
-    columnRange2 <- columnRange1 + rev(columnRange1)
-    data.frame(variable = as.character(singleRowDF[columnRange1]),
-               priority = as.integer(singleRowDF[columnRange2]),
-               stringsAsFactors = FALSE)
-}
-
 ## This function reads in both variable curation and clinical data and checks
 ## to see what columns in the variable curation are extraneous
 checkClinicalCuration <- function(diseaseCode) {
     stopifnot(S4Vectors::isSingleString(diseaseCode))
     message("Working on ", diseaseCode)
 
-    clinicalLocation <- "./inst/extdata/Clinical/enhanced/"
-    clinicalData <- readr::read_csv(file.path(clinicalLocation,
-                                              paste0(diseaseCode, ".csv")))
-
-    curatedFile <- .readClinicalCuration(diseaseCode = diseaseCode)
+    clinicalData <- .readClinical(diseaseCode)
+    curatedFile <- .readClinicalCuration(diseaseCode)
     listLines <- split(curatedFile, seq_len(nrow(curatedFile)))
 
     listDF <- lapply(listLines, .rowToDataFrame)
@@ -65,10 +39,30 @@ checkClinicalCuration <- function(diseaseCode) {
     curatedLinesNames[!curatedLinesNames %in% names(clinicalData)]
 }
 
-excludeDatasets <- c("COADREAD", "GBMLGG", "KIPAN", "STES", "FPPP")
-dxCodes <- RTCGAToolbox::getFirehoseDatasets()
+data("diseaseCodes")
+dxCodes <- diseaseCodes[["Study.Abbreviation"]]
+tbxCodes <- getFirehoseDatasets()
+
+dput(setdiff(diseaseCodes[[1L]], tbxCodes))
+codesNotInTbx <- c("CNTL", "LCML", "MISC")
+
+dput(setdiff(tbxCodes, diseaseCodes[[1L]]))
+codesNotInDxCodes <- c("COADREAD", "GBMLGG", "KIPAN", "STES")
+
+excludeDatasets <- c(codesNotInTbx, codesNotInDxCodes, "FPPP")
+
 includeDatasets <- dxCodes[!(dxCodes %in% excludeDatasets)]
 names(includeDatasets) <- includeDatasets
 
 ## Check for errors across all datasets
 nonMatchingColumns <- lapply(includeDatasets, checkClinicalCuration)
+
+## Check all clinical data names
+
+allPatientIDs <- vapply(includeDatasets, function(disease) {
+                            dxData <- .readClinical(disease)
+                            "patientID" %in% names(dxData)
+               }, FUN.VALUE = logical(1L))
+
+stopifnot(all(allPatientIDs))
+

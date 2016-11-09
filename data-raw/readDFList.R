@@ -21,7 +21,10 @@ for (i in seq(from=1, to=57, by=3)) {
     dflist[[colnames(df)[2]]] = df
 }
 
+rm(df)
+
 dflist <- lapply(dflist, function(x) {
     x[[2]] <- gsub('"', "", x[[2]])
     x
 })
+

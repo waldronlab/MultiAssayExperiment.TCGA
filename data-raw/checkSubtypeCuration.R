@@ -1,18 +1,5 @@
 ## Script to check subtype data against the maps
-
-.readSubtypeMap <- function(diseaseCode) {
-    subtypeMapFile <- file.path(dataDirectories()[["curatedMaps"]],
-                                paste0(diseaseCode, "_subtypeMap.csv"))
-    readr::read_csv(subtypeMapFile)
-}
-
-.readSubtypeData <- function(diseaseCode) {
-    subtypeDataFile <- file.path(dataDirectories()[["subtypePath"]],
-                                 paste0(diseaseCode, ".csv"))
-    subtypeData <- readr::read_csv(subtypeDataFile)
-    names(subtypeData) <- make.names(names(subtypeData))
-    subtypeData
-}
+source("data-raw/helpers.R")
 
 ## How to figure out which datasets don't have matching columns
 ## List of lists (each inner list has names in dataset and names that were
