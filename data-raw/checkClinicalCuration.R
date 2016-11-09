@@ -39,20 +39,8 @@ checkClinicalCuration <- function(diseaseCode) {
     curatedLinesNames[!curatedLinesNames %in% names(clinicalData)]
 }
 
-data("diseaseCodes")
-dxCodes <- diseaseCodes[["Study.Abbreviation"]]
-tbxCodes <- getFirehoseDatasets()
-
-dput(setdiff(diseaseCodes[[1L]], tbxCodes))
-codesNotInTbx <- c("CNTL", "LCML", "MISC")
-
-dput(setdiff(tbxCodes, diseaseCodes[[1L]]))
-codesNotInDxCodes <- c("COADREAD", "GBMLGG", "KIPAN", "STES")
-
-excludeDatasets <- c(codesNotInTbx, codesNotInDxCodes, "FPPP")
-
-includeDatasets <- dxCodes[!(dxCodes %in% excludeDatasets)]
-names(includeDatasets) <- includeDatasets
+## Load available codes
+source("data-raw/diseaseCodes.R")
 
 ## Check for errors across all datasets
 nonMatchingColumns <- lapply(includeDatasets, checkClinicalCuration)

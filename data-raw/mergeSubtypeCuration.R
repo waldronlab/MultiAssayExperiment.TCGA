@@ -2,9 +2,10 @@
 library(dplyr)
 
 source("R/dataDirectories.R")
-source("data-raw/readDFList.R")
 source("data-raw/checkSubtypeCuration.R")
 source("data-raw/helpers.R")
+## Load available cancer codes
+source("data-raw/diseaseCodes.R")
 
 curateBarcodes <- function(diseaseCode) {
     subtypeData <- .readSubtypeData(diseaseCode)
@@ -28,10 +29,6 @@ findCorruptBarcodes <- function(diseaseCode) {
     return(dplyr::data_frame())
 }
 
-curationAvailable <- gsub(".csv", "", names(dflist), fixed = TRUE)
-curationAvailable <- curationAvailable[!curationAvailable == "BRCA2"]
-
-names(curationAvailable) <- curationAvailable
 
 bcodeRes <- vapply(curationAvailable, FUN = function(dx) {
     identical(c(0L, 0L), dim(findCorruptBarcodes(dx)))
@@ -47,3 +44,6 @@ writeMergedClinical <- function(diseaseCode, curationAvailable) {
     write_csv(x = mergedData,
         path = file.path(mergedLocation, paste0(diseaseCode, "_merged.csv")))
 }
+
+lapply(includeDatasets, writeMergedClinical,
+       curationAvailable=curationAvailable)
