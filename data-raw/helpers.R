@@ -15,19 +15,13 @@ source("R/dataDirectories.R")
     curatedFile
 }
 
-## Read enhanced clinical data from file
-.readClinical <- function(diseaseCode) {
-    clinicalLoc <- dataDirectories()[["enhancedClinical"]]
+## Read clinical data from file location
+.readClinical <- function(diseaseCode, dataDir=NULL) {
+    if (is.null(dataDir)) stop("provide data directory name from dataDirectories()")
+    clinicalLoc <- dataDirectories()[[dataDir]]
     clinicalData <- readr::read_csv(file.path(clinicalLoc,
                                               paste0(diseaseCode, ".csv")))
     clinicalData
-}
-
-.readBasicClinical <- function(diseaseCode) {
-    clinicalLoc <- dataDirectories()[["basicClinical"]]
-    clinicalBasic <- readr::read_csv(file.path(clinicalLoc,
-                                              paste0(diseaseCode, ".csv")))
-    clinicalBasic
 }
 
 ## Helper function stipulation:
@@ -112,7 +106,7 @@ source("R/dataDirectories.R")
 
 ## Merge basic clinical and extra to create enhanced
 .mergeClinicalData <- function(diseaseCode) {
-    basicClinical <- .readBasicClinical(diseaseCode)
+    basicClinical <- .readClinical(diseaseCode, "basicClinical")
     idName <- grep("patientID", names(basicClinical), ignore.case = TRUE,
                    value = TRUE)
     stopifnot(S4Vectors::isSingleString(idName))
@@ -155,3 +149,9 @@ source("R/dataDirectories.R")
     clinicalData
 }
 
+## Find columns that are all NA
+.findNAColumns <- function(dataset) {
+    apply(dataset, 2, function(column) {
+              all(is.na(column))
+                              })
+}
