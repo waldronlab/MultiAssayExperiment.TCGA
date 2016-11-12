@@ -3,10 +3,9 @@ library(RTCGAToolbox)
 library(readr)
 library(BiocInterfaces)
 
-rD <- getFirehoseRunningDates(last = 1)
-## 20151101
-excludeDatasets <- c("COADREAD", "GBMLGG", "KIPAN", "STES", "FPPP")
-diseases <- getFirehoseDatasets()[!(getFirehoseDatasets() %in% excludeDatasets)]
+# Load vector of TCGA cancer codes
+source("data-raw/diseaseCodes.R")
+source("data-raw/helpers.R")
 
 getClinicalFirehose <- function(diseaseCode, force = FALSE) {
     runDate <- "20151101"
@@ -34,3 +33,4 @@ saveClinicalFirehose <- function(diseaseCode) {
     readr::write_csv(full_TCGAclin, path=file.path(dirList[["basicClinical"]],
                                                    paste0(diseaseCode, ".csv")))
 }
+

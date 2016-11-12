@@ -26,7 +26,7 @@ checkClinicalCuration <- function(diseaseCode) {
     stopifnot(S4Vectors::isSingleString(diseaseCode))
     message("Working on ", diseaseCode)
 
-    clinicalData <- .readClinical(diseaseCode)
+    clinicalData <- .readClinical(diseaseCode, "enhancedClinical")
     curatedFile <- .readClinicalCuration(diseaseCode)
     listLines <- split(curatedFile, seq_len(nrow(curatedFile)))
 
@@ -48,7 +48,7 @@ nonMatchingColumns <- lapply(includeDatasets, checkClinicalCuration)
 ## Check all clinical data names
 
 allPatientIDs <- vapply(includeDatasets, function(disease) {
-                            dxData <- .readClinical(disease)
+                            dxData <- .readClinical(disease, "enhancedClinical")
                             "patientID" %in% names(dxData)
                }, FUN.VALUE = logical(1L))
 

@@ -40,10 +40,11 @@ stopifnot(all(bcodeRes))
 ## Save final merged datasets
 writeMergedClinical <- function(diseaseCode, curationAvailable) {
     mergedData <- .mergeSubtypeClinical(diseaseCode, curationAvailable)
-    mergedLocation <- "inst/extdata/Clinical/merged"
+    mergedLocation <- dataDirectories()[["mergedClinical"]]
     write_csv(x = mergedData,
         path = file.path(mergedLocation, paste0(diseaseCode, "_merged.csv")))
 }
 
 lapply(includeDatasets, writeMergedClinical,
        curationAvailable=curationAvailable)
+
