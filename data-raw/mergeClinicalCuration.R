@@ -22,6 +22,14 @@ mergeVecs <- function(x1, x2, prioritize=TRUE) {
   ## mergeVecs(x1=c(1, 2, 3, NA), x2=c(2, 2, NA, 4), prioritize=FALSE)
 }
 
+# Alternative download for clinical data
+source("R/downloadDropbox.R")
+BoxClinicalCuration <- rdrop2::drop_dir("The Cancer Genome Atlas/TCGA_Clinical_Curation")[["path"]]
+downloadDropbox(BoxClinicalCuration, TCGAcode=TCGAcode, dirList=dirList)
+
+## Load curationAvailable vector
+load("data/curationAvailable.rda")
+
 diseaseCode <- "BRCA"
 filePath <- paste0("./inst/extdata/TCGA_Clinical_Curation/TCGA_Variable_Curation_", diseaseCode, ".xlsx")
 curatedLines <- readxl::read_excel(path = filePath, na = " ", sheet = 1L)
