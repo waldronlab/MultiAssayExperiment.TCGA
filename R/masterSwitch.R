@@ -15,3 +15,6 @@ source("data-raw/downloadSubtypeDrop.R")
 
 ## Merge curated data to clinical data
 source("data-raw/mergeSubtypeCuration.R")
+
+## Clean merged data files
+source("data-raw/cleanMerged.R")
