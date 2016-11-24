@@ -1,6 +1,8 @@
 ## Script for removing NA from merged data
-source("data-raw/diseaseCodes.R")
+source("R/getDiseaseCodes.R")
 source("data-raw/helpers.R")
+
+TCGAcodes <- getDiseaseCodes()
 
 cleanMerged <- function(diseaseCode) {
     mergedLoc <- dataDirectories()[["mergedClinical"]]
@@ -15,10 +17,4 @@ cleanMerged <- function(diseaseCode) {
     message(diseaseCode, " completed!")
 }
 
-checkDims <- lapply(includeDatasets, function(dx) {
-    mergedLoc <- dataDirectories()[["mergedClinical"]]
-    Clinical <- readr::read_csv(file.path(mergedLoc, paste0(dx,
-                                                                "_reduced.csv")))
-    return(dim(Clinical))
-})
-
+lapply(TCGAcodes, cleanMerged)
