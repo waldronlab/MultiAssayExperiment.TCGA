@@ -46,6 +46,36 @@ source("R/dataDirectories.R")
     }) %>% apply(., 2, all) %>% Filter(isTRUE, .) %>% names %>% `[[`(1L)
 }
 
+## Download Subtype file from allsubtypes
+.getSubtypeFile <- function(diseaseCode, overwrite=TRUE) {
+    invisible(BoxSubTypes <-
+                  rdrop2::drop_dir("The Cancer Genome Atlas/Script/allsubtypes")[["path"]])
+    subtypePath <- dataDirectories()[["subtypePath"]]
+    subtypeFile <- BoxSubTypes[grepl(paste0(diseaseCode, ".csv"),
+                                     basename(BoxSubTypes), fixed = TRUE)]
+    if (rdrop2::drop_get(subtypeFile, local_file =
+                         file.path(subtypePath, basename(subtypeFile)),
+                         overwrite = overwrite))
+        message("download successful")
+}
+
+## Download Clinical Curation File
+.getClinicalFile <- function(diseaseCode, overwrite=TRUE) {
+    invisible(BoxClinicalCuration <-
+                  drop_dir("The Cancer Genome Atlas/TCGA_Clinical_Curation")[["path"]])
+    clinicalCurationPath <- dataDirectories()[["clinicalCurationPath"]]
+    clinicalFile <-
+        BoxClinicalCuration[grepl(paste0("TCGA_Variable_Curation_",
+                                         diseaseCode, ".xlsx"),
+                                  basename(BoxClinicalCuration))]
+    if (rdrop2::drop_get(clinicalFile,
+                         local_file = file.path(clinicalCurationPath,
+                                                basename(clinicalFile)),
+                         overwrite = overwrite))
+        message("download successful")
+}
+
+
 ## Helper to read small df - subtypeMap
 .readSubtypeMap <- function(diseaseCode) {
     subtypeMapFile <- file.path(dataDirectories()[["curatedMaps"]],
@@ -145,7 +175,7 @@ source("R/dataDirectories.R")
         clinicalData <- merge(clinicalData, subtypeCuration,
                               by.x = "patientID", by.y = BarcodeColName,
                               sort = FALSE)
-    } 
+    }
     clinicalData
 }
 
