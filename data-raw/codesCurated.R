@@ -1,10 +1,8 @@
-## small script for resolving TCGA disease codes available
+## small script for resolving TCGA curation codes available
 ## BiocInstaller::biocLite("waldronlab/BiocInterfaces")
 source("data-raw/readDFList.R")
-
-library(BiocInterfaces)
-
 data("diseaseCodes")
+
 dxCodes <- diseaseCodes[["Study.Abbreviation"]]
 tbxCodes <- getFirehoseDatasets()
 
@@ -25,4 +23,6 @@ curationAvailable <- gsub(".csv", "", names(dflist), fixed = TRUE)
 curationAvailable <- curationAvailable[!curationAvailable == "BRCA2"]
 
 names(curationAvailable) <- curationAvailable
+
+save(curationAvailable, file = "data/curationAvailable.rda")
 
