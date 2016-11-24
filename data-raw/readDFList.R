@@ -1,8 +1,4 @@
 ## Read and split curation to small data.frames
-library(readxl)
-library(readr)
-library(dplyr)
-library(rdrop2)
 
 # Download from Dropbox
 # rdrop2::drop_get("The Cancer Genome Atlas/Script/subtypes_curation.txt", local_file =
@@ -21,7 +17,7 @@ for (i in seq(from=1, to=57, by=3)) {
     dflist[[colnames(df)[2]]] = df
 }
 
-rm(df)
+rm(df, ST)
 
 dflist <- lapply(dflist, function(x) {
     x[[2]] <- gsub('"', "", x[[2]])
