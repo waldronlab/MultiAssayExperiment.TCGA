@@ -1,5 +1,6 @@
 ## Source dataDirectories function
 source("R/dataDirectories.R")
+load("data/curationAvailable.rda")
 
 ## Helper function for reading clinical variable curation files
 .readClinicalCuration <- function(diseaseCode) {
