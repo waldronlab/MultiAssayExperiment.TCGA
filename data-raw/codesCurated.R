@@ -24,5 +24,8 @@ curationAvailable <- curationAvailable[!curationAvailable == "BRCA2"]
 
 names(curationAvailable) <- curationAvailable
 
+if (!dir.exists("data"))
+    dir.create("data")
+
 save(curationAvailable, file = "data/curationAvailable.rda")
 
