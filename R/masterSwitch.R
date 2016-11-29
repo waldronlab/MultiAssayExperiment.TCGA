@@ -12,6 +12,7 @@ source("data-raw/downloadExtraClinical.R")
 
 ## Download SubType data from DropBox
 source("data-raw/downloadSubtypeDrop.R")
+## ALTERNATIVELY: Download files manually and put in "inst/extdata/allsubtypes"
 
 ## Merge curated data to clinical data
 source("data-raw/mergeSubtypeCuration.R")
