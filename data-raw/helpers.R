@@ -175,7 +175,7 @@ load("data/curationAvailable.rda")
         BarcodeColName <- .findBarcodeCol(subtypeCuration)
         clinicalData <- merge(clinicalData, subtypeCuration,
                               by.x = "patientID", by.y = BarcodeColName,
-                              sort = FALSE)
+                              all = TRUE, sort = FALSE)
     }
     clinicalData
 }
