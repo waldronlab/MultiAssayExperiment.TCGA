@@ -1,6 +1,6 @@
 # Script to run to build all clinical datasets in several folders
-packs <- c("readxl", "readr", "dplyr", "rdrop2", "RTCGAToolbox", "BiocInterfaces")
-sapply(packs, library, character.only = TRUE)
+## Make sure libraries are installed
+source("R/installLibraries.R")
 
 # Allocate all directories in repository
 source("R/dataDirectories.R")
@@ -12,7 +12,7 @@ source("data-raw/downloadExtraClinical.R")
 
 ## Download SubType data from DropBox
 source("data-raw/downloadSubtypeDrop.R")
-## ALTERNATIVELY: Download files manually and put in "inst/extdata/allsubtypes"
+## ALTERNATIVELY: Download files manually and put them in "inst/extdata/allsubtypes"
 
 ## Merge curated data to clinical data
 source("data-raw/mergeSubtypeCuration.R")
