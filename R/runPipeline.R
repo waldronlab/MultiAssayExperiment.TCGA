@@ -82,7 +82,10 @@ buildMultiAssayExperiments <-
             assayNames <- names(dataFull)
 
             exps <- c("CNASNP", "CNVSNP", "CNASeq", "CNACGH")
-            lapply(exps, function(dataType) {
+            inAssays <- exps %in% assayNames
+            if (any(inAssays)) {
+            exps <- exps[inAssays]
+            invisible(lapply(exps, function(dataType) {
                 type <- switch(dataType,
                                CNASNP = "CNA_SNP",
                                CNVSNP = "CNV_SNP",
@@ -97,9 +100,9 @@ buildMultiAssayExperiments <-
                 source_file <- c(source_file = source_file)
                 metadata(dataFull[[dataType]]) <- c(metadata(dataFull[[dataType]]),
                                                     source_file)
-                message(dataType, " metadata added")
-            })
-
+            }))
+            message( paste(exps, collapse = ", ") , " metadata added")
+            }
             ExpList <- ExperimentList(dataFull)
             NewElist <- TCGAcleanExpList(ExpList, clinicalData)
             NewMap <- generateMap(NewElist, clinicalData, TCGAbarcode)
