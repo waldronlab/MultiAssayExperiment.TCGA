@@ -18,5 +18,5 @@ install_packages <- function(packageVector) {
     }))
 }
 
-packs <- c("devtools", "readxl", "readr", "dplyr")
+packs <- c("devtools", "readxl", "readr", "dplyr", "AnnotationHubData")
 install_packages(packs)
