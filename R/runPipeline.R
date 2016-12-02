@@ -134,3 +134,8 @@ buildMultiAssayExperiments <-
 # call buildMultiAssayExperiment function
 buildMultiAssayExperiments(TCGAcodes, runDate, analyzeDate, dataDirectory)
 
+# Upload data to S3 bucket
+upload_to_S3(file = paste0(cancerCode, "MAEO.rds"),
+             remotename = paste0(cancerCode, "MAEO.rds"),
+             bucket = "multiassayexperiments")
+
