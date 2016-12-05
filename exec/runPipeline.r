@@ -2,7 +2,7 @@
 
 ## Script for installing necessary packages
 ## Use Bioconductor devel and R devel versions
-stopifnot(R.Version()$major == 3 && R.Version()$minor >=4)
+stopifnot(R.Version()$major == 3 && R.Version()$minor >= 3)
 source("https://bioconductor.org/biocLite.R")
 library(BiocInstaller)
 useDevel()
