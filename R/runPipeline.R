@@ -4,8 +4,8 @@ library(RTCGAToolbox)
 library(BiocInterfaces)
 library(readr)
 
-source("R/getDiseaseCodes.R")
-source("data-raw/helpers.R")
+source("../R/getDiseaseCodes.R")
+source("../data-raw/helpers.R")
 
 # Create MultiAssayExperiments for each TCGA disease code
 TCGAcodes <- getDiseaseCodes()
@@ -13,14 +13,14 @@ TCGAcodes <- getDiseaseCodes()
 runDate <- "20151101"
 # analyzeDate <- getFirehoseAnalyzeDates(last=1)
 analyzeDate <- "20150821"
-dataDirectory <- "data"
+dataDirectory <- "../data"
 
 # write header row to csv file for unit tests
 if(!file.exists("MAEOinfo.csv")) {
-    header <- data.frame(cbind("cohort_name", "experiment_name",
-        "experiment_class", "feature_number", "sample_number"))
+    header <- cbind.data.frame("cohort_name", "experiment_name",
+        "experiment_class", "feature_number", "sample_number")
 
-    write.table(header, file = "MAEOinfo.csv", sep = ",",
+    write.table(header, file = "../MAEOinfo.csv", sep = ",",
         append = TRUE, row.names = FALSE, col.names = FALSE)
 }
 
@@ -33,7 +33,7 @@ buildMultiAssayExperiments <-
         for (cancer in TCGAcodes) {
             message("\n######\n", "\nProcessing ", cancer, " : )\n", "\n######\n")
             cancerCode <- tolower(cancer)
-            serialPath <- file.path(dataDirectory, paste0(cancerCode, ".rds"))
+            serialPath <- file.path(dataDirectory, paste1(cancerCode, ".rds"))
 
             if (file.exists(serialPath)) {
                 cancerObject <- readRDS(serialPath)
@@ -126,7 +126,7 @@ buildMultiAssayExperiments <-
                                     integer(1L))
             MAEOinfo <- cbind.data.frame(cohort_name, experiment_names, experiment_classes,
                                          feature_numbers, sample_numbers)
-            write.table(MAEOinfo, file = "MAEOinfo.csv", sep = ",", append = TRUE,
+            write.table(MAEOinfo, file = "../MAEOinfo.csv", sep = ",", append = TRUE,
                         row.names = FALSE, col.names = FALSE)
         }
     }
