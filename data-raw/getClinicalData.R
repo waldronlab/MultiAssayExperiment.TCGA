@@ -11,7 +11,7 @@ processClinicalFirehose <- function(diseaseCode) {
     rawRDSdata <- file.path("../data", paste0(diseaseCode, ".rds"))
     if (file.exists(rawRDSdata)) {
         TCGAdata <- readRDS(rawRDSdata)
-        TCGAclin <- TCGAdata@clinical
+        TCGAclin <- TCGAdata@Clinical
         rm(TCGAdata)
         gc()
     } else {
