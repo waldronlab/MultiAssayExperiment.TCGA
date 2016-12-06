@@ -1,7 +1,8 @@
 #!/bin/bash
+## Input 1 = User.name (e.g., first.last)
 
-export R_LIBS="/scratch/lucas.schiffer/R_libs"
+export R_LIBS="/scratch/${1}/R_libs"
 
-module load intel r
+source start.sh
 
-Rscript dataGetter.R --verbose
+Rscript ../R/dataGetter.R --verbose
