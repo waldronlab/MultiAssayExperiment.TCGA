@@ -1,8 +1,9 @@
 ## Script for installing necessary packages
 ## Use Bioconductor devel and R devel versions
-stopifnot(R.Version()$major == 3 && R.Version()$minor >=4)
+## R-devel not available at HPC
+stopifnot(R.Version()$major == 3 && R.Version()$minor >= 3)
 source("https://bioconductor.org/biocLite.R")
-useDevel()
+# useDevel()
 BiocInstaller::biocLite("vjcitn/MultiAssayExperiment")
 BiocInstaller::biocLite("LiNk-NY/RTCGAToolbox")
 BiocInstaller::biocLite("waldronlab/BiocInterfaces")
