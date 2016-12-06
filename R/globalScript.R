@@ -7,7 +7,7 @@ source("R/dataDirectories.R")
 dataDirectories(create = TRUE)
 
 ## Download all available resources
-source("data-raw/downloadClinicalData.R")
+source("data-raw/getClinicalData.R")
 source("data-raw/downloadExtraClinical.R")
 
 ## Download SubType data from DropBox
