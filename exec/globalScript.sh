@@ -5,4 +5,4 @@ export R_LIBS="/scratch/${1}/R_libs"
 
 source start.sh
 
-Rscript ../R/runPipepline.R --verbose
+Rscript ../R/globalScript.R --verbose
