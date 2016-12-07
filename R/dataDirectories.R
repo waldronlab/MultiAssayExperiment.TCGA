@@ -1,4 +1,5 @@
 dataDirectories <- function(create=FALSE) {
+    message("Creating 'inst' directory in ", getwd())
     extData <- "inst/extdata/"
     clinicalData <- file.path(extData, "Clinical")
     directories <- list(
