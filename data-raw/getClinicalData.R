@@ -8,7 +8,7 @@ TCGAcode <- getDiseaseCodes()
 processClinicalFirehose <- function(diseaseCode) {
     runDate <- "20151101"
     dirList <- dataDirectories()
-    rawRDSdata <- file.path("../data", paste0(diseaseCode, ".rds"))
+    rawRDSdata <- file.path("data", paste0(diseaseCode, ".rds"))
     if (file.exists(rawRDSdata)) {
         TCGAdata <- readRDS(rawRDSdata)
         TCGAclin <- TCGAdata@Clinical
@@ -27,3 +27,4 @@ processClinicalFirehose <- function(diseaseCode) {
 }
 
 lapply(TCGAcode, processClinicalFirehose)
+
