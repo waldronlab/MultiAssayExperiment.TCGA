@@ -1,3 +1,4 @@
+# Ignore Files
 .Rproj.user
 *.Rproj
 .Rhistory
@@ -16,3 +17,6 @@ rawdata/*
 *.[Rr]ds
 .httr-oauth
 .~lock.*
+
+# Don't ignore
+!curationAvailable.Rda
