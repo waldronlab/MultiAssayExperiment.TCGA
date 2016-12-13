@@ -3,8 +3,8 @@
 
 stopifnot(R.Version()$major == 3 && R.Version()$minor >= 4)
 source("https://bioconductor.org/biocLite.R")
-install.packages("devtools")
 # useDevel()
+BiocInstaller::biocLite("devtools")
 BiocInstaller::biocLite("LiNk-NY/RTCGAToolbox")
 BiocInstaller::biocLite("waldronlab/BiocInterfaces")
 # BiocInstaller::biocLite("karthik/rdrop2")
