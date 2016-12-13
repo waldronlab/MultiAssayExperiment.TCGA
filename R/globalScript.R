@@ -3,7 +3,7 @@
 ## Running from EXEC folder, use .. to go to project dir
 setwd("..")
 
-stopifnot(file.exists("R/installLibraries.R")
+stopifnot(file.exists("R/installLibraries.R"))
 source("R/installLibraries.R")
 
 # Allocate all directories in repository
