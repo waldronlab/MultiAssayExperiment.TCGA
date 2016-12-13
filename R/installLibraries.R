@@ -1,13 +1,12 @@
 ## Script for installing necessary packages
 ## Use Bioconductor devel and R devel versions
-## R-devel not available at HPC
-stopifnot(R.Version()$major == 3 && R.Version()$minor >= 3)
+
+stopifnot(R.Version()$major == 3 && R.Version()$minor >= 4)
 source("https://bioconductor.org/biocLite.R")
-# useDevel()
-BiocInstaller::biocLite("vjcitn/MultiAssayExperiment")
+useDevel()
 BiocInstaller::biocLite("LiNk-NY/RTCGAToolbox")
 BiocInstaller::biocLite("waldronlab/BiocInterfaces")
-BiocInstaller::biocLite("karthik/rdrop2")
+# BiocInstaller::biocLite("karthik/rdrop2")
 
 install_packages <- function(packageVector) {
     invisible(lapply(packageVector, function(package) {
@@ -19,6 +18,7 @@ install_packages <- function(packageVector) {
     }))
 }
 
-packs <- c("devtools", "readxl", "readr", "dplyr", "AnnotationHubData")
+packs <- c("devtools", "readxl", "readr", "dplyr", "AnnotationHubData",
+    "MultiAssayExperiment")
 install_packages(packs)
 

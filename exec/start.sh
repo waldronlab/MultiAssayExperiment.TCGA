@@ -1,4 +1,4 @@
 #!/bin/bash 
 
-module load intel r git tmux/2.3
+module load intel r/3.3.0_dev
 
