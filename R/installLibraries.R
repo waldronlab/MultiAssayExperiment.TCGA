@@ -3,7 +3,8 @@
 
 stopifnot(R.Version()$major == 3 && R.Version()$minor >= 4)
 source("https://bioconductor.org/biocLite.R")
-useDevel()
+install.packages("devtools")
+# useDevel()
 BiocInstaller::biocLite("LiNk-NY/RTCGAToolbox")
 BiocInstaller::biocLite("waldronlab/BiocInterfaces")
 # BiocInstaller::biocLite("karthik/rdrop2")
@@ -18,7 +19,7 @@ install_packages <- function(packageVector) {
     }))
 }
 
-packs <- c("devtools", "readxl", "readr", "dplyr", "AnnotationHubData",
+packs <- c("readxl", "readr", "dplyr", "AnnotationHubData",
     "MultiAssayExperiment")
 install_packages(packs)
 
