@@ -13,8 +13,10 @@ writeClinicalData <- function(diseaseCode, force=FALSE) {
               path = file.path(enhancedPath,
                                paste0(diseaseCode, ".csv")))
     message(dataset, " with extra columns created")
+    rm(dataset)
     }
     message(fileName, " available")
 }
 
 invisible(lapply(TCGAcodes, writeClinicalData))
+
