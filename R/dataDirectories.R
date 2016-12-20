@@ -1,5 +1,4 @@
 dataDirectories <- function(create=FALSE) {
-    message("Creating 'inst' directory in ", getwd())
     extData <- "inst/extdata/"
     clinicalData <- file.path(extData, "Clinical")
     directories <- list(
@@ -18,6 +17,7 @@ dataDirectories <- function(create=FALSE) {
                         mergedClinical = file.path(clinicalData, "merged")
                         )
     if (create) {
+    message("Creating 'inst' directory in ", getwd())
         invisible(lapply(directories,
                          function(folder) {
                              if (!file.exists(folder))

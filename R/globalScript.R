@@ -4,7 +4,7 @@
 setwd("..")
 
 # stopifnot(file.exists("R/installLibraries.R"))
-# source("R/installLibraries.R")
+source("R/installLibraries.R")
 
 # Allocate all directories in repository
 # source("R/dataDirectories.R")
