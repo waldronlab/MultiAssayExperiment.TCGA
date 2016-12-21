@@ -18,5 +18,6 @@ writeClinicalData <- function(diseaseCode, force=FALSE) {
     message(fileName, " available")
 }
 
-invisible(lapply(TCGAcodes, writeClinicalData))
-
+for (cancer in TCGAcodes) {
+    writeClinicalData(cancer)
+}

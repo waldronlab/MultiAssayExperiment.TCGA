@@ -22,6 +22,7 @@ TCGAclin <- RTCGAToolbox::getFirehoseData(diseaseCode, runDate = runDate,
                                           Clinic = TRUE,
                                           destdir =
                                               dirList[["rawClinical"]])
+TCGAclin <- TCGAclin@Clinical
 #    }
     stdBarcodes <- .stdIDs(rownames(TCGAclin))
     TCGAclin <- cbind(patientID = stdBarcodes, TCGAclin)
@@ -30,5 +31,6 @@ TCGAclin <- RTCGAToolbox::getFirehoseData(diseaseCode, runDate = runDate,
     rm(TCGAclin, stdBarcodes)
 }
 
-lapply(TCGAcode, processClinicalFirehose)
-
+for (cancer in TCGAcode) {
+    processClinicalFirehose(cancer)
+}
