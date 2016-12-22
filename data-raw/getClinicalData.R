@@ -5,32 +5,24 @@ source("data-raw/helpers.R")
 source("R/getDiseaseCodes.R")
 TCGAcode <- getDiseaseCodes()
 
-processClinicalFirehose <- function(diseaseCode) {
+processClinicalFirehose <- function(diseaseCode, force = FALSE) {
     runDate <- "20151101"
     dirList <- dataDirectories()
-# rawRDSdata <- file.path("data", paste0(diseaseCode, ".rds"))
-#    basicClinical <- file.path(dirList[["basicClinical"]],
-#            paste0(diseaseCode, ".csv"))
-#    if (file.exists(rawRDSdata)) {
-#        if (file.exists(basicClinical))
-#            return(NULL)
-#                TCGAdata <- readRDS(rawRDSdata)
-#                TCGAclin <- TCGAdata@Clinical
-#                rm(TCGAdata)
-#    } else {
-TCGAclin <- RTCGAToolbox::getFirehoseData(diseaseCode, runDate = runDate,
-                                          Clinic = TRUE,
-                                          destdir =
-                                              dirList[["rawClinical"]])
-TCGAclin <- TCGAclin@Clinical
-#    }
-    stdBarcodes <- .stdIDs(rownames(TCGAclin))
-    TCGAclin <- cbind(patientID = stdBarcodes, TCGAclin)
-    readr::write_csv(TCGAclin, path=file.path(dirList[["basicClinical"]],
-                                              paste0(diseaseCode, ".csv")))
-    rm(TCGAclin, stdBarcodes)
+    basicClinical <- dirList[["basicClinical"]]
+    fileName <- file.path(basicClinical, paste0(diseaseCode, ".csv"))
+    if (!file.exists(fileName) || force) {
+        TCGAclin <- RTCGAToolbox::getFirehoseData(diseaseCode,
+                                                  runDate = runDate,
+                                                  Clinic = TRUE,
+                                                  destdir =
+                                                      dirList[["rawClinical"]])
+        TCGAclin <- TCGAclin@Clinical
+        stdBarcodes <- .stdIDs(rownames(TCGAclin))
+        TCGAclin <- cbind(patientID = stdBarcodes, TCGAclin)
+        readr::write_csv(TCGAclin, path = fileName)
+        rm(TCGAclin, stdBarcodes)
+    } else { message(fileName, " already downloaded and processed") }
 }
 
-for (cancer in TCGAcode) {
-    processClinicalFirehose(cancer)
-}
+BiocParallel::bplapply(TCGAcode, processClinicalFirehose)
+

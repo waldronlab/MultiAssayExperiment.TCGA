@@ -3,8 +3,8 @@
 ## Running from EXEC folder, use .. to go to project dir
 setwd("..")
 
-# stopifnot(file.exists("R/installLibraries.R"))
-source("R/installLibraries.R")
+stopifnot(file.exists("R/loadLibraries.R"))
+source("R/loadLibraries.R")
 
 # Allocate all directories in repository
 # source("R/dataDirectories.R")

@@ -33,7 +33,7 @@ buildMultiAssayExperiments <-
         for (cancer in TCGAcodes) {
             message("\n######\n", "\nProcessing ", cancer, " : )\n", "\n######\n")
             cancerCode <- tolower(cancer)
-            serialPath <- file.path(dataDirectory, paste1(cancerCode, ".rds"))
+            serialPath <- file.path(dataDirectory, paste0(cancerCode, ".rds"))
 
             if (file.exists(serialPath)) {
                 cancerObject <- readRDS(serialPath)

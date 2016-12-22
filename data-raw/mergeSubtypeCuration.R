@@ -5,12 +5,16 @@ load("data/curationAvailable.rda")
 
 ## Save final merged datasets
 writeMergedClinical <- function(diseaseCode, curationAvailable) {
-    mergedData <- .mergeSubtypeClinical(diseaseCode, curationAvailable)
-    mergedLocation <- dataDirectories()[["mergedClinical"]]
-    write_csv(x = mergedData,
-        path = file.path(mergedLocation, paste0(diseaseCode, "_merged.csv")))
+    dirList <- dataDirectories()
+    mergedClinical <- dirList[["mergedClinical"]]
+    fileName <- file.path(mergedClinical,
+                          paste0(diseaseCode, "_merged.csv"))
+    if (!file.exists(fileName)) {
+        mergedData <- .mergeSubtypeClinical(diseaseCode, curationAvailable)
+        write_csv(x = mergedData, path = fileName)
+    }
 }
 
-lapply(TCGAcodes, writeMergedClinical,
+BiocParallel::bplapply(TCGAcodes, writeMergedClinical,
        curationAvailable=curationAvailable)
 

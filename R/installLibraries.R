@@ -10,7 +10,7 @@ useDevel()
 
 library(BiocInstaller)
 biocLite(c("devtools", "readxl", "readr", "dplyr",
-		"AnnotationHubData", "MultiAssayExperiment"))
+		"AnnotationHubData", "MultiAssayExperiment", "BiocParallel"))
 biocLite("LiNk-NY/RTCGAToolbox")
 biocLite("waldronlab/BiocInterfaces")
 biocLite("karthik/rdrop2")

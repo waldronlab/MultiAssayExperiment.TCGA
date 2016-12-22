@@ -18,6 +18,5 @@ writeClinicalData <- function(diseaseCode, force=FALSE) {
     message(fileName, " available")
 }
 
-for (cancer in TCGAcodes) {
-    writeClinicalData(cancer)
-}
+BiocParallel::bplapply(TCGAcode, writeClinicalData)
+
