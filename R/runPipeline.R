@@ -32,8 +32,7 @@ buildMultiAssayExperiments <-
 
         for (cancer in TCGAcodes) {
             message("\n######\n", "\nProcessing ", cancer, " : )\n", "\n######\n")
-            cancerCode <- tolower(cancer)
-            serialPath <- file.path(dataDirectory, paste0(cancerCode, ".rds"))
+            serialPath <- file.path(dataDirectory, paste0(cancer, ".rds"))
 
             if (file.exists(serialPath)) {
                 cancerObject <- readRDS(serialPath)
@@ -104,20 +103,19 @@ buildMultiAssayExperiments <-
             message( paste(exps, collapse = ", ") , " metadata added")
             }
             ExpList <- ExperimentList(dataFull)
-            NewElist <- TCGAcleanExpList(ExpList, clinicalData)
-            NewMap <- generateMap(NewElist, clinicalData, TCGAbarcode)
-            MAEO <- MultiAssayExperiment(NewElist, clinicalData, NewMap)
+            NewMap <- generateMap(ExpList, clinicalData, TCGAbarcode)
+            MAEO <- MultiAssayExperiment(ExpList, clinicalData, NewMap)
 
             MAEOmeta <- c(cancer, runDate, analyzeDate, sessionInfo())
             names(MAEOmeta)[1:3] <- c("cohort_name", "running_date", "analysis_data")
             metadata(MAEO) <- c(metadata(MAEO), MAEOmeta)
 
             saveRDS(MAEO, file = file.path(dataDirectory,
-                                           paste0(cancerCode, "MAEO.rds")),
+                                           paste0(cancer, "MAEO.rds")),
                     compress = "bzip2")
 
             # add lines to csv file for unit tests
-            cohort_name <- rep(cancerCode, length(experiments(MAEO)))
+            cohort_name <- rep(cancer, length(experiments(MAEO)))
             experiment_names <- names(MAEO)
             experiment_classes <- vapply(experiments(MAEO), class, character(1L))
             feature_numbers <- vapply(experiments(MAEO), function(exp) dim(exp)[[1L]],
@@ -135,7 +133,10 @@ buildMultiAssayExperiments <-
 buildMultiAssayExperiments(TCGAcodes, runDate, analyzeDate, dataDirectory)
 
 # Upload data to S3 bucket
-upload_to_S3(file = paste0(cancerCode, "MAEO.rds"),
-             remotename = paste0(cancerCode, "MAEO.rds"),
-             bucket = "multiassayexperiments")
+lapply(TCGAcodes, function(cancer) {
+           upload_to_S3(file = file.path(dataDirectory,
+                                         paste0(cancer, "MAEO.rds")),
+                        remotename = paste0(cancer, "MAEO.rds"),
+                        bucket = "multiassayexperiments")
+                        })
 
