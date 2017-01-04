@@ -102,16 +102,15 @@ buildMultiAssayExperiments <-
             }))
             message( paste(exps, collapse = ", ") , " metadata added")
             }
-            ExpList <- ExperimentList(dataFull)
-            NewMap <- generateMap(ExpList, clinicalData, TCGAbarcode)
-            MAEO <- MultiAssayExperiment(ExpList, clinicalData, NewMap)
+            NewMap <- generateMap(dataFull, clinicalData, TCGAbarcode)
+            MAEO <- MultiAssayExperiment(dataFull, clinicalData, NewMap)
 
             MAEOmeta <- c(cancer, runDate, analyzeDate, sessionInfo())
             names(MAEOmeta)[1:3] <- c("cohort_name", "running_date", "analysis_data")
             metadata(MAEO) <- c(metadata(MAEO), MAEOmeta)
 
             saveRDS(MAEO, file = file.path(dataDirectory,
-                                           paste0(cancer, "MAEO.rds")),
+                                           paste0(tolower(cancer), "MAEO.rds")),
                     compress = "bzip2")
 
             # add lines to csv file for unit tests
