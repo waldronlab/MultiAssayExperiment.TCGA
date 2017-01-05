@@ -107,7 +107,7 @@ buildMultiAssayExperiments <-
             MAEO <- MultiAssayExperiment(dataFull, clinicalData, NewMap)
 
             MAEOmeta <- c(cancer, runDate, analyzeDate, devtools::session_info())
-            names(MAEOmeta)[1:3] <- c("cancerCode", "runDate", "analyzeDate", "session_info")
+            names(MAEOmeta) <- c("cancerCode", "runDate", "analyzeDate", "session_info")
             metadata(MAEO) <- c(metadata(MAEO), MAEOmeta)
 
             # Serialize MultiAssayExperiment object
