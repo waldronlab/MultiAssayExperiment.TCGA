@@ -1,8 +1,8 @@
 #!/bin/bash
-## Input 1 = User.name (e.g., first.last)
+# export R_LIBS="/scratch/$USER/R_libs"
+# source start.sh
 
-export R_LIBS="/scratch/${1}/R_libs"
+ulimit -s unlimited
 
-source start.sh
+/home/$USER/src/svn/r-devel/R/bin/Rscript ../R/globalScript.R --verbose
 
-Rscript ../R/globalScript.R --verbose

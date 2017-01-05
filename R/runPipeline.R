@@ -3,6 +3,7 @@ library(MultiAssayExperiment)
 library(RTCGAToolbox)
 library(BiocInterfaces)
 library(readr)
+library(devtools)
 
 source("R/getDiseaseCodes.R")
 source("data-raw/helpers.R")
@@ -105,15 +106,22 @@ buildMultiAssayExperiments <-
             NewMap <- generateMap(dataFull, clinicalData, TCGAbarcode)
             MAEO <- MultiAssayExperiment(dataFull, clinicalData, NewMap)
 
-            MAEOmeta <- c(cancer, runDate, analyzeDate, sessionInfo())
-            names(MAEOmeta)[1:3] <- c("cohort_name", "running_date", "analysis_data")
+            MAEOmeta <- c(cancer, runDate, analyzeDate, devtools::session_info())
+            names(MAEOmeta)[1:3] <- c("cancerCode", "runDate", "analyzeDate", "session_info")
             metadata(MAEO) <- c(metadata(MAEO), MAEOmeta)
 
+            # Serialize MultiAssayExperiment object
             saveRDS(MAEO, file = file.path(dataDirectory,
                                            paste0(tolower(cancer), "MAEO.rds")),
                     compress = "bzip2")
 
-            # add lines to csv file for unit tests
+            # Upload data to S3 bucket
+            upload_to_S3(file = file.path(dataDirectory,
+                                          paste0(tolower(cancer), "MAEO.rds")),
+                         remotename = paste0(tolower(cancer), "MAEO.rds"),
+                         bucket = "multiassayexperiments")
+
+            # Add lines to csv file for unit tests
             cohort_name <- rep(cancer, length(experiments(MAEO)))
             experiment_names <- names(MAEO)
             experiment_classes <- vapply(experiments(MAEO), class, character(1L))
@@ -130,12 +138,4 @@ buildMultiAssayExperiments <-
 
 # call buildMultiAssayExperiment function
 buildMultiAssayExperiments(TCGAcodes, runDate, analyzeDate, dataDirectory)
-
-# Upload data to S3 bucket
-lapply(TCGAcodes, function(cancer) {
-           upload_to_S3(file = file.path(dataDirectory,
-                                         paste0(cancer, "MAEO.rds")),
-                        remotename = paste0(cancer, "MAEO.rds"),
-                        bucket = "multiassayexperiments")
-                        })
 

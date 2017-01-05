@@ -49,3 +49,4 @@ bcodeRes <- vapply(curationAvailable, FUN = function(dx) {
 
 which(!bcodeRes)
 stopifnot(all(bcodeRes))
+
