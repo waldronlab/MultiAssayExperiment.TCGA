@@ -1,11 +1,8 @@
-# load libraries
-library(MultiAssayExperiment)
-library(RTCGAToolbox)
-library(BiocInterfaces)
-library(readr)
-library(devtools)
-
+## Load libraries
+source("R/loadLibraries.R")
+## Get TCGA cancer codes
 source("R/getDiseaseCodes.R")
+## Load supporting functions
 source("data-raw/helpers.R")
 
 # Create MultiAssayExperiments for each TCGA disease code
@@ -17,12 +14,13 @@ analyzeDate <- "20150821"
 dataDirectory <- "data"
 
 # write header row to csv file for unit tests
-if(!file.exists("MAEOinfo.csv")) {
-    header <- cbind.data.frame("cohort_name", "experiment_name",
-        "experiment_class", "feature_number", "sample_number")
+if (!file.exists("MAEOinfo.csv")) {
+    header <- cbind.data.frame("cancerCode", "assay", "class", "nrow", "ncol")
 
-    write.table(header, file = "MAEOinfo.csv", sep = ",",
-        append = TRUE, row.names = FALSE, col.names = FALSE)
+    write.table(header, file = "MAEOinfo.csv", sep = ",", append = TRUE,
+                row.names = FALSE, col.names = FALSE)
+} else {
+    file.remove("MAEOinfo.csv")
 }
 
 # buildMultiAssayExperiments function definition
@@ -122,17 +120,17 @@ buildMultiAssayExperiments <-
                          bucket = "multiassayexperiments")
 
             # Add lines to csv file for unit tests
-            cohort_name <- rep(cancer, length(experiments(MAEO)))
-            experiment_names <- names(MAEO)
-            experiment_classes <- vapply(experiments(MAEO), class, character(1L))
-            feature_numbers <- vapply(experiments(MAEO), function(exp) dim(exp)[[1L]],
+            cancerCodes <- rep(cancer, length(experiments(MAEO)))
+            assays <- names(MAEO)
+            classes <- vapply(experiments(MAEO), class, character(1L))
+            nrows <- vapply(experiments(MAEO), function(exp) dim(exp)[[1L]],
                                      integer(1L))
-            sample_numbers <- vapply(experiments(MAEO), function(exp) dim(exp)[[2L]],
+            ncols <- vapply(experiments(MAEO), function(exp) dim(exp)[[2L]],
                                     integer(1L))
-            MAEOinfo <- cbind.data.frame(cohort_name, experiment_names, experiment_classes,
-                                         feature_numbers, sample_numbers)
-            write.table(MAEOinfo, file = "MAEOinfo.csv", sep = ",", append = TRUE,
-                        row.names = FALSE, col.names = FALSE)
+            MAEOinfo <- cbind.data.frame(cancerCodes, assays, classes, nrows,
+                                         ncols)
+            write.table(MAEOinfo, file = "MAEOinfo.csv", sep = ",",
+                        append = TRUE, row.names = FALSE, col.names = FALSE)
         }
     }
 

@@ -12,7 +12,7 @@ install_packages <- function(packageVector) {
     }))
 }
 
-packs <- c("readxl", "readr", "dplyr", "AnnotationHubData",
+packs <- c("readxl", "readr", "dplyr", "devtools", "AnnotationHubData",
            "MultiAssayExperiment", "RTCGAToolbox", "BiocInterfaces",
            "BiocParallel")
 

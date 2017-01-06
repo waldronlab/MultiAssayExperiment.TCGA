@@ -1,4 +1,4 @@
-"cohort_name","experiment_name","experiment_class","feature_number","sample_number"
+"cancerCode","assay","class","nrow","ncol"
 "ACC","RNASeq2GeneNorm","ExpressionSet",20501,79
 "ACC","miRNASeqGene","ExpressionSet",1046,80
 "ACC","Methylation","SummarizedExperiment",485577,80

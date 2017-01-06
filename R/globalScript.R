@@ -6,7 +6,7 @@ setwd("..")
 stopifnot(file.exists("R/loadLibraries.R"))
 source("R/loadLibraries.R")
 
-# Allocate all directories in repository
+# Create all directories needed in repository
 # source("R/dataDirectories.R")
 # dataDirectories(create = TRUE)
 

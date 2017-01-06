@@ -4,5 +4,5 @@
 
 ulimit -s unlimited
 
-/home/$USER/src/svn/r-devel/R/bin/Rscript ../R/globalScript.R --verbose
+time /home/$USER/src/svn/r-devel/R/bin/Rscript ../R/globalScript.R --verbose
 
