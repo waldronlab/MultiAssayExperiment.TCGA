@@ -30,7 +30,9 @@ buildMultiAssayExperiments <-
             dir.create(dataDirectory)
 
         for (cancer in TCGAcodes) {
-            message("\n######\n", "\nProcessing ", cancer, " : )\n", "\n######\n")
+            message("\n######\n",
+                    "\nProcessing ", cancer, " : )\n",
+                    "\n######\n")
             serialPath <- file.path(dataDirectory, paste0(cancer, ".rds"))
 
             if (file.exists(serialPath)) {
@@ -52,7 +54,8 @@ buildMultiAssayExperiments <-
                                                 miRNA_Array = TRUE,
                                                 RPPA_Array = TRUE,
                                                 RNAseqNorm = "raw_counts",
-                                                RNAseq2Norm = "normalized_count",
+                                                RNAseq2Norm =
+                                                    "normalized_count",
                                                 forceDownload = FALSE,
                                                 destdir = "./tmp",
                                                 fileSizeLimit = 500000,
@@ -63,20 +66,24 @@ buildMultiAssayExperiments <-
             clinicalPath <- file.path(dataDirectories()[["mergedClinical"]],
                                       paste0(cancer, "_reduced.csv"))
             stopifnot(file.exists(clinicalPath))
-            clinicalData <- read.csv(clinicalPath, header=TRUE, stringsAsFactors=FALSE)
+            clinicalData <- read.csv(clinicalPath, header=TRUE,
+                                     stringsAsFactors=FALSE)
             rownames(clinicalData) <- clinicalData[["patientID"]]
             clinicalData <- S4Vectors::DataFrame(clinicalData)
             metadata(clinicalData)[["droppedColumns"]] <-
                 readRDS(file.path(dataDirectories()[["mergedClinical"]],
                                   paste0(cancer, "_dropped.rds")))
 
-            targets <- c(slotNames(cancerObject)[c(5:16)], "gistica", "gistict")
+            targets <- c(slotNames(cancerObject)[c(5:16)],
+                         "gistica", "gistict")
             names(targets) <- targets
             dataList <- lapply(targets, function(x) {
                 tryCatch({TCGAextract(cancerObject, x)},
-                         error = function(e) {message(x, " does not contain any data!")})
+                         error = function(e) {
+                             message(x, " does not contain any data!")
+                             })
             })
-            dataFull <- Filter(function(x){class(x)!="NULL"}, dataList)
+            dataFull <- Filter(function(x) {class(x) != "NULL"}, dataList)
             assayNames <- names(dataFull)
 
             exps <- c("CNASNP", "CNVSNP", "CNASeq", "CNACGH")
@@ -92,25 +99,29 @@ buildMultiAssayExperiments <-
                 args <- list(cancer, runDate, TRUE)
                 names(args) <- c("disease", "runDate", type)
                 source_file <- do.call(getFileNames, args = args)
-                genome_build <- gsub("(^.+)_(hg[0-9]{2})_(.+$)", "\\2", x = source_file,
+                genome_build <- gsub("(^.+)_(hg[0-9]{2})_(.+$)", "\\2",
+                                     x = source_file,
                                      ignore.case = TRUE)
                 dataFull[[dataType]] <- genome_build
                 source_file <- c(source_file = source_file)
-                metadata(dataFull[[dataType]]) <- c(metadata(dataFull[[dataType]]),
-                                                    source_file)
+                metadata(dataFull[[dataType]]) <-
+                    c(metadata( dataFull[[dataType]]), source_file)
             }))
             message( paste(exps, collapse = ", ") , " metadata added")
             }
             NewMap <- generateMap(dataFull, clinicalData, TCGAbarcode)
             MAEO <- MultiAssayExperiment(dataFull, clinicalData, NewMap)
 
-            MAEOmeta <- c(cancer, runDate, analyzeDate, devtools::session_info())
-            names(MAEOmeta) <- c("cancerCode", "runDate", "analyzeDate", "session_info")
+            MAEOmeta <- c(cancer, runDate, analyzeDate,
+                          devtools::session_info())
+            names(MAEOmeta) <- c("cancerCode", "runDate", "analyzeDate",
+                                 "session_info")
             metadata(MAEO) <- c(metadata(MAEO), MAEOmeta)
 
             # Serialize MultiAssayExperiment object
             saveRDS(MAEO, file = file.path(dataDirectory,
-                                           paste0(tolower(cancer), "MAEO.rds")),
+                                           paste0(tolower(cancer),
+                                                  "MAEO.rds")),
                     compress = "bzip2")
 
             # Upload data to S3 bucket
