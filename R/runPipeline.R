@@ -73,17 +73,19 @@ buildMultiAssayExperiments <-
             metadata(clinicalData)[["droppedColumns"]] <-
                 readRDS(file.path(dataDirectories()[["mergedClinical"]],
                                   paste0(cancer, "_dropped.rds")))
-
-            targets <- c(slotNames(cancerObject)[c(5:16)],
+            ## slotNames in FirehoseData RTCGAToolbox class
+            targets <- c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene",
+                         "CNASNP", "CNVSNP", "CNAseq", "CNACGH", "Methylation",
+                         "mRNAArray", "miRNAArray", "RPPAArray", "Mutations",
                          "gistica", "gistict")
             names(targets) <- targets
-            dataList <- lapply(targets, function(x) {
-                tryCatch({TCGAextract(cancerObject, x)},
+            dataList <- lapply(targets, function(datType) {
+                tryCatch({TCGAextract(cancerObject, datType)},
                          error = function(e) {
-                             message(x, " does not contain any data!")
+                             message(datType, " does not contain any data!")
                              })
             })
-            dataFull <- Filter(function(x) {class(x) != "NULL"}, dataList)
+            dataFull <- Filter(function(x) {!is.null(x)}, dataList)
             assayNames <- names(dataFull)
 
             exps <- c("CNASNP", "CNVSNP", "CNASeq", "CNACGH")
