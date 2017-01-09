@@ -10,8 +10,12 @@ useDevel()
 
 library(BiocInstaller)
 biocLite(c("devtools", "readxl", "readr", "dplyr",
-		"AnnotationHubData", "MultiAssayExperiment", "BiocParallel"))
+		"AnnotationHubData", "MultiAssayExperiment", "BiocParallel",
+        "Biobase"))
 biocLite("LiNk-NY/RTCGAToolbox")
 biocLite("waldronlab/BiocInterfaces")
 biocLite("karthik/rdrop2")
+
+stopifnot(!package_version(Biobase::package.version("BiocInterfaces")) >=
+                            package_version("0.1.3"))
 
