@@ -104,7 +104,7 @@ buildMultiAssayExperiments <-
                 genome_build <- gsub("(^.+)_(hg[0-9]{2})_(.+$)", "\\2",
                                      x = source_file,
                                      ignore.case = TRUE)
-                dataFull[[dataType]] <- genome_build
+                GenomeInfoDb::genome(dataFull[[dataType]]) <- genome_build
                 source_file <- c(source_file = source_file)
                 metadata(dataFull[[dataType]]) <-
                     c(metadata( dataFull[[dataType]]), source_file)

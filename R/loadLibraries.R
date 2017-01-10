@@ -14,7 +14,7 @@ install_packages <- function(packageVector) {
 
 packs <- c("readxl", "readr", "dplyr", "devtools", "AnnotationHubData",
            "MultiAssayExperiment", "RTCGAToolbox", "BiocInterfaces",
-           "BiocParallel", "Biobase")
+           "BiocParallel", "Biobase", "GenomeInfoDb")
 
 install_packages(packs)
 
