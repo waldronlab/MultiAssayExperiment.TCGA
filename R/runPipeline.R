@@ -11,17 +11,12 @@ TCGAcodes <- getDiseaseCodes()
 runDate <- "20151101"
 # analyzeDate <- getFirehoseAnalyzeDates(last=1)
 analyzeDate <- "20150821"
-dataDirectory <- "data"
+dataDirectory <- "data/built"
 
 # write header row to csv file for unit tests
-if (!file.exists("MAEOinfo.csv")) {
-    header <- cbind.data.frame("cancerCode", "assay", "class", "nrow", "ncol")
-
-    write.table(header, file = "MAEOinfo.csv", sep = ",", append = TRUE,
-                row.names = FALSE, col.names = FALSE)
-} else {
-    file.remove("MAEOinfo.csv")
-}
+header <- cbind.data.frame("cancerCode", "assay", "class", "nrow", "ncol")
+write.table(header, file = "MAEOinfo.csv", sep = ",",
+            row.names = FALSE, col.names = FALSE)
 
 # buildMultiAssayExperiments function definition
 buildMultiAssayExperiments <-
@@ -33,7 +28,7 @@ buildMultiAssayExperiments <-
             message("\n######\n",
                     "\nProcessing ", cancer, " : )\n",
                     "\n######\n")
-            serialPath <- file.path(dataDirectory, paste0(cancer, ".rds"))
+            serialPath <- file.path("data/raw", paste0(cancer, ".rds"))
 
             if (file.exists(serialPath)) {
                 cancerObject <- readRDS(serialPath)
@@ -104,6 +99,7 @@ buildMultiAssayExperiments <-
                 genome_build <- gsub("(^.+)_(hg[0-9]{2})_(.+$)", "\\2",
                                      x = source_file,
                                      ignore.case = TRUE)
+
                 GenomeInfoDb::genome(dataFull[[dataType]]) <- genome_build
                 source_file <- c(source_file = source_file)
                 metadata(dataFull[[dataType]]) <-
