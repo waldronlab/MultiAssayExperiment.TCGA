@@ -4,6 +4,8 @@ source("R/loadLibraries.R")
 source("R/getDiseaseCodes.R")
 ## Load supporting functions
 source("data-raw/helpers.R")
+## Load function for updating metadata
+source("R/updateInfo.R")
 
 # Create MultiAssayExperiments for each TCGA disease code
 TCGAcodes <- getDiseaseCodes()
@@ -128,18 +130,7 @@ buildMultiAssayExperiments <-
                          remotename = paste0(tolower(cancer), "MAEO.rds"),
                          bucket = "multiassayexperiments")
 
-            # Add lines to csv file for unit tests
-            cancerCodes <- rep(cancer, length(experiments(MAEO)))
-            assays <- names(MAEO)
-            classes <- vapply(experiments(MAEO), class, character(1L))
-            nrows <- vapply(experiments(MAEO), function(exp) dim(exp)[[1L]],
-                                     integer(1L))
-            ncols <- vapply(experiments(MAEO), function(exp) dim(exp)[[2L]],
-                                    integer(1L))
-            MAEOinfo <- cbind.data.frame(cancerCodes, assays, classes, nrows,
-                                         ncols)
-            write.table(MAEOinfo, file = "MAEOinfo.csv", sep = ",",
-                        append = TRUE, row.names = FALSE, col.names = FALSE)
+            updateInfo(MAEO, cancer)
         }
     }
 

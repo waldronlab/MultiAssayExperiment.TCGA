@@ -1,14 +1,15 @@
-## Read datasets
-source("R/getDiseaseCodes.R")
-
-TCGAcodes <- getDiseaseCodes()
-
-updateInfo <- function(diseaseCode) {
-    maeoFile <- paste0(tolower(diseaseCode), "MAEO.rds")
-    location <- "data/built"
-    builtMAEO <- file.path(location, maeoFile)
-header <- cbind.data.frame("cancerCode", "assay", "class", "nrow", "ncol")
-write.table(header = file = "MAEOinfo.csv", sep = ",", append = TRUE,
-    row.names = FALSE, col.names = FALSE)
-## TODO: add function to main pipeline
+## Function for updating metadata from MultiAssayExperiment objects
+updateInfo <- function(MAEObject, cancerCode) {
+    cancerCodes <- rep(cancerCode, length(experiments(MAEObject)))
+    assays <- names(MAEObject)
+    classes <- vapply(experiments(MAEObject), class, character(1L))
+    nrows <- vapply(experiments(MAEObject), function(exp) dim(exp)[[1L]],
+                    integer(1L))
+    ncols <- vapply(experiments(MAEObject), function(exp) dim(exp)[[2L]],
+                    integer(1L))
+    MAEOinfo <- cbind.data.frame(cancerCodes, assays, classes, nrows,
+                                 ncols)
+    write.table(MAEOinfo, file = "MAEOinfo.csv", sep = ",",
+                append = TRUE, row.names = FALSE, col.names = FALSE)
 }
+
