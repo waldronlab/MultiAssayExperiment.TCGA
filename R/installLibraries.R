@@ -13,9 +13,9 @@ biocLite(c("devtools", "readxl", "readr", "dplyr",
 		"AnnotationHubData", "MultiAssayExperiment", "BiocParallel",
         "Biobase", "GenomeInfoDb"))
 biocLite("LiNk-NY/RTCGAToolbox")
-biocLite("waldronlab/BiocInterfaces")
+biocLite("waldronlab/TCGAutils")
 biocLite("karthik/rdrop2")
 
-stopifnot(!package_version(Biobase::package.version("BiocInterfaces")) >=
+stopifnot(!package_version(Biobase::package.version("TCGAutils")) >=
                             package_version("0.1.3"))
 

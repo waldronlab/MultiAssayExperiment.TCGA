@@ -2,7 +2,7 @@
 library(devtools)
 library(MultiAssayExperiment)
 library(RTCGAToolbox)
-library(BiocInterfaces)
+library(TCGAutils)
 library(readr)
 
 source("R/getDiseaseCodes.R")

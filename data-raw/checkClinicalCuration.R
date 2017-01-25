@@ -1,5 +1,5 @@
 ## Script for checking clinical data curation for any errors
-library(BiocInterfaces)
+library(TCGAutils)
 source("R/dataDirectories.R")
 source("data-raw/helpers.R")
 
