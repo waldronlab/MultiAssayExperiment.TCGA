@@ -101,13 +101,14 @@ buildMultiAssayExperiments <-
                 genome_build <- gsub("(^.+)_(hg[0-9]{2})_(.+$)", "\\2",
                                      x = source_file,
                                      ignore.case = TRUE)
-
+                if (S4Vectors::isEmpty(genome_build))
+                    genome_build <- NA
                 GenomeInfoDb::genome(dataFull[[dataType]]) <- genome_build
                 source_file <- c(source_file = source_file)
                 metadata(dataFull[[dataType]]) <-
-                    c(metadata( dataFull[[dataType]]), source_file)
+                    c(metadata(dataFull[[dataType]]), source_file)
             }))
-            message( paste(exps, collapse = ", ") , " metadata added")
+            message(paste(exps, collapse = ", ") , " metadata added")
             }
             NewMap <- generateMap(dataFull, clinicalData, TCGAbarcode)
             MAEO <- MultiAssayExperiment(dataFull, clinicalData, NewMap)
