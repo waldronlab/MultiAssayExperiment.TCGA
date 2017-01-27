@@ -1,3 +1,4 @@
+setwd("../..")
 ## Load libraries
 source("R/loadLibraries.R")
 ## Get TCGA cancer codes

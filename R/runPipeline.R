@@ -85,7 +85,7 @@ buildMultiAssayExperiments <-
             dataFull <- Filter(function(x) {!is.null(x)}, dataList)
             assayNames <- names(dataFull)
 
-            exps <- c("CNASNP", "CNVSNP", "CNASeq", "CNACGH")
+            exps <- c("CNASNP", "CNVSNP", "CNAseq", "CNACGH")
             inAssays <- exps %in% assayNames
             if (any(inAssays)) {
             exps <- exps[inAssays]
@@ -93,7 +93,7 @@ buildMultiAssayExperiments <-
                 type <- switch(dataType,
                                CNASNP = "CNA_SNP",
                                CNVSNP = "CNV_SNP",
-                               CNASeq = "CNA_Seq",
+                               CNAseq = "CNA_Seq",
                                CNACGH = "CNA_CGH")
                 args <- list(cancer, runDate, TRUE)
                 names(args) <- c("disease", "runDate", type)
