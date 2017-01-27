@@ -1,5 +1,5 @@
 ## small script for resolving TCGA curation codes available
-## BiocInstaller::biocLite("waldronlab/BiocInterfaces")
+## BiocInstaller::biocLite("waldronlab/TCGAutils")
 source("data-raw/readDFList.R")
 data("diseaseCodes")
 

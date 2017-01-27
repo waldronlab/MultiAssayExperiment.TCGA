@@ -7,16 +7,17 @@ stopifnot(file.exists("R/loadLibraries.R"))
 source("R/loadLibraries.R")
 
 # Create all directories needed in repository
-# source("R/dataDirectories.R")
-# dataDirectories(create = TRUE)
+source("R/dataDirectories.R")
+dataDirectories(create = TRUE)
 
 ## Download all available resources
 source("data-raw/getClinicalData.R")
 source("data-raw/downloadExtraClinical.R")
 
 ## Download SubType data from DropBox
-# source("data-raw/downloadSubtypeDrop.R")
-## ALTERNATIVELY: Download files manually and put them in "inst/extdata/allsubtypes"
+source("data-raw/downloadSubtypeDrop.R")
+## ALTERNATIVELY: Download files manually and put them in
+##   "inst/extdata/allsubtypes"
 
 ## Merge curated data to clinical data
 source("data-raw/mergeSubtypeCuration.R")
