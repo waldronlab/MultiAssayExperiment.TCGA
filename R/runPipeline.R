@@ -77,7 +77,7 @@ buildMultiAssayExperiments <-
                          "gistica", "gistict")
             names(targets) <- targets
             dataList <- lapply(targets, function(datType) {
-                tryCatch({TCGAextract(cancerObject, datType)},
+                tryCatch({TCGAutils::TCGAextract(cancerObject, datType)},
                          error = function(e) {
                              message(datType, " does not contain any data!")
                              })
