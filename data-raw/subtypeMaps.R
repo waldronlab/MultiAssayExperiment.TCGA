@@ -5,21 +5,23 @@
 #                      "data-raw/subtypes_curation.txt", overwrite = TRUE)
 
 # Readlines from TXT file downloaded from Dropbox
-ST = readLines("data-raw/subtypes_curation.txt")
+ST <- readLines("data-raw/subtypes_curation.txt")
 
 # Create a list of data.frames
-dflist <- list()
+subMap <- list()
 for (i in seq(from=1, to=57, by=3)) {
-    df = as.data.frame(strsplit(ST[c(i, i+1)], "\t"), stringsAsFactors = FALSE)
+    df <- as.data.frame(strsplit(ST[c(i, i+1)], "\t"), stringsAsFactors = FALSE)
     colnames(df) = t(df[1, ])
-    df = df[-1, ]
-    df = df[!df[, 1] %in% "", ]
-    dflist[[colnames(df)[2]]] = df
+    df <- df[-1, ]
+    diseaseCode <- gsub(".csv", "", colnames(df)[[2]])
+    colnames(df) <- gsub(".csv", "_subtype", colnames(df))
+    df <- df[!df[, 1] %in% "", ]
+    subMap[[diseaseCode]] <- df
 }
 
 rm(df, ST)
 
-dflist <- lapply(dflist, function(x) {
+subtypeMaps <- lapply(subMap, function(x) {
     x[[2]] <- gsub('"', "", x[[2]])
     x
 })
