@@ -6,6 +6,8 @@ source("R/getDiseaseCodes.R")
 source("data-raw/helpers.R")
 ## Load function for updating metadata
 source("R/updateInfo.R")
+## Load subtypeMaps list from file
+source("data-raw/subtypeMaps.R")
 
 # Create MultiAssayExperiments for each TCGA disease code
 TCGAcodes <- getDiseaseCodes()
@@ -70,6 +72,7 @@ buildMultiAssayExperiments <-
             metadata(clinicalData)[["droppedColumns"]] <-
                 readRDS(file.path(dataDirectories()[["mergedClinical"]],
                                   paste0(cancer, "_dropped.rds")))
+            metadata(clinicalData)[["subtypes"]] <- subtypeMaps[[cancer]]
             ## slotNames in FirehoseData RTCGAToolbox class
             targets <- c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene",
                          "CNASNP", "CNVSNP", "CNAseq", "CNACGH", "Methylation",
