@@ -1,15 +1,16 @@
 ## Write data.frame list to files
-source("data-raw/readDFList.R")
+source("data-raw/subtypeMaps.R")
 
 invisible(
-    lapply(seq_along(dflist),
+    lapply(seq_along(subtypeMaps),
            function(i, disease, data) {
-               write_csv(x = data[[i]],
+               readr:::write_csv(x = data[[i]],
                          path = file.path("inst", "extdata",
                                           "curatedSubtypes", "curatedMaps",
                                           paste0(disease[[i]],
                                                  "_subtypeMap.csv")))
-           }, disease = gsub(".csv", "", names(dflist)),
-           data = dflist))
+           }, disease = names(subtypeMaps),
+           data = subtypeMaps))
 
-curationAvailable <- gsub(".csv", "", names(dflist), fixed = TRUE)
+curationAvailable <- names(subtypeMaps)
+# save(curationAvailable, file = "data/curationAvailable.rda")
