@@ -12,9 +12,9 @@ source("data-raw/subtypeMaps.R")
 # Create MultiAssayExperiments for each TCGA disease code
 TCGAcodes <- getDiseaseCodes()
 # runDate <- getFirehoseRunningDates(last=1)
-runDate <- "20151101"
+runDate <- "20160128"
 # analyzeDate <- getFirehoseAnalyzeDates(last=1)
-analyzeDate <- "20150821"
+analyzeDate <- "20160128"
 dataDirectory <- "data/built"
 
 # write header row to csv file for unit tests
@@ -24,7 +24,7 @@ write.table(header, file = "MAEOinfo.csv", sep = ",",
 
 # buildMultiAssayExperiments function definition
 buildMultiAssayExperiments <-
-    function(TCGAcodes, runDate, analyzeDate, dataDirectory) {
+    function(TCGAcodes, runDate, analyzeDate, dataDirectory, force) {
         if (!dir.exists(dataDirectory))
             dir.create(dataDirectory)
 
@@ -34,7 +34,7 @@ buildMultiAssayExperiments <-
                     "\n######\n")
             serialPath <- file.path("data/raw", paste0(cancer, ".rds"))
 
-            if (file.exists(serialPath)) {
+            if (file.exists(serialPath) && !force) {
                 cancerObject <- readRDS(serialPath)
             } else {
                 cancerObject <- getFirehoseData(cancer, runDate = runDate,
@@ -61,7 +61,7 @@ buildMultiAssayExperiments <-
                                                 getUUIDs = FALSE)
                 saveRDS(cancerObject, file = serialPath, compress = "bzip2")
             }
-            ## Include curated clinical data
+            ## pData - clinicalData
             clinicalPath <- file.path(dataDirectories()[["mergedClinical"]],
                                       paste0(cancer, "_reduced.csv"))
             stopifnot(file.exists(clinicalPath))
@@ -113,31 +113,33 @@ buildMultiAssayExperiments <-
             }))
             message(paste(exps, collapse = ", ") , " metadata added")
             }
+
+            # sampleMap
             NewMap <- generateMap(dataFull, clinicalData, TCGAbarcode)
-            MAEO <- MultiAssayExperiment(dataFull, clinicalData, NewMap)
-
-            MAEOmeta <- c(cancer, runDate, analyzeDate,
+            # ExperimentList
+            dataFull <- MultiAssayExperiment:::.harmonize(
+                MultiAssayExperiment::ExperimentList(dataFull),
+                clinicalData,
+                NewMap)
+            # metadata
+            metadata <- c(cancer, runDate, analyzeDate,
                           devtools::session_info())
-            names(MAEOmeta) <- c("cancerCode", "runDate", "analyzeDate",
+            names(metadata) <- c("cancerCode", "runDate", "analyzeDate",
                                  "session_info")
-            metadata(MAEO) <- c(metadata(MAEO), MAEOmeta)
 
-            # Serialize MultiAssayExperiment object
-            saveRDS(MAEO, file = file.path(dataDirectory,
-                                           paste0(tolower(cancer),
-                                                  "MAEO.rds")),
-                    compress = "bzip2")
+            # add pData, sampleMap, and metadata to ExperimentList
+            extraObjects <- list(pData = clinicalData,
+                                 sampleMap = newMap,
+                                 metadata = metadata)
+            allObjects <- c(extraObjects, dataFull)
+            saveNupload(allObjects, cancer, directory = "data/bits")
 
-            # Upload data to S3 bucket
-            upload_to_S3(file = file.path(dataDirectory,
-                                          paste0(tolower(cancer), "MAEO.rds")),
-                         remotename = paste0(tolower(cancer), "MAEO.rds"),
-                         bucket = "multiassayexperiments")
-
-            updateInfo(MAEO, cancer)
+            lapply(seq_along(allObjects), function(i, dataElement, code) {
+               updateInfo(dataElement[i], code)
+            }, dataAssay = dataFull, code = cancer)
         }
     }
 
-# call buildMultiAssayExperiment function
-buildMultiAssayExperiments(TCGAcodes, runDate, analyzeDate, dataDirectory)
+# call buildMultiAssayExperiments function
+buildMultiAssayExperiments(TCGAcodes, runDate, analyzeDate, dataDirectory, force = TRUE)
 
