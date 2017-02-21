@@ -6,6 +6,8 @@ library(RTCGAToolbox)
 library(TCGAutils)
 
 source("R/getDiseaseCodes.R")
+source("R/saveRTCGAdata.R")
+
 TCGAcodes <- getDiseaseCodes()
 runDate <- "20160128"
 analyzeDate <- "20160128"
