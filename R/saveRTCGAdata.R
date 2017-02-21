@@ -1,6 +1,7 @@
-saveRTCGAdata <- function(diseaseCode, runDate, analyzeDate, directory, force) {
+saveRTCGAdata <- function(diseaseCode, runDate, analyzeDate, directory,
+                          force = FALSE) {
     rdsLocation <- file.path(directory, paste0(diseaseCode, ".rds"))
-    if (file.exists(rdsLocation))
+    if (file.exists(rdsLocation) && !force)
         cancerObject <- readRDS(rdsLocation)
     else {
         cancerObject <- getFirehoseData(dataset = diseaseCode,
