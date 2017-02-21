@@ -7,7 +7,7 @@ saveRTCGAdata <- function(diseaseCode, runDate, analyzeDate, directory, force) {
                                      runDate = runDate,
                                      gistic2_Date = analyzeDate,
                             RNAseq_Gene = TRUE,
-                            Clinic = TRUE,
+                            Clinic = FALSE,
                             miRNASeq_Gene = TRUE,
                             RNAseq2_Gene_Norm = TRUE,
                             CNA_SNP = TRUE,
