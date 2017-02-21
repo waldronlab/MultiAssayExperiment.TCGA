@@ -6,6 +6,8 @@ source("R/getDiseaseCodes.R")
 source("data-raw/helpers.R")
 ## Load function for updating metadata
 source("R/updateInfo.R")
+## Load function for downloading raw data
+source("R/saveRTCGAdata.R")
 ## Load subtypeMaps list from file
 source("data-raw/subtypeMaps.R")
 
@@ -34,33 +36,9 @@ buildMultiAssayExperiments <-
                     "\n######\n")
             serialPath <- file.path("data/raw", paste0(cancer, ".rds"))
 
-            if (file.exists(serialPath) && !force) {
-                cancerObject <- readRDS(serialPath)
-            } else {
-                cancerObject <- getFirehoseData(cancer, runDate = runDate,
-                                                gistic2_Date = analyzeDate,
-                                                RNAseq_Gene = TRUE,
-                                                Clinic = FALSE,
-                                                miRNASeq_Gene = TRUE,
-                                                RNAseq2_Gene_Norm = TRUE,
-                                                CNA_SNP = TRUE,
-                                                CNV_SNP = TRUE,
-                                                CNA_Seq = TRUE,
-                                                CNA_CGH = TRUE,
-                                                Methylation = TRUE,
-                                                Mutation = TRUE,
-                                                mRNA_Array = TRUE,
-                                                miRNA_Array = TRUE,
-                                                RPPA_Array = TRUE,
-                                                RNAseqNorm = "raw_counts",
-                                                RNAseq2Norm =
-                                                    "normalized_count",
-                                                forceDownload = FALSE,
-                                                destdir = "./tmp",
-                                                fileSizeLimit = 500000,
-                                                getUUIDs = FALSE)
-                saveRDS(cancerObject, file = serialPath, compress = "bzip2")
-            }
+            ## Download raw data if not already serialized
+            saveRTCGAdata(cancer, runDate, analyzeDate, serialPath, force)
+
             ## pData - clinicalData
             clinicalPath <- file.path(dataDirectories()[["mergedClinical"]],
                                       paste0(cancer, "_reduced.csv"))
@@ -73,6 +51,7 @@ buildMultiAssayExperiments <-
                 readRDS(file.path(dataDirectories()[["mergedClinical"]],
                                   paste0(cancer, "_dropped.rds")))
             metadata(clinicalData)[["subtypes"]] <- subtypeMaps[[cancer]]
+
             ## slotNames in FirehoseData RTCGAToolbox class
             targets <- c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene",
                          "CNASNP", "CNVSNP", "CNAseq", "CNACGH", "Methylation",
