@@ -1,15 +1,13 @@
-## Function for updating metadata from MultiAssayExperiment objects
-updateInfo <- function(MAEObject, cancerCode) {
-    cancerCodes <- rep(cancerCode, length(experiments(MAEObject)))
-    assays <- names(MAEObject)
-    classes <- vapply(experiments(MAEObject), class, character(1L))
-    nrows <- vapply(experiments(MAEObject), function(exp) dim(exp)[[1L]],
-                    integer(1L))
-    ncols <- vapply(experiments(MAEObject), function(exp) dim(exp)[[2L]],
-                    integer(1L))
-    MAEOinfo <- cbind.data.frame(cancerCodes, assays, classes, nrows,
-                                 ncols)
+## Update metadata from data bits
+updateInfo <- function(dataElement, cancerCode) {
+    dataObject <- dataElement[[1L]]
+    assayName <- names(dataElement)
+    stopifnot(S4Vectors::isSingleString(assayName))
+    className <- class(dataObject)
+    numberRow <- dim(dataObject)[[1L]]
+    numberCol <- dim(dataObject)[[2L]]
+    MAEOinfo <- cbind.data.frame(cancerCode, assayName, className, numberRow,
+                                 numberCol)
     write.table(MAEOinfo, file = "MAEOinfo.csv", sep = ",",
                 append = TRUE, row.names = FALSE, col.names = FALSE)
 }
-
