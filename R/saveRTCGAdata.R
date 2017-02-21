@@ -1,23 +1,9 @@
-# load libraries
-library(devtools)
-library(MultiAssayExperiment)
-library(RTCGAToolbox)
-library(TCGAutils)
-library(readr)
-
-source("R/getDiseaseCodes.R")
-TCGAcodes <- getDiseaseCodes()
-runDate <- "20151101"
-analyzeDate <- "20150821"
-directory <- "data"
-
-saveRTCGAdata <- function(diseaseCode, runDate, analyzeDate, directory) {
-    diseaseCodename <- tolower(diseaseCode)
+saveRTCGAdata <- function(diseaseCode, runDate, analyzeDate, directory, force) {
     rdsLocation <- file.path(directory, paste0(diseaseCode, ".rds"))
     if (file.exists(rdsLocation))
-        cancerObj <- readRDS(rdsLocation)
+        cancerObject <- readRDS(rdsLocation)
     else {
-        cancerObj <- getFirehoseData(dataset = diseaseCode,
+        cancerObject <- getFirehoseData(dataset = diseaseCode,
                                      runDate = runDate,
                                      gistic2_Date = analyzeDate,
                             RNAseq_Gene = TRUE,
@@ -39,8 +25,6 @@ saveRTCGAdata <- function(diseaseCode, runDate, analyzeDate, directory) {
                             destdir = "./tmp",
                             fileSizeLimit = 500000,
                             getUUIDs = FALSE)
-        saveRDS(cancerObj, file = rdsLocation, compress = "bzip2")
+        saveRDS(cancerObject, file = rdsLocation, compress = "bzip2")
     }
 }
-
-lapply(TCGAcodes, saveRTCGAdata, runDate, analyzeDate, directory)
