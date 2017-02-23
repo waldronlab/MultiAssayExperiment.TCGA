@@ -8,8 +8,6 @@ source("data-raw/helpers.R")
 source("R/updateInfo.R")
 ## Load function for downloading raw data
 source("R/saveRTCGAdata.R")
-## Load subtypeMaps list from file
-source("data-raw/subtypeMaps.R")
 
 # Create MultiAssayExperiments for each TCGA disease code
 TCGAcodes <- getDiseaseCodes()
@@ -50,7 +48,14 @@ buildMultiAssayExperiments <-
             metadata(clinicalData)[["droppedColumns"]] <-
                 readRDS(file.path(dataDirectories()[["mergedClinical"]],
                                   paste0(cancer, "_dropped.rds")))
-            metadata(clinicalData)[["subtypes"]] <- subtypeMaps[[cancer]]
+
+            ### Add subtype maps where available
+            subtypeMapFile <- file.path(dataDirectories()[["curatedMaps"]],
+                                        paste0(cancer, "_subtypeMap.csv"))
+            if (file.exists(subtypeMapFile)) {
+                curatedMap <- read.csv(subtypeMapFile)
+                metadata(clinicalData)[["subtypes"]] <- curatedMap
+            }
 
             ## slotNames in FirehoseData RTCGAToolbox class
             targets <- c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene",
