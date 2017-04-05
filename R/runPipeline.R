@@ -110,11 +110,13 @@ buildMultiAssayExperiments <-
                 MultiAssayExperiment::ExperimentList(dataFull),
                 clinicalData,
                 NewMap)
+            # builddate
+            buildDate <- Sys.time()
             # metadata
-            metadata <- c(cancer, runDate, analyzeDate,
+            metadata <- c(buildDate, cancer, runDate, analyzeDate,
                           devtools::session_info())
-            names(metadata) <- c("cancerCode", "runDate", "analyzeDate",
-                                 "session_info")
+            names(metadata) <- c("buildDate", "cancerCode", "runDate",
+                                 "analyzeDate", "session_info")
 
             # add pData, sampleMap, and metadata to ExperimentList
             extraObjects <- list(pData = clinicalData,
