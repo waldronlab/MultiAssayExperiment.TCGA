@@ -108,12 +108,12 @@ buildMultiAssayExperiments <-
             }
 
             # sampleMap
-            NewMap <- generateMap(dataFull, clinicalData, TCGAbarcode)
+            newMap <- generateMap(dataFull, clinicalData, TCGAbarcode)
             # ExperimentList
             dataFull <- MultiAssayExperiment:::.harmonize(
                 MultiAssayExperiment::ExperimentList(dataFull),
                 clinicalData,
-                NewMap)
+                newMap)
             # builddate
             buildDate <- Sys.time()
             # metadata
