@@ -8,6 +8,8 @@ source("data-raw/helpers.R")
 source("R/updateInfo.R")
 ## Load function for downloading raw data
 source("R/saveRTCGAdata.R")
+## Load function for saving results and uploading to S3
+source("R/saveNupload.R")
 
 # Create MultiAssayExperiments for each TCGA disease code
 TCGAcodes <- getDiseaseCodes()

@@ -7,7 +7,7 @@ saveNupload <- function(dataList, cancer, directory = "data/bits") {
     dataNames <- names(dataList)
     stopifnot(!is.null(dataNames))
     objnames <- paste0(filePrefix, dataNames)
-    fnames <- file.path(directory, paste0(objnames, ".rda"))
+    fnames <- file.path(cancerSubdir, paste0(objnames, ".rda"))
     for (i in seq_along(dataList)) {
         message(paste0("Writing: ", fnames[i]))
         objname <- objnames[i]
@@ -19,6 +19,7 @@ saveNupload <- function(dataList, cancer, directory = "data/bits") {
                                          remotename = basename(fnames[i]),
                                          bucket =
                                              "experimenthub/curatedTCGAData/")
-        updateMetadata(dataList[i], cancer)
+        if (!name(dataList[i]) %in% c("colData", "sampleMap", "metadata"))
+            updateInfo(dataList[i], cancer)
     }
 }
