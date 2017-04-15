@@ -32,12 +32,15 @@ buildMultiAssayExperiments <-
             message("\n######\n",
                     "\nProcessing ", cancer, " : )\n",
                     "\n######\n")
-            serialPath <- file.path("data/raw", paste0(cancer, ".rds"))
+            serialDir <- file.path("data/raw")
 
             ## Download raw data if not already serialized
-            saveRTCGAdata(cancer, runDate, analyzeDate, serialPath, force)
+            saveRTCGAdata(cancer, runDate, analyzeDate, serialDir, force)
 
-            ## pData - clinicalData
+            ## Load data
+            cancerObject <- readRDS(file.path(serialDir, paste0(cancer, ".rds")))
+
+            ## colData - clinicalData
             clinicalPath <- file.path(dataDirectories()[["mergedClinical"]],
                                       paste0(cancer, "_reduced.csv"))
             stopifnot(file.exists(clinicalPath))
@@ -103,6 +106,7 @@ buildMultiAssayExperiments <-
                     dataFull[[i]] <-
                         RaggedExperiment::RaggedExperiment(dataFull[[i]])
             }
+
             # sampleMap
             NewMap <- generateMap(dataFull, clinicalData, TCGAbarcode)
             # ExperimentList
@@ -118,8 +122,8 @@ buildMultiAssayExperiments <-
             names(metadata) <- c("buildDate", "cancerCode", "runDate",
                                  "analyzeDate", "session_info")
 
-            # add pData, sampleMap, and metadata to ExperimentList
-            extraObjects <- list(pData = clinicalData,
+            # add colData, sampleMap, and metadata to ExperimentList
+            extraObjects <- list(colData = clinicalData,
                                  sampleMap = newMap,
                                  metadata = metadata)
             allObjects <- c(extraObjects, dataFull)
@@ -132,5 +136,6 @@ buildMultiAssayExperiments <-
     }
 
 # call buildMultiAssayExperiments function
-buildMultiAssayExperiments(TCGAcodes, runDate, analyzeDate, dataDirectory, force = TRUE)
+buildMultiAssayExperiments(TCGAcodes, runDate,
+            analyzeDate, dataDirectory, force = FALSE)
 
