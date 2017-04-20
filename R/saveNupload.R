@@ -18,8 +18,6 @@ saveNupload <- function(dataList, cancer, directory = "data/bits") {
         AnnotationHubData:::upload_to_S3(file = fnames[i],
                                          remotename = basename(fnames[i]),
                                          bucket =
-                                             "experimenthub/curatedTCGAData/")
-        if (!name(dataList[i]) %in% c("colData", "sampleMap", "metadata"))
-            updateInfo(dataList[i], cancer)
+                                             "experimenthub/curatedTCGAData")
     }
 }
