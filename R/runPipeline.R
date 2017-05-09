@@ -40,19 +40,24 @@ buildMultiAssayExperiments <-
         saveRTCGAdata(cancer, runDate, analyzeDate, serialDir, force)
 
         ## Load data
-        cancerObject <- readRDS(file.path(serialDir, paste0(cancer, ".rds")))
+        cancerObject <- readRDS(
+            file.path(serialDir,
+                      paste(runDate, paste0(cancer, ".rds"), sep = "-")
+            ))
 
         ## colData - clinicalData
-        clinicalPath <- file.path(dataDirectories()[["mergedClinical"]],
-                                  paste0(cancer, "_reduced.csv"))
+        clinicalPath <- file.path(
+            dataDirectories()[["mergedClinical"]],
+            paste(runDate, paste0(cancer, "_reduced.csv"), sep = "-"))
         stopifnot(file.exists(clinicalPath))
         clinicalData <- read.csv(clinicalPath, header=TRUE,
                                  stringsAsFactors=FALSE)
         rownames(clinicalData) <- clinicalData[["patientID"]]
         clinicalData <- S4Vectors::DataFrame(clinicalData)
         metadata(clinicalData)[["droppedColumns"]] <-
-            readRDS(file.path(dataDirectories()[["mergedClinical"]],
-                              paste0(cancer, "_dropped.rds")))
+            readRDS(file.path(
+                dataDirectories()[["mergedClinical"]],
+                paste(runDate, paste0(cancer, "_dropped.rds"), sep = "-")))
 
         ### Add subtype maps where available
         subtypeMapFile <- file.path(dataDirectories()[["curatedMaps"]],
