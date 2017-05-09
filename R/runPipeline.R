@@ -107,12 +107,6 @@ buildMultiAssayExperiments <-
         }))
         message(paste(exps, collapse = ", ") , " metadata added")
         }
-        ## Create RaggedExperiment from GRangesList
-        for (i in seq_along(dataFull)) {
-            if (is(dataFull[[i]], "GRangesList"))
-                dataFull[[i]] <-
-                    RaggedExperiment::RaggedExperiment(dataFull[[i]])
-        }
 
         # sampleMap
         newMap <- generateMap(dataFull, clinicalData, TCGAbarcode)
