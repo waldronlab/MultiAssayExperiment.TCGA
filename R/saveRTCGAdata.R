@@ -1,8 +1,13 @@
 saveRTCGAdata <- function(diseaseCode, runDate, analyzeDate, directory,
                           force = FALSE) {
-    rdsLocation <- file.path(directory, paste0(diseaseCode, ".rds"))
+    if (!dir.exists(directory))
+        dir.create(directory)
+    rdsLocation <- file.path(directory, paste(runDate,
+                                              paste0(diseaseCode, ".rds"),
+                                              sep = "-"))
+
     if (file.exists(rdsLocation) && !force)
-        cancerObject <- readRDS(rdsLocation)
+        return(message(diseaseCode, " cancer data exists"))
     else {
         cancerObject <- getFirehoseData(dataset = diseaseCode,
                                      runDate = runDate,
@@ -27,5 +32,6 @@ saveRTCGAdata <- function(diseaseCode, runDate, analyzeDate, directory,
                             fileSizeLimit = 500000,
                             getUUIDs = FALSE)
         saveRDS(cancerObject, file = rdsLocation, compress = "bzip2")
+        message(basename(rdsLocation), " saved in ", dirname(rdsLocation))
     }
 }

@@ -17,11 +17,14 @@ load("data/curationAvailable.rda")
 }
 
 ## Read clinical data from file location
-.readClinical <- function(diseaseCode, dataDir=NULL) {
+.readClinical <- function(diseaseCode, runDate, dataDir=NULL) {
     if (is.null(dataDir)) stop("provide data directory name from dataDirectories()")
     clinicalLoc <- dataDirectories()[[dataDir]]
-    clinicalData <- readr::read_csv(file.path(clinicalLoc,
-                                              paste0(diseaseCode, ".csv")))
+    clinicalData <- readr::read_csv(
+        file.path(clinicalLoc, paste(runDate,
+                                     paste0(diseaseCode, ".csv"),
+                                     sep = "-")
+        ))
     clinicalData
 }
 
@@ -136,8 +139,8 @@ load("data/curationAvailable.rda")
 }
 
 ## Merge basic clinical and extra to create enhanced
-.mergeClinicalData <- function(diseaseCode) {
-    basicClinical <- .readClinical(diseaseCode, "basicClinical")
+.mergeClinicalData <- function(diseaseCode, runDate) {
+    basicClinical <- .readClinical(diseaseCode, runDate, "basicClinical")
     idName <- grep("patientID", names(basicClinical), ignore.case = TRUE,
                    value = TRUE)
     stopifnot(S4Vectors::isSingleString(idName))
@@ -165,11 +168,14 @@ load("data/curationAvailable.rda")
 }
 
 ## Read clinical and merge subtype information
-.mergeSubtypeClinical <- function(diseaseCode, curationAvailable) {
+.mergeSubtypeClinical <- function(diseaseCode, runDate, curationAvailable) {
     clinicalData <-
-        readr::read_csv(file.path(
-                                  dataDirectories()[["enhancedClinical"]],
-                                  paste0(diseaseCode, ".csv")))
+        readr::read_csv(
+            file.path(
+                dataDirectories()[["enhancedClinical"]],
+                paste(runDate, paste0(diseaseCode, ".csv"), sep = "-")
+            )
+        )
     if (diseaseCode %in% curationAvailable) {
         subtypeCuration <- .readSubtypeData(diseaseCode)
         BarcodeColName <- .findBarcodeCol(subtypeCuration)
