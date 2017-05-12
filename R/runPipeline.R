@@ -107,20 +107,9 @@ buildMultiAssayExperiments <-
         }))
         message(paste(exps, collapse = ", ") , " metadata added")
         }
-        ## Create RaggedExperiment from GRangesList
-        for (i in seq_along(dataFull)) {
-            if (is(dataFull[[i]], "GRangesList"))
-                dataFull[[i]] <-
-                    RaggedExperiment::RaggedExperiment(dataFull[[i]])
-        }
 
         # sampleMap
         newMap <- generateMap(dataFull, clinicalData, TCGAbarcode)
-        # ExperimentList
-        dataFull <- MultiAssayExperiment:::.harmonize(
-            MultiAssayExperiment::ExperimentList(dataFull),
-            clinicalData,
-            newMap)
         # builddate
         buildDate <- Sys.time()
         # metadata
@@ -130,7 +119,7 @@ buildMultiAssayExperiments <-
                              "analyzeDate", "session_info")
 
         # add colData, sampleMap, and metadata to ExperimentList
-        allObjects <- c(as(dataFull[["experiments"]], "list"),
+        allObjects <- c(dataFull[["experiments"]],
                         colData = dataFull[["colData"]],
                         sampleMap = dataFull[["sampleMap"]],
                         metadata = list(metadata))
