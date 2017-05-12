@@ -19,16 +19,6 @@ checkSubtypeCuration <- function(diseaseCode) {
     }
 }
 
-## Fix barcodes that are inconsistent
-curateBarcodes <- function(diseaseCode) {
-    subtypeData <- .readSubtypeData(diseaseCode)
-    bcode <- .findBarcodeCol(subtypeData)
-    if (length(bcode)) {
-        subtypeData[[bcode]] <- .stdIDs(subtypeData[[bcode]])
-    }
-    subtypeData
-}
-
 ## See what TCGA disease codes have corrupt barcodes
 findCorruptBarcodes <- function(diseaseCode) {
     subtypeData <- .readSubtypeData(diseaseCode)

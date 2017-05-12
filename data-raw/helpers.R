@@ -167,6 +167,16 @@ load("data/curationAvailable.rda")
     subtypeData[, targetColumns, drop = FALSE]
 }
 
+## Fix barcodes that are inconsistent
+.curateBarcodes <- function(diseaseCode) {
+    subtypeData <- .readSubtypeData(diseaseCode)
+    bcode <- .findBarcodeCol(subtypeData)
+    if (length(bcode)) {
+        subtypeData[[bcode]] <- .stdIDs(subtypeData[[bcode]])
+    }
+    subtypeData
+}
+
 ## Read clinical and merge subtype information
 .mergeSubtypeClinical <- function(diseaseCode, runDate, curationAvailable) {
     clinicalData <-

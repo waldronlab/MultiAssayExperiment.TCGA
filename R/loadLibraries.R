@@ -17,4 +17,3 @@ packs <- c("readxl", "readr", "dplyr", "devtools", "AnnotationHubData",
            "BiocParallel", "Biobase", "GenomeInfoDb", "RaggedExperiment")
 
 install_packages(packs)
-
