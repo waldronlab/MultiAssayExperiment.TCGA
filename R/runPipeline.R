@@ -110,11 +110,6 @@ buildMultiAssayExperiments <-
 
         # sampleMap
         newMap <- generateMap(dataFull, clinicalData, TCGAbarcode)
-        # ExperimentList
-        dataFull <- MultiAssayExperiment:::.harmonize(
-            MultiAssayExperiment::ExperimentList(dataFull),
-            clinicalData,
-            newMap)
         # builddate
         buildDate <- Sys.time()
         # metadata
@@ -124,7 +119,7 @@ buildMultiAssayExperiments <-
                              "analyzeDate", "session_info")
 
         # add colData, sampleMap, and metadata to ExperimentList
-        allObjects <- c(as(dataFull[["experiments"]], "list"),
+        allObjects <- c(dataFull[["experiments"]],
                         colData = dataFull[["colData"]],
                         sampleMap = dataFull[["sampleMap"]],
                         metadata = list(metadata))
