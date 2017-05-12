@@ -109,7 +109,8 @@ buildMultiAssayExperiments <-
         }
 
         # sampleMap
-        newMap <- generateMap(dataFull, clinicalData, TCGAbarcode)
+        newMap <- generateMap(dataFull, clinicalData, TCGAbarcode,
+                              force = TRUE)
         # builddate
         buildDate <- Sys.time()
         # metadata
@@ -118,7 +119,7 @@ buildMultiAssayExperiments <-
         names(metadata) <- c("buildDate", "cancerCode", "runDate",
                              "analyzeDate", "session_info")
 
-        # add colData, sampleMap, and metadata to ExperimentList
+        # add colData, sampleMap, and metadata to experiments list
         allObjects <- c(dataFull[["experiments"]],
                         colData = dataFull[["colData"]],
                         sampleMap = dataFull[["sampleMap"]],
