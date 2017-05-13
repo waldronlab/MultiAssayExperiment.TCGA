@@ -12,7 +12,9 @@ source("R/saveRTCGAdata.R")
 source("R/saveNupload.R")
 
 # Create MultiAssayExperiments for each TCGA disease code
-TCGAcodes <- getDiseaseCodes()
+# TCGAcodes <- getDiseaseCodes()
+TCGAcodes <- "ACC"
+
 # runDate <- getFirehoseRunningDates(last=1)
 runDate <- "20160128"
 # analyzeDate <- getFirehoseAnalyzeDates(last=1)
@@ -120,9 +122,9 @@ buildMultiAssayExperiments <-
                              "analyzeDate", "session_info")
 
         # add colData, sampleMap, and metadata to experiments list
-        allObjects <- c(dataFull[["experiments"]],
-                        colData = dataFull[["colData"]],
-                        sampleMap = dataFull[["sampleMap"]],
+        allObjects <- c(dataFull,
+                        colData = clinicalData,
+                        sampleMap = newMap,
                         metadata = list(metadata))
 
         # save rda files and upload them to S3
