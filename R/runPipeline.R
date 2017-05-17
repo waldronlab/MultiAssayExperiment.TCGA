@@ -12,11 +12,14 @@ source("R/saveRTCGAdata.R")
 source("R/saveNupload.R")
 
 # Create MultiAssayExperiments for each TCGA disease code
-# TCGAcodes <- getDiseaseCodes()
-TCGAcodes <- "ACC"
+TCGAcodes <- getDiseaseCodes()
+
+# If subset needs to be run, replace cancer code with last attempt
+TCGAcodes <- TCGAcodes[which(TCGAcodes == "ACC"):length(TCGAcodes)]
 
 # runDate <- getFirehoseRunningDates(last=1)
 runDate <- "20160128"
+
 # analyzeDate <- getFirehoseAnalyzeDates(last=1)
 analyzeDate <- "20160128"
 dataDirectory <- "data/built"
