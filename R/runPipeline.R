@@ -14,7 +14,7 @@ source("R/saveNupload.R")
 # Create MultiAssayExperiments for each TCGA disease code
 TCGAcodes <- getDiseaseCodes()
 
-# If subset needs to be run, replace cancer code with last attempt
+# If subset needs to be run, replace cancer code with last unsuccessful attempt
 TCGAcodes <- TCGAcodes[which(TCGAcodes == "ACC"):length(TCGAcodes)]
 
 # runDate <- getFirehoseRunningDates(last=1)

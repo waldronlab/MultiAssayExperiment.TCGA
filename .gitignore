@@ -17,6 +17,7 @@ rawdata/*
 *.[Rr]ds
 .httr-oauth
 .~lock.*
+*.orig
 
 # Don't ignore
 !curationAvailable.Rda
