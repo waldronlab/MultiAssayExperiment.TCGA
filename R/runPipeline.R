@@ -113,9 +113,20 @@ buildMultiAssayExperiments <-
         message(paste(exps, collapse = ", ") , " metadata added")
         }
 
+        for (i in seq_along(dataFull)) {
+            if (is(dataFull[[i]], "GRangesList"))
+                dataFull[[i]] <-
+                    RaggedExperiment::RaggedExperiment(dataFull[[i]])
+        }
+
         # sampleMap
         newMap <- generateMap(dataFull, clinicalData, TCGAbarcode,
                               force = TRUE)
+        # ExperimentList
+        dataFull <- MultiAssayExperiment:::.harmonize(
+            MultiAssayExperiment::ExperimentList(dataFull),
+            clinicalData,
+            newMap)
         # builddate
         buildDate <- Sys.time()
         # metadata
@@ -124,10 +135,10 @@ buildMultiAssayExperiments <-
         names(metadata) <- c("buildDate", "cancerCode", "runDate",
                              "analyzeDate", "session_info")
 
-        # add colData, sampleMap, and metadata to experiments list
-        allObjects <- c(dataFull,
-                        colData = clinicalData,
-                        sampleMap = newMap,
+        # add colData, sampleMap, and metadata to ExperimentList
+        allObjects <- c(as(dataFull[["experiments"]], "list"),
+                        colData = dataFull[["colData"]],
+                        sampleMap = dataFull[["sampleMap"]],
                         metadata = list(metadata))
 
         # save rda files and upload them to S3
