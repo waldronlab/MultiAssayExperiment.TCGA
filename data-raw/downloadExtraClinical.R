@@ -14,7 +14,8 @@ writeClinicalData <- function(diseaseCode, runDate = "20160128", force=FALSE) {
     message(dataset, " with extra columns created")
     rm(dataset)
     }
-    message(fileName, " available")
+    message("\n", fileName, " available")
 }
 
-BiocParallel::bplapply(TCGAcodes, writeClinicalData)
+for (code in TCGAcodes)
+    writeClinicalData(code, force = TRUE)

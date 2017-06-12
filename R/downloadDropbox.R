@@ -11,7 +11,8 @@ downloadDropbox <- function(dropBoxPaths, TCGAcode, dirList) {
                     BoxSubTypes = "subtypePath",
                     BoxClinicalData = "basicClinical",
                     BoxClinicalCuration = "clinicalCurationPath")
-    fileNames <- gsub("TCGA_Variable_Curation_", "", basename(dropBoxPaths), fixed = TRUE)
+    fileNames <- gsub("TCGA_Variable_Curation_", "", basename(dropBoxPaths),
+                      fixed = TRUE)
     dxCodes <- gsub(".csv|.xlsx", "", fileNames)
     files <- dropBoxPaths[dxCodes %in% TCGAcode]
     invisible(lapply(files, function(archive) {

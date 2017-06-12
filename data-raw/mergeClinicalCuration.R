@@ -6,15 +6,15 @@ mergeVecs <- function(x1, x2, prioritize=TRUE) {
   ##x1 will be over-written by x2, and in case of conflict, x2 takes priority
   if(!identical(length(x1), length(x2))) stop("x1 and x2 must have the same length")
   if(!identical(class(x1), class(x2))) stop("x1 and x2 must have the same class")
-  x1[is.na(x1)] = x2[is.na(x1)]
+  x1[is.na(x1)] <- x2[is.na(x1)]
   mismatches <- which(x1 != x2)
   if(length(mismatches) > 0){
     if(prioritize){
-      x1[mismatches] = x2[mismatches]
+      x1[mismatches] <- x2[mismatches]
     }else{
       warning(paste("There were mismatches in positions:",
                     paste0(mismatches, collapse=", ")))
-      x1[mismatches] = paste(x1[mismatches], x2[mismatches], sep="///")
+      x1[mismatches] <- paste(x1[mismatches], x2[mismatches], sep="///")
     }
   }
   return(x1)

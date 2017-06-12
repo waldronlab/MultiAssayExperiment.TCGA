@@ -18,11 +18,15 @@ load("data/curationAvailable.rda")
 
 ## Read clinical data from file location
 .readClinical <- function(diseaseCode, runDate, dataDir=NULL) {
-    if (is.null(dataDir)) stop("provide data directory name from dataDirectories()")
+    if (is.null(dataDir))
+        stop("provide data directory name from dataDirectories()")
     clinicalLoc <- dataDirectories()[[dataDir]]
     clinicalData <- readr::read_csv(
         file.path(clinicalLoc, paste(runDate,
-                                     paste0(diseaseCode, ".csv"),
+                                     paste0(diseaseCode,
+                                            if (dataDir == "mergedClinical") {
+                                                "_merged.csv"
+                                            } else { ".csv" } ),
                                      sep = "-")
         ))
     clinicalData
@@ -97,8 +101,8 @@ load("data/curationAvailable.rda")
 }
 
 ## Download extra columns from BROAD
-.downloadExtraClinical <- function(diseaseCode) {
-    adt <- "20151101"
+.downloadExtraClinical <- function(diseaseCode, runDate) {
+    adt <- runDate
     dset <- diseaseCode
     cl_url <- "http://gdac.broadinstitute.org/runs/stddata__"
     cl_url <- paste0(cl_url, substr(adt, 1, 4), "_", substr(adt, 5, 6),
@@ -148,7 +152,7 @@ load("data/curationAvailable.rda")
     patientIDs <- .stdIDs(patientIDs)
     basicClinical <- as.data.frame(basicClinical, stringsAsFactors=FALSE)
     rownames(basicClinical) <- patientIDs
-    extraClinical <- .downloadExtraClinical(diseaseCode)
+    extraClinical <- .downloadExtraClinical(diseaseCode, runDate)
     enhancedClinical <- merge(basicClinical, extraClinical, "row.names")
     enhancedClinical$patientID <- enhancedClinical[["Row.names"]]
     enhancedClinical <-
