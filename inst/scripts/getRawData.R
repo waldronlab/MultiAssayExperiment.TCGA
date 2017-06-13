@@ -1,9 +1,9 @@
 ## Load libraries
 library(MultiAssayExperiment)
-library(devtools)
-library(readr)
 library(RTCGAToolbox)
 library(TCGAutils)
+library(devtools)
+library(readr)
 
 setwd("../")
 stopifnot(identical(basename(getwd()), "MultiAssayExperiment-TCGA"))
@@ -15,5 +15,5 @@ runDate <- "20160128"
 analyzeDate <- "20160128"
 directory <- "data/raw"
 
-lapply(TCGAcodes, saveRTCGAdata, runDate, analyzeDate, directory)
-
+for(code in TCGAcodes)
+    saveRTCGAdata(code, runDate, analyzeDate, directory)

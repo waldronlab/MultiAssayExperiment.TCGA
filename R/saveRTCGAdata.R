@@ -2,36 +2,29 @@ saveRTCGAdata <- function(diseaseCode, runDate, analyzeDate, directory,
                           force = FALSE) {
     if (!dir.exists(directory))
         dir.create(directory)
-    rdsLocation <- file.path(directory, paste(runDate,
-                                              paste0(diseaseCode, ".rds"),
-                                              sep = "-"))
-
-    if (file.exists(rdsLocation) && !force)
-        return(message(diseaseCode, " cancer data exists"))
-    else {
-        cancerObject <- getFirehoseData(dataset = diseaseCode,
-                                     runDate = runDate,
-                                     gistic2_Date = analyzeDate,
-                            RNAseq_Gene = TRUE,
-                            Clinic = FALSE,
-                            miRNASeq_Gene = TRUE,
-                            RNAseq2_Gene_Norm = TRUE,
-                            CNA_SNP = TRUE,
-                            CNV_SNP = TRUE,
-                            CNA_Seq = TRUE,
-                            CNA_CGH = TRUE,
-                            Methylation = TRUE,
-                            Mutation = TRUE,
-                            mRNA_Array = TRUE,
-                            miRNA_Array = TRUE,
-                            RPPA_Array = TRUE,
-                            RNAseqNorm = "raw_counts",
-                            RNAseq2Norm = "normalized_count",
-                            forceDownload = FALSE,
-                            destdir = "./tmp",
-                            fileSizeLimit = 500000,
-                            getUUIDs = FALSE)
-        saveRDS(cancerObject, file = rdsLocation, compress = "bzip2")
-        message(basename(rdsLocation), " saved in ", dirname(rdsLocation))
+    choices <- c("RNAseq_Gene", "miRNASeq_Gene", "RNAseq2_Gene_Norm",
+        "CNA_SNP", "CNV_SNP", "CNA_Seq", "CNA_CGH", "Methylation",
+        "Mutation", "mRNA_Array", "miRNA_Array", "RPPA_Array", "GISTIC")
+    for(dataType in choices) {
+        dataTypeName <- gsub("_", "", dataType)
+        rdsPath <- file.path(directory, paste0(runDate, "-",
+            diseaseCode, "_", dataTypeName, ".rds"))
+        if (!file.exists(rdsPath) || force) {
+            gistic <- grepl("^GIST", dataType, ignore.case = TRUE)
+            if (gistic) {
+                dateType <- "gistic2_Date"
+                args <- list(diseaseCode, analyzeDate)
+                names(args) <- c("dataset", dateType)
+            } else {
+                dateType <- "runDate"
+                args <- list(diseaseCode, runDate, TRUE)
+                names(args) <- c("dataset", dateType, dataType)
+            }
+                dataPiece <- do.call(getFirehoseData, args = c(
+                    list(Clinic = FALSE, destdir = "./tmp",
+                         fileSizeLimit = 500000), args))
+                saveRDS(dataPiece, file = rdsPath, compress = "bzip2")
+                message(basename(rdsPath), " saved in ", dirname(rdsPath))
+        } else { message(diseaseCode, "_", dataType, " data exists") }
     }
 }
