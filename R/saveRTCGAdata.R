@@ -1,10 +1,13 @@
-saveRTCGAdata <- function(diseaseCode, runDate, analyzeDate, directory,
-                          force = FALSE) {
+saveRTCGAdata <- function(runDate, diseaseCode, dataType = c("RNAseq_Gene",
+    "miRNASeq_Gene", "RNAseq2_Gene_Norm", "CNA_SNP", "CNV_SNP", "CNA_Seq",
+    "CNA_CGH", "Methylation", "Mutation", "mRNA_Array", "miRNA_Array",
+    "RPPA_Array", "GISTIC"), analyzeDate, directory, force = FALSE) {
     if (!dir.exists(directory))
         dir.create(directory)
-    choices <- c("RNAseq_Gene", "miRNASeq_Gene", "RNAseq2_Gene_Norm",
-        "CNA_SNP", "CNV_SNP", "CNA_Seq", "CNA_CGH", "Methylation",
-        "Mutation", "mRNA_Array", "miRNA_Array", "RPPA_Array", "GISTIC")
+    choices <- match.arg(dataType, c("RNAseq_Gene", "miRNASeq_Gene",
+        "RNAseq2_Gene_Norm", "CNA_SNP", "CNV_SNP", "CNA_Seq", "CNA_CGH",
+        "Methylation", "Mutation", "mRNA_Array", "miRNA_Array", "RPPA_Array",
+        "GISTIC"), several.ok = TRUE)
     for(dataType in choices) {
         dataTypeName <- gsub("_", "", dataType)
         rdsPath <- file.path(directory, paste0(runDate, "-",
