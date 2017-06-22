@@ -16,4 +16,5 @@ analyzeDate <- "20160128"
 directory <- "data/raw"
 
 for(code in TCGAcodes)
-    saveRTCGAdata(code, runDate, analyzeDate, directory)
+    saveRTCGAdata(runDate, code, analyzeDate = analyzeDate, directory = directory, force = TRUE)
+
