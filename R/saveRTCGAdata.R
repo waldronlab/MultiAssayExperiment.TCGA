@@ -1,21 +1,20 @@
-saveRTCGAdata <- function(runDate, diseaseCode, dataType = c("RNAseq_Gene",
-    "miRNASeq_Gene", "RNAseq2_Gene_Norm", "CNA_SNP", "CNV_SNP", "CNA_Seq",
-    "CNA_CGH", "Methylation", "Mutation", "mRNA_Array", "miRNA_Array",
-    "RPPA_Array", "GISTIC"), analyzeDate, directory, force = FALSE) {
+saveRTCGAdata <- function(runDate, diseaseCode, dataType = c("RNASeqGene",
+    "miRNASeqGene", "RNASeq2GeneNorm", "CNASNP", "CNVSNP", "CNASeq",
+    "CNACGH", "Methylation", "Mutation", "mRNAArray", "miRNAArray",
+    "RPPAArray", "GISTIC"), analyzeDate, directory, force = FALSE) {
     if (!dir.exists(directory))
         dir.create(directory)
-    choices <- match.arg(dataType, c("RNAseq_Gene", "miRNASeq_Gene",
-        "RNAseq2_Gene_Norm", "CNA_SNP", "CNV_SNP", "CNA_Seq", "CNA_CGH",
-        "Methylation", "Mutation", "mRNA_Array", "miRNA_Array", "RPPA_Array",
+    choices <- match.arg(dataType, c("RNASeqGene", "miRNASeqGene",
+        "RNASeq2GeneNorm", "CNASNP", "CNVSNP", "CNASeq", "CNACGH",
+        "Methylation", "Mutation", "mRNAArray", "miRNAArray", "RPPAArray",
         "GISTIC"), several.ok = TRUE)
     for(dataType in choices) {
-        dataTypeName <- gsub("_", "", dataType)
         rdsPath <- file.path(directory, paste0(runDate, "-",
-            diseaseCode, "_", dataTypeName, ".rds"))
+            diseaseCode, "_", dataType, ".rds"))
         if (!file.exists(rdsPath) || force) {
             gistic <- grepl("^GIST", dataType, ignore.case = TRUE)
             if (gistic) {
-                dateType <- "gistic2_Date"
+                dateType <- "gistic2Date"
                 args <- list(diseaseCode, analyzeDate)
                 names(args) <- c("dataset", dateType)
             } else {
