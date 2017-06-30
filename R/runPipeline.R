@@ -42,7 +42,8 @@ buildMultiAssayExperiments <-
         serialDir <- file.path("data/raw")
 
         ## Download raw data if not already serialized
-        saveRTCGAdata(cancer, runDate, analyzeDate, serialDir, force)
+        saveRTCGAdata(runDate, cancer, analyzeDate = analyzeDate,
+                      directory = serialDir, force = force)
 
         ## Load data
         cancerObject <- readRDS(
