@@ -2,14 +2,14 @@ saveRTCGAdata <- function(runDate, diseaseCode, dataType = c("RNASeqGene",
     "miRNASeqGene", "RNASeq2GeneNorm", "CNASNP", "CNVSNP", "CNASeq",
     "CNACGH", "Methylation", "Mutation", "mRNAArray", "miRNAArray",
     "RPPAArray", "GISTIC"), analyzeDate, directory, force = FALSE) {
-    if (!dir.exists(directory))
-        dir.create(directory)
+    if (!dir.exists(file.path(directory, diseaseCode)))
+        dir.create(file.path(directory, diseaseCode), recursive = TRUE)
     choices <- match.arg(dataType, c("RNASeqGene", "miRNASeqGene",
         "RNASeq2GeneNorm", "CNASNP", "CNVSNP", "CNASeq", "CNACGH",
         "Methylation", "Mutation", "mRNAArray", "miRNAArray", "RPPAArray",
         "GISTIC"), several.ok = TRUE)
     for(dataType in choices) {
-        rdsPath <- file.path(directory, paste0(runDate, "-",
+        rdsPath <- file.path(directory, diseaseCode, paste0(runDate, "-",
             diseaseCode, "_", dataType, ".rds"))
         if (!file.exists(rdsPath) || force) {
             gistic <- grepl("^GIST", dataType, ignore.case = TRUE)
