@@ -75,9 +75,9 @@ buildMultiAssayExperiments <-
 
         ## slotNames in FirehoseData RTCGAToolbox class
         targets <- c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene",
-                     "CNASNP", "CNVSNP", "CNAseq", "CNACGH", "Methylation",
-                     "mRNAArray", "miRNAArray", "RPPAArray", "Mutations",
-                     "gistica", "gistict")
+                     "CNASNP", "CNVSNP", "CNASeq", "CNACGH", "Methylation",
+                     "mRNAArray", "miRNAArray", "RPPAArray", "Mutation",
+                     "GISTICA", "GISTICT")
         names(targets) <- targets
         dataList <- lapply(targets, function(datType) {
             tryCatch({TCGAutils::TCGAextract(cancerObject, datType)},
