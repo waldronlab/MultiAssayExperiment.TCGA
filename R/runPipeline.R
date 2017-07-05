@@ -45,11 +45,15 @@ buildMultiAssayExperiments <-
         saveRTCGAdata(runDate, cancer, analyzeDate = analyzeDate,
                       directory = serialDir, force = force)
 
-        ## Load data
-        cancerObject <- readRDS(
-            file.path(serialDir,
-                      paste(runDate, paste0(cancer, ".rds"), sep = "-")
-            ))
+        ## slotNames in FirehoseData RTCGAToolbox class
+        targets <- c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene",
+                     "CNASNP", "CNVSNP", "CNASeq", "CNACGH", "Methylation",
+                     "mRNAArray", "miRNAArray", "RPPAArray", "Mutation",
+                     "GISTICA", "GISTICT")
+        names(targets) <- targets
+
+        ## Specify cancer folder
+        cancerFolder <- file.path(serialDir, cancer)
 
         ## colData - clinicalData
         clinicalPath <- file.path(
@@ -73,12 +77,11 @@ buildMultiAssayExperiments <-
             metadata(clinicalData)[["subtypes"]] <- curatedMap
         }
 
-        ## slotNames in FirehoseData RTCGAToolbox class
-        targets <- c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene",
-                     "CNASNP", "CNVSNP", "CNASeq", "CNACGH", "Methylation",
-                     "mRNAArray", "miRNAArray", "RPPAArray", "Mutation",
-                     "GISTICA", "GISTICT")
-        names(targets) <- targets
+        for (dataType in targets) {
+            rdsFile <- file.path(cancerFolder,
+                paste0(runDate,"-", cancer, "_", dataType, ".rds"))
+            cancerPiece <- readRDS(rdsFile)
+        }
         dataList <- lapply(targets, function(datType) {
             tryCatch({TCGAutils::TCGAextract(cancerObject, datType)},
                      error = function(e) {
@@ -88,7 +91,7 @@ buildMultiAssayExperiments <-
         dataFull <- Filter(function(x) {!is.null(x)}, dataList)
         assayNames <- names(dataFull)
 
-        exps <- c("CNASNP", "CNVSNP", "CNAseq", "CNACGH")
+        exps <- c("CNASNP", "CNVSNP", "CNASeq", "CNACGH")
         inAssays <- exps %in% assayNames
         if (any(inAssays)) {
         exps <- exps[inAssays]
