@@ -17,4 +17,3 @@ directory <- "data/raw"
 
 for(code in TCGAcodes)
     saveRTCGAdata(runDate, code, analyzeDate = analyzeDate, directory = directory, force = TRUE)
-

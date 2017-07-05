@@ -77,60 +77,27 @@ buildMultiAssayExperiments <-
             metadata(clinicalData)[["subtypes"]] <- curatedMap
         }
 
-        for (dataType in targets) {
-            rdsFile <- file.path(cancerFolder,
-                paste0(runDate,"-", cancer, "_", dataType, ".rds"))
-            cancerPiece <- readRDS(rdsFile)
-        }
-        dataList <- lapply(targets, function(datType) {
-            tryCatch({TCGAutils::TCGAextract(cancerObject, datType)},
-                     error = function(e) {
-                         message(datType, " does not contain any data!")
-                         })
-        })
-        dataFull <- Filter(function(x) {!is.null(x)}, dataList)
-        assayNames <- names(dataFull)
+        dataFiles <- list.files(cancerFolder, full.names = TRUE,
+            pattern = "rds$")
+        dataList <- lapply(dataFiles, readRDS)
+        names(dataList) <- gsub("\\.rds$", "", basename(dataFiles))
+        dataList <- lapply(seq_along(dataList), function(i, dlist) {
+            dattype <- strsplit(names(dlist[i]), "_") %>%
+                vapply(., `[`, character(1L), 2L)
+            TCGAutils::TCGAextract(dlist[[i]], dattype[[i]])
+        }, dlist = dataList)
 
-        exps <- c("CNASNP", "CNVSNP", "CNASeq", "CNACGH")
-        inAssays <- exps %in% assayNames
-        if (any(inAssays)) {
-        exps <- exps[inAssays]
-        invisible(lapply(exps, function(dataType) {
-            type <- switch(dataType,
-                           CNASNP = "CNA_SNP",
-                           CNVSNP = "CNV_SNP",
-                           CNAseq = "CNA_Seq",
-                           CNACGH = "CNA_CGH")
-            args <- list(cancer, runDate, TRUE)
-            names(args) <- c("disease", "runDate", type)
-            source_file <- do.call(getFileNames, args = args)
-            genome_build <- gsub("(^.+)_(hg[0-9]{2})_(.+$)", "\\2",
-                                 x = source_file,
-                                 ignore.case = TRUE)
-            if (S4Vectors::isEmpty(genome_build))
-                genome_build <- NA
-            GenomeInfoDb::genome(dataFull[[dataType]]) <- genome_build
-            source_file <- c(source_file = source_file)
-            metadata(dataFull[[dataType]]) <-
-                c(metadata(dataFull[[dataType]]), source_file)
-        }))
-        message(paste(exps, collapse = ", ") , " metadata added")
-        }
+        ## Filter by zero length
+        dataFull <- Filter(function(x) {!length(x)}, dataList)
 
-        for (i in seq_along(dataFull)) {
-            if (is(dataFull[[i]], "GRangesList"))
-                dataFull[[i]] <-
-                    RaggedExperiment::RaggedExperiment(dataFull[[i]])
-        }
+        # sampleMap - generate by getting all colnames
+        sampMap <- generateMap(dataFull, clinicalData, TCGAbarcode, force = TRUE)
 
-        # sampleMap
-        newMap <- generateMap(dataFull, clinicalData, TCGAbarcode,
-                              force = TRUE)
         # ExperimentList
         dataFull <- MultiAssayExperiment:::.harmonize(
             MultiAssayExperiment::ExperimentList(dataFull),
             clinicalData,
-            newMap)
+            sampMap)
         # builddate
         buildDate <- Sys.time()
         # metadata
