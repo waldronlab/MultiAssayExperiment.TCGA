@@ -31,7 +31,7 @@ write.table(header, file = "MAEOinfo.csv", sep = ",",
 
 # buildMultiAssayExperiments function definition
 buildMultiAssayExperiments <-
-    function(TCGAcodes, runDate, analyzeDate, dataDirectory, force) {
+    function(TCGAcodes, runDate, analyzeDate, dataDirectory, force = FALSE) {
     if (!dir.exists(dataDirectory))
         dir.create(dataDirectory)
 
@@ -84,7 +84,7 @@ buildMultiAssayExperiments <-
         dataList <- lapply(seq_along(dataList), function(i, dlist) {
             dattype <- strsplit(names(dlist[i]), "_") %>%
                 vapply(., `[`, character(1L), 2L)
-            TCGAutils::TCGAextract(dlist[[i]], dattype[[i]])
+            TCGAutils::TCGAextract(dlist[[i]], dattype)
         }, dlist = dataList)
 
         ## Filter by zero length
@@ -123,6 +123,5 @@ buildMultiAssayExperiments <-
 }
 
 # call buildMultiAssayExperiments function
-buildMultiAssayExperiments(TCGAcodes, runDate,
-            analyzeDate, dataDirectory, force = FALSE)
+buildMultiAssayExperiments(TCGAcodes, runDate, analyzeDate, dataDirectory)
 
