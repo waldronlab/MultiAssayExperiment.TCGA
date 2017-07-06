@@ -80,12 +80,14 @@ buildMultiAssayExperiments <-
         dataFiles <- list.files(cancerFolder, full.names = TRUE,
             pattern = "rds$")
         dataList <- lapply(dataFiles, readRDS)
-        dataList <- lapply(seq_along(dataList), function(i, dlist) {
+        names(dataList) <- gsub("\\.rds$", "", basename(dataFiles))
+        dataListIdx <- seq_along(dataList)
+        names(dataListIdx) <- names(dataList)
+        dataList <- lapply(dataListIdx, function(i, dlist) {
             dattype <- strsplit(names(dlist[i]), "_") %>%
                 vapply(., `[`, character(1L), 2L)
             TCGAutils::TCGAextract(dlist[[i]], dattype)
         }, dlist = dataList)
-        names(dataList) <- gsub("\\.rds$", "", basename(dataFiles))
 
         ## Filter by zero length
         dataFull <- Filter(function(x) {length(x)}, dataList)
