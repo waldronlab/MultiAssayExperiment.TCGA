@@ -9,8 +9,8 @@ saveRTCGAdata <- function(runDate, diseaseCode, dataType = c("RNASeqGene",
         "Methylation", "Mutation", "mRNAArray", "miRNAArray", "RPPAArray",
         "GISTIC"), several.ok = TRUE)
     for(dataType in choices) {
-        rdsPath <- file.path(directory, diseaseCode, paste0(runDate, "-",
-            diseaseCode, "_", dataType, ".rds"))
+        rdsPath <- file.path(directory, diseaseCode, paste0(diseaseCode, "_",
+            dataType, "-", runDate, ".rds"))
         if (!file.exists(rdsPath) || force) {
             gistic <- grepl("^GIST", dataType, ignore.case = TRUE)
             if (gistic) {
