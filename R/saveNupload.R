@@ -2,11 +2,10 @@ saveNupload <- function(dataList, cancer, directory = "data/bits") {
     cancerSubdir <- file.path(directory, cancer)
     if (!dir.exists(cancerSubdir))
         dir.create(cancerSubdir, recursive = TRUE)
-    filePrefix <- paste0(toupper(cancer), "_")
     filetype <- ".rda"
     dataNames <- names(dataList)
     stopifnot(!is.null(dataNames))
-    objnames <- paste0(filePrefix, dataNames)
+    objnames <- dataNames
     fnames <- file.path(cancerSubdir, paste0(objnames, ".rda"))
     for (i in seq_along(dataList)) {
         message(paste0("Writing: ", fnames[i]))
