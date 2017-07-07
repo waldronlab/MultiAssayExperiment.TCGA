@@ -80,12 +80,11 @@ buildMultiAssayExperiments <-
         dataFiles <- list.files(cancerFolder, full.names = TRUE,
             pattern = "rds$")
         dataList <- lapply(dataFiles, readRDS)
-        names(dataList) <- gsub("\\.rds$", "", basename(dataFiles))
+        names(dataList) <- .cleanFileNames(dataFiles, "-")
         dataListIdx <- seq_along(dataList)
         names(dataListIdx) <- names(dataList)
         dataList <- lapply(dataListIdx, function(i, dlist) {
-            dattype <- strsplit(names(dlist[i]), "_") %>%
-                vapply(., `[`, character(1L), 2L)
+            dattype <- .cleanFileNames(names(dlist[i]), "_")
             TCGAutils::TCGAextract(dlist[[i]], dattype)
         }, dlist = dataList)
 
