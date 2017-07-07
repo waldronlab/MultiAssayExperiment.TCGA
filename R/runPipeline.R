@@ -92,7 +92,7 @@ buildMultiAssayExperiments <-
         ## Filter by zero length
         dataFull <- Filter(function(x) {length(x)}, dataList)
 
-        isList <- vapply(dataFull, is.list, character(1L))
+        isList <- vapply(dataFull, is.list, logical(1L))
         if (any(isList)) {
             dataFull <- unlist(dataFull, use.names = TRUE)
             names(dataFull) <- gsub("\\.", "_", names(dataFull))
@@ -132,4 +132,3 @@ buildMultiAssayExperiments <-
 
 # call buildMultiAssayExperiments function
 buildMultiAssayExperiments(TCGAcodes, runDate, analyzeDate, dataDirectory)
-
