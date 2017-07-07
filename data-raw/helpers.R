@@ -208,7 +208,7 @@ load("data/curationAvailable.rda")
 }
 
 ## Clean and take second element from string split
-.cleanFileNames <- function(fileNames, splitDelim) {
+.cleanFileNames <- function(fileNames, splitDelim, position) {
     fileNames <- gsub("\\.rd[as]", "", basename(fileNames))
-    strsplit(fileNames, delim) %>% vapply(., `[`, character(1L), 2L)
+    strsplit(fileNames, splitDelim) %>% vapply(., `[`, character(1L), position)
 }
