@@ -127,21 +127,26 @@ buildMultiAssayExperiments <- function(runDate, TCGAcodes, dataType = "all",
         names(metadata) <- c("buildDate", "cancerCode", "runDate",
                              "analyzeDate", "session_info")
 
+        mustData <- list(dataFull[["colData"]], dataFull[["sampleMap"]],
+                         metadata)
+        mustNames <- paste0(cancer, "_", c("colData", "sampleMap",
+                                                 "metadata"), "-", runDate)
+        names(mustData) <- mustNames
+
         # add colData, sampleMap, and metadata to ExperimentList
-        allObjects <- c(as(dataFull[["experiments"]], "list"),
-                        colData = dataFull[["colData"]],
-                        sampleMap = dataFull[["sampleMap"]],
-                        metadata = list(metadata))
+        if (length(dataFull[["experiments"]]))
+        allObjects <- c(as(dataFull[["experiments"]], "list"), mustData)
 
         # save rda files and upload them to S3
         saveNupload(allObjects, cancer, directory = "data/bits")
         # update MAEOinfo.csv
         lapply(seq_along(allObjects), function(i, dataElement, code) {
-        if (!names(dataElement[i]) %in% c("colData", "sampleMap", "metadata"))
+        if (!names(dataElement[i]) %in% mustNames)
            updateInfo(dataElement[i], code)
         }, dataElement = allObjects, code = cancer)
     }
 }
 
 # call buildMultiAssayExperiments function
-buildMultiAssayExperiments(TCGAcodes, runDate, analyzeDate, dataDirectory)
+buildMultiAssayExperiments(runDate, TCGAcodes, dataType = "all", analyzeDate,
+                           dataDirectory)
