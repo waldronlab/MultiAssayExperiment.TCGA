@@ -30,8 +30,8 @@ write.table(header, file = "MAEOinfo.csv", sep = ",",
             row.names = FALSE, col.names = FALSE)
 
 # buildMultiAssayExperiments function definition
-buildMultiAssayExperiments <-
-    function(TCGAcodes, runDate, analyzeDate, dataDirectory, force = FALSE) {
+buildMultiAssayExperiments <- function(runDate, TCGAcodes, dataType = "all",
+                                   analyzeDate, dataDirectory, force = FALSE) {
     if (!dir.exists(dataDirectory))
         dir.create(dataDirectory)
 
@@ -41,16 +41,24 @@ buildMultiAssayExperiments <-
                 "\n######\n")
         serialDir <- file.path("data/raw")
 
-        ## Download raw data if not already serialized
-        saveRTCGAdata(runDate, cancer, analyzeDate = analyzeDate,
-                      directory = serialDir, force = force)
-
-        ## slotNames in FirehoseData RTCGAToolbox class
         targets <- c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene",
                      "CNASNP", "CNVSNP", "CNASeq", "CNACGH", "Methylation",
                      "mRNAArray", "miRNAArray", "RPPAArray", "Mutation",
-                     "GISTICA", "GISTICT")
-        names(targets) <- targets
+                     "GISTIC")
+
+        if (dataType != "all") {
+            dataType <- match.arg(dataType, targets)
+        } else {
+            dataType <- targets
+            names(dataType) <- dataType
+        }
+
+        ## Download raw data if not already serialized
+        saveRTCGAdata(runDate, cancer, dataType = dataType,
+                      analyzeDate = analyzeDate, directory = serialDir,
+                      force = force)
+
+        ## slotNames in FirehoseData RTCGAToolbox class
 
         ## Specify cancer folder
         cancerFolder <- file.path(serialDir, cancer)
@@ -79,8 +87,13 @@ buildMultiAssayExperiments <-
 
         dataFiles <- list.files(cancerFolder, full.names = TRUE,
             pattern = "rds$")
-        dataList <- lapply(dataFiles, readRDS)
-        names(dataList) <- .cleanFileNames(dataFiles, "-", 1L)
+        ObjNames <- .cleanFileNames(dataFiles, "-", 1L)
+        ## Select targets from dataTypes
+        fileDatType <- .cleanFileNames(ObjNames, "_", 2L)
+        subTargets <- match(targets, fileDatType)
+        ## Load targets to memory
+        dataList <- lapply(dataFiles[subTargets], readRDS)
+        names(dataList) <- ObjNames[subTargets]
         dataListIdx <- seq_along(dataList)
         names(dataListIdx) <- names(dataList)
         dataList <- lapply(dataListIdx, function(i, dlist) {
