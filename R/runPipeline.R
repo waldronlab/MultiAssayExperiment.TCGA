@@ -30,8 +30,10 @@ write.table(header, file = "MAEOinfo.csv", sep = ",",
             row.names = FALSE, col.names = FALSE)
 
 # buildMultiAssayExperiments function definition
-buildMultiAssayExperiments <- function(runDate, TCGAcodes, dataType = "all",
-                                   analyzeDate, dataDirectory, force = FALSE) {
+buildMultiAssayExperiments <- function(runDate, TCGAcodes, dataType =
+    c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene", "CNASNP", "CNVSNP",
+    "CNASeq", "CNACGH", "Methylation", "mRNAArray", "miRNAArray", "RPPAArray",
+    "Mutation", "GISTIC"), analyzeDate, dataDirectory, force = FALSE) {
     if (!dir.exists(dataDirectory))
         dir.create(dataDirectory)
 
@@ -46,12 +48,8 @@ buildMultiAssayExperiments <- function(runDate, TCGAcodes, dataType = "all",
                      "mRNAArray", "miRNAArray", "RPPAArray", "Mutation",
                      "GISTIC")
 
-        if (dataType != "all") {
-            dataType <- match.arg(dataType, targets)
-        } else {
-            dataType <- targets
-            names(dataType) <- dataType
-        }
+        dataType <- match.arg(dataType, targets, several.ok = TRUE)
+        names(dataType) <- dataType
 
         ## Download raw data if not already serialized
         saveRTCGAdata(runDate, cancer, dataType = dataType,
@@ -150,5 +148,5 @@ buildMultiAssayExperiments <- function(runDate, TCGAcodes, dataType = "all",
 }
 
 # call buildMultiAssayExperiments function
-buildMultiAssayExperiments(runDate, TCGAcodes, dataType = "all", analyzeDate,
-                           dataDirectory)
+buildMultiAssayExperiments(runDate, TCGAcodes, analyzeDate = analyzeDate,
+                           dataDirectory = dataDirectory)
