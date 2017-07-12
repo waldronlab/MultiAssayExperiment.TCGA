@@ -90,12 +90,14 @@ buildMultiAssayExperiments <- function(runDate, TCGAcodes, dataType = "all",
         ObjNames <- .cleanFileNames(dataFiles, "-", 1L)
         ## Select targets from dataTypes
         fileDatType <- .cleanFileNames(ObjNames, "_", 2L)
-        subTargets <- match(targets, fileDatType)
+        ## Select only those dataTypes specified
+        subTargets <- match(dataType, fileDatType)
         ## Load targets to memory
         dataList <- lapply(dataFiles[subTargets], readRDS)
         names(dataList) <- ObjNames[subTargets]
         dataListIdx <- seq_along(dataList)
         names(dataListIdx) <- names(dataList)
+        ## Run TCGAextract on filtered dataTypes
         dataList <- lapply(dataListIdx, function(i, dlist) {
             dattype <- .cleanFileNames(names(dlist[i]), "_", 2L)
             TCGAutils::TCGAextract(dlist[[i]], dattype)
