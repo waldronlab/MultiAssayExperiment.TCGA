@@ -43,6 +43,7 @@ buildMultiAssayExperiments <- function(runDate, TCGAcodes, dataType =
                 "\n######\n")
         serialDir <- file.path("data/raw")
 
+        ## slotNames in FirehoseData RTCGAToolbox class
         targets <- c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene",
                      "CNASNP", "CNVSNP", "CNASeq", "CNACGH", "Methylation",
                      "mRNAArray", "miRNAArray", "RPPAArray", "Mutation",
@@ -55,8 +56,6 @@ buildMultiAssayExperiments <- function(runDate, TCGAcodes, dataType =
         saveRTCGAdata(runDate, cancer, dataType = dataType,
                       analyzeDate = analyzeDate, directory = serialDir,
                       force = force)
-
-        ## slotNames in FirehoseData RTCGAToolbox class
 
         ## Specify cancer folder
         cancerFolder <- file.path(serialDir, cancer)
