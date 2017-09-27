@@ -23,7 +23,7 @@ saveRTCGAdata <- function(runDate, diseaseCode, dataType = c("RNASeqGene",
                 names(args) <- c("dataset", dateType, dataType)
             }
                 dataPiece <- do.call(getFirehoseData, args = c(
-                    list(Clinic = FALSE, destdir = "./tmp",
+                    list(clinical = FALSE, destdir = "./tmp",
                          fileSizeLimit = 500000), args))
                 saveRDS(dataPiece, file = rdsPath, compress = "bzip2")
                 message(basename(rdsPath), " saved in ", dirname(rdsPath))
