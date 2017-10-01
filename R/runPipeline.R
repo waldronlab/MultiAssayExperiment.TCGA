@@ -105,7 +105,8 @@ buildMultiAssayExperiments <- function(runDate, TCGAcodes, dataType =
 
         isList <- vapply(dataFull, is.list, logical(1L))
         if (any(isList)) {
-            dataFull <- unlist(dataFull, use.names = TRUE)
+            # dataFull <- unlist(dataFull, use.names = TRUE)
+            dataFull <- unlist(lapply(dataFull, unlist, use.names = TRUE))
             names(dataFull) <- paste0(gsub("\\.", "_", names(dataFull)), "-",
                                       runDate)
         }
