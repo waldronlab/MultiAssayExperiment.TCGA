@@ -101,7 +101,7 @@ buildMultiAssayExperiments <- function(runDate, TCGAcodes, dataType =
         }, dlist = dataList)
 
         ## Filter by zero length
-        dataFull <- Filter(function(x) {length(x)}, dataList)
+        dataFull <- Filter(length, dataList)
 
         isList <- vapply(dataFull, is.list, logical(1L))
         if (any(isList)) {
@@ -140,10 +140,10 @@ buildMultiAssayExperiments <- function(runDate, TCGAcodes, dataType =
         # save rda files and upload them to S3
         saveNupload(allObjects, cancer, directory = "data/bits")
         # update MAEOinfo.csv
-        lapply(seq_along(allObjects), function(i, dataElement, code) {
+        lapply(seq_along(allObjects), function(i, dataElement, code, file) {
         if (!names(dataElement[i]) %in% mustNames)
-           updateInfo(dataElement[i], code)
-        }, dataElement = allObjects, code = cancer)
+           updateInfo(dataElement[i], code, file)
+        }, dataElement = allObjects, code = cancer, file = "MAEOinfo.csv")
     }
 }
 
