@@ -13,10 +13,10 @@ processClinicalFirehose <- function(diseaseCode, runDate = "20160128", force = F
     if (!file.exists(fileName) || force) {
         TCGAclin <- RTCGAToolbox::getFirehoseData(diseaseCode,
                                                   runDate = runDate,
-                                                  Clinic = TRUE,
+                                                  clinical = TRUE,
                                                   destdir =
                                                       dirList[["rawClinical"]])
-        TCGAclin <- TCGAclin@Clinical
+        TCGAclin <- selectType(TCGAclin, "clinical")
         stdBarcodes <- .stdIDs(rownames(TCGAclin))
         TCGAclin <- cbind(patientID = stdBarcodes, TCGAclin)
         newFile <- file.path(dirList[["basicClinical"]],
