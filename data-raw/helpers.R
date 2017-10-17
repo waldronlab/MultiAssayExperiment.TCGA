@@ -193,6 +193,8 @@ load("data/curationAvailable.rda")
     if (diseaseCode %in% curationAvailable) {
         subtypeCuration <- .readSubtypeData(diseaseCode)
         BarcodeColName <- .findBarcodeCol(subtypeCuration)
+        subtypeCuration[, BarcodeColName] <-
+            TCGAutils::TCGAbarcode(subtypeCuration[[BarcodeColName]])
         clinicalData <- merge(clinicalData, subtypeCuration,
                               by.x = "patientID", by.y = BarcodeColName,
                               all = TRUE, sort = FALSE)
