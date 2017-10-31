@@ -21,3 +21,5 @@ rawdata/*
 
 # Don't ignore
 !curationAvailable.Rda
+!clinicalColnames.rds
+
