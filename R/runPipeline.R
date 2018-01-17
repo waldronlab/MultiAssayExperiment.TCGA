@@ -96,8 +96,8 @@ buildMultiAssayExperiments <- function(runDate, TCGAcodes, dataType =
         names(dataListIdx) <- names(dataList)
         ## Run TCGAextract on filtered dataTypes
         dataList <- lapply(dataListIdx, function(i, dlist) {
-            dattype <- .cleanFileNames(names(dlist[i]), "_", 2L)
-            TCGAutils::TCGAextract(dlist[[i]], dattype)
+            dattype <- .cleanFileNames(names(dlist[i]), "_|-", 2L)
+            RTCGAToolbox::biocExtract(dlist[[i]], dattype)
         }, dlist = dataList)
 
         ## Filter by zero length
