@@ -1,4 +1,5 @@
-saveNupload <- function(dataList, cancer, directory = "data/bits") {
+saveNupload <- function(dataList, cancer, directory = "data/bits",
+    upload = TRUE) {
     cancerSubdir <- file.path(directory, cancer)
     if (!dir.exists(cancerSubdir))
         dir.create(cancerSubdir, recursive = TRUE)
@@ -11,9 +12,9 @@ saveNupload <- function(dataList, cancer, directory = "data/bits") {
         objname <- objnames[i]
         assign(x = objname, value = dataList[[i]])
         save(list = objname, file = fnames[i], compress = "bzip2")
+    if (upload)
         AnnotationHubData:::upload_to_S3(file = fnames[i],
-                                         remotename = basename(fnames[i]),
-                                         bucket =
-                                             "experimenthub/curatedTCGAData")
+            remotename = basename(fnames[i]),
+            bucket = "experimenthub/curatedTCGAData")
     }
 }
