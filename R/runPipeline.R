@@ -1,7 +1,5 @@
 ## Load libraries
 source("R/loadLibraries.R")
-## Get TCGA cancer codes
-source("R/getDiseaseCodes.R")
 ## Load supporting functions
 source("data-raw/helpers.R")
 ## Load function for updating metadata
@@ -12,7 +10,9 @@ source("R/saveRTCGAdata.R")
 source("R/saveNupload.R")
 
 # Create MultiAssayExperiments for each TCGA disease code
-TCGAcodes <- getDiseaseCodes()
+TCGAcodes <- diseaseCodes[diseaseCodes[["Available"]] == "Yes",
+    "Study.Abbreviation"]
+names(TCGAcodes) <- TCGAcodes
 
 # If subset needs to be run, replace cancer code with last unsuccessful attempt
 TCGAcodes <- TCGAcodes[which(TCGAcodes == "ACC"):length(TCGAcodes)]
