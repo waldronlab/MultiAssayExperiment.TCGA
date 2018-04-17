@@ -17,11 +17,6 @@ names(TCGAcodes) <- TCGAcodes
 # If subset needs to be run, replace cancer code with last unsuccessful attempt
 TCGAcodes <- TCGAcodes[which(TCGAcodes == "ACC"):length(TCGAcodes)]
 
-# runDate <- getFirehoseRunningDates(last=1)
-runDate <- "20160128"
-
-# analyzeDate <- getFirehoseAnalyzeDates(last=1)
-analyzeDate <- "20160128"
 dataDirectory <- "data/built"
 
 # write header row to csv file for unit tests
@@ -30,10 +25,13 @@ write.table(header, file = "MAEOinfo.csv", sep = ",",
             row.names = FALSE, col.names = FALSE)
 
 # buildMultiAssayExperiments function definition
-buildMultiAssayExperiments <- function(runDate, TCGAcodes, dataType =
-    c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene", "CNASNP", "CNVSNP",
-    "CNASeq", "CNACGH", "Methylation", "mRNAArray", "miRNAArray", "RPPAArray",
-    "Mutation", "GISTIC"), analyzeDate, dataDirectory, force = FALSE) {
+buildMultiAssayExperiments <- function(TCGAcodes, dataType =
+    c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene", "CNASNP",
+    "CNVSNP", "CNASeq", "CNACGH", "Methylation", "mRNAArray",
+    "miRNAArray", "RPPAArray", "Mutation", "GISTIC"),
+    runDate = "20160128", analyzeDate = "20160128", dataDirectory,
+    upload = TRUE, force = FALSE) {
+
     if (!dir.exists(dataDirectory))
         dir.create(dataDirectory)
 
