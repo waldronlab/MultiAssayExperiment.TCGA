@@ -43,17 +43,17 @@ buildMultiAssayExperiments <- function(TCGAcodes, dataType =
 
         ## slotNames in FirehoseData RTCGAToolbox class
         targets <- c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene",
-                     "CNASNP", "CNVSNP", "CNASeq", "CNACGH", "Methylation",
-                     "mRNAArray", "miRNAArray", "RPPAArray", "Mutation",
-                     "GISTIC")
+            "CNASNP", "CNVSNP", "CNASeq", "CNACGH", "Methylation",
+            "mRNAArray", "miRNAArray", "RPPAArray", "Mutation",
+            "GISTIC")
 
         dataType <- match.arg(dataType, targets, several.ok = TRUE)
         names(dataType) <- dataType
 
         ## Download raw data if not already serialized
         saveRTCGAdata(runDate, cancer, dataType = dataType,
-                      analyzeDate = analyzeDate, directory = serialDir,
-                      force = force)
+            analyzeDate = analyzeDate, directory = serialDir,
+            force = force)
 
         ## Specify cancer folder
         cancerFolder <- file.path(serialDir, cancer)
@@ -64,7 +64,7 @@ buildMultiAssayExperiments <- function(TCGAcodes, dataType =
             paste(runDate, paste0(cancer, "_reduced.csv"), sep = "-"))
         stopifnot(file.exists(clinicalPath))
         clinicalData <- read.csv(clinicalPath, header=TRUE,
-                                 stringsAsFactors=FALSE)
+            stringsAsFactors=FALSE)
         rownames(clinicalData) <- clinicalData[["patientID"]]
         clinicalData <- S4Vectors::DataFrame(clinicalData)
         metadata(clinicalData)[["droppedColumns"]] <-
@@ -74,7 +74,7 @@ buildMultiAssayExperiments <- function(TCGAcodes, dataType =
 
         ### Add subtype maps where available
         subtypeMapFile <- file.path(dataDirectories()[["curatedMaps"]],
-                                    paste0(cancer, "_subtypeMap.csv"))
+            paste0(cancer, "_subtypeMap.csv"))
         if (file.exists(subtypeMapFile)) {
             curatedMap <- read.csv(subtypeMapFile)
             metadata(clinicalData)[["subtypes"]] <- curatedMap
@@ -105,8 +105,8 @@ buildMultiAssayExperiments <- function(TCGAcodes, dataType =
         if (any(isList)) {
             # dataFull <- unlist(dataFull, use.names = TRUE)
             dataFull <- unlist(lapply(dataFull, unlist, use.names = TRUE))
-            names(dataFull) <- paste0(gsub("\\.", "_", names(dataFull)), "-",
-                                      runDate)
+            names(dataFull) <- paste0(gsub("\\.", "_", names(dataFull)),
+                "-", runDate)
         }
 
         # sampleMap - generate by getting all colnames
@@ -121,14 +121,14 @@ buildMultiAssayExperiments <- function(TCGAcodes, dataType =
         buildDate <- Sys.time()
         # metadata
         metadata <- list(buildDate, cancer, runDate, analyzeDate,
-                      devtools::session_info())
+            devtools::session_info())
         names(metadata) <- c("buildDate", "cancerCode", "runDate",
-                             "analyzeDate", "session_info")
+            "analyzeDate", "session_info")
 
         mustData <- list(dataFull[["colData"]], dataFull[["sampleMap"]],
-                         metadata)
-        mustNames <- paste0(cancer, "_", c("colData", "sampleMap",
-                                                 "metadata"), "-", runDate)
+            metadata)
+        mustNames <- paste0(cancer, "_",
+            c("colData", "sampleMap", "metadata"), "-", runDate)
         names(mustData) <- mustNames
 
         # add colData, sampleMap, and metadata to ExperimentList
