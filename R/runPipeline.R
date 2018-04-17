@@ -136,7 +136,8 @@ buildMultiAssayExperiments <- function(TCGAcodes, dataType =
         allObjects <- c(as(dataFull[["experiments"]], "list"), mustData)
 
         # save rda files and upload them to S3
-        saveNupload(allObjects, cancer, directory = "data/bits")
+        saveNupload(allObjects, cancer, directory = "data/bits",
+            upload = upload)
         # update MAEOinfo.csv
         lapply(seq_along(allObjects), function(i, dataElement, code, file) {
         if (!names(dataElement[i]) %in% mustNames)
@@ -146,5 +147,5 @@ buildMultiAssayExperiments <- function(TCGAcodes, dataType =
 }
 
 # call buildMultiAssayExperiments function
-buildMultiAssayExperiments(runDate, TCGAcodes, analyzeDate = analyzeDate,
-                           dataDirectory = dataDirectory)
+buildMultiAssayExperiments(TCGAcodes, dataDirectory = dataDirectory)
+
