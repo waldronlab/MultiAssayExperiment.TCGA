@@ -110,7 +110,7 @@ buildMultiAssayExperiments <- function(TCGAcodes, dataType =
         }
 
         # sampleMap - generate by getting all colnames
-        sampMap <- generateMap(dataFull, clinicalData, TCGAbarcode, force = TRUE)
+        sampMap <- generateMap(dataFull, clinicalData, TCGAbarcode)
 
         # ExperimentList
         dataFull <- MultiAssayExperiment:::.harmonize(
