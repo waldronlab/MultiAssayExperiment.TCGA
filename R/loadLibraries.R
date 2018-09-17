@@ -8,7 +8,7 @@ install_packages <- function(packageVector) {
         if (!packageAvail)
             do.call(install.packages,
                     args = list(package,
-                                repos = BiocInstaller::biocinstallRepos()))
+                                repos = BiocManager::repositories()))
     }))
 }
 
