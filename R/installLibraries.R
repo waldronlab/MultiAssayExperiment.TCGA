@@ -11,13 +11,10 @@ library(BiocManager)
 
 install(version = "devel")
 
-install(c("devtools", "readxl", "readr", "dplyr",
+install(c("devtools", "readxl", "readr", "dplyr", "TCGAutils",
     "AnnotationHubData", "MultiAssayExperiment", "BiocParallel",
     "Biobase", "GenomeInfoDb", "RaggedExperiment"))
 install("LiNk-NY/RTCGAToolbox")
 install("waldronlab/TCGAutils")
 install("karthik/rdrop2")
-
-stopifnot(!package_version(Biobase::package.version("TCGAutils")) >=
-                            package_version("0.1.3"))
 
