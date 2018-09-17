@@ -4,17 +4,19 @@
 
 stopifnot(R.Version()$major == 3 && R.Version()$minor >= 4)
 
-source("https://bioconductor.org/biocLite.R")
+if (!requireNamespace("BiocManager"))
+    install.packages("BiocManager")
 
-useDevel()
+library(BiocManager)
 
-library(BiocInstaller)
-biocLite(c("devtools", "readxl", "readr", "dplyr",
-        "AnnotationHubData", "MultiAssayExperiment", "BiocParallel",
-        "Biobase", "GenomeInfoDb", "RaggedExperiment"))
-biocLite("LiNk-NY/RTCGAToolbox")
-biocLite("waldronlab/TCGAutils")
-biocLite("karthik/rdrop2")
+install(version = "devel")
+
+install(c("devtools", "readxl", "readr", "dplyr",
+    "AnnotationHubData", "MultiAssayExperiment", "BiocParallel",
+    "Biobase", "GenomeInfoDb", "RaggedExperiment"))
+install("LiNk-NY/RTCGAToolbox")
+install("waldronlab/TCGAutils")
+install("karthik/rdrop2")
 
 stopifnot(!package_version(Biobase::package.version("TCGAutils")) >=
                             package_version("0.1.3"))
