@@ -3,7 +3,7 @@
     stopifnot(length(folder) == 1L)
     h5exts <- c("assays.h5", "se.rds")
     HDF5Array::saveHDF5SummarizedExperiment(
-        x = get(objname), dir = folder)
+        x = get(objname, parent.frame()), dir = folder)
     file.rename(file.path(folder, h5exts), filepaths)
     filepaths
 }
