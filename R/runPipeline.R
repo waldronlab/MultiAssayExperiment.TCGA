@@ -23,15 +23,17 @@ write.table(header, file = "MAEOinfo.csv", sep = ",",
             row.names = FALSE, col.names = FALSE)
 
 # buildMultiAssayExperiments function definition
-buildMultiAssayExperiments <- function(TCGAcodes, dataType =
-    c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene", "CNASNP",
-    "CNVSNP", "CNASeq", "CNACGH", "Methylation", "mRNAArray",
-    "miRNAArray", "RPPAArray", "Mutation", "GISTIC"),
+buildMultiAssayExperiments <-
+    function(
+    TCGAcodes,
+    dataType = c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene", "CNASNP",
+        "CNVSNP", "CNASeq", "CNACGH", "Methylation", "mRNAArray", "miRNAArray",
+        "RPPAArray", "Mutation", "GISTIC"),
     runDate = "20160128", analyzeDate = "20160128", serialDir = "data/raw",
     outDataDir = "data/bits", upload = TRUE, force = FALSE)
 {
-    if (!dir.exists(dataDirectory))
-        dir.create(dataDirectory)
+    if (!dir.exists(outDataDir))
+        dir.create(outDataDir)
 
     for (cancer in TCGAcodes) {
         message("\n######\n",
@@ -148,6 +150,6 @@ buildMultiAssayExperiments <- function(TCGAcodes, dataType =
 }
 
 # call buildMultiAssayExperiments function
-buildMultiAssayExperiments(TCGAcodes)
-buildMultiAssayExperiments("GBM", dataType = "Methylation", upload = FALSE)
+# buildMultiAssayExperiments(TCGAcodes)
+buildMultiAssayExperiments("GBM", upload = FALSE)
 
