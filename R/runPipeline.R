@@ -17,8 +17,6 @@ names(TCGAcodes) <- TCGAcodes
 # If subset needs to be run, replace cancer code with last unsuccessful attempt
 TCGAcodes <- TCGAcodes[which(TCGAcodes == "ACC"):length(TCGAcodes)]
 
-dataDirectory <- "data/built"
-
 # write header row to csv file for unit tests
 header <- cbind.data.frame("cancerCode", "assay", "class", "nrow", "ncol")
 write.table(header, file = "MAEOinfo.csv", sep = ",",
@@ -29,9 +27,9 @@ buildMultiAssayExperiments <- function(TCGAcodes, dataType =
     c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene", "CNASNP",
     "CNVSNP", "CNASeq", "CNACGH", "Methylation", "mRNAArray",
     "miRNAArray", "RPPAArray", "Mutation", "GISTIC"),
-    runDate = "20160128", analyzeDate = "20160128", dataDirectory,
-    upload = TRUE, force = FALSE) {
-
+    runDate = "20160128", analyzeDate = "20160128", serialDir = "data/raw",
+    outDataDir = "data/bits", upload = TRUE, force = FALSE)
+{
     if (!dir.exists(dataDirectory))
         dir.create(dataDirectory)
 
@@ -39,7 +37,6 @@ buildMultiAssayExperiments <- function(TCGAcodes, dataType =
         message("\n######\n",
                 "\nProcessing ", cancer, " : )\n",
                 "\n######\n")
-        serialDir <- file.path("data/raw")
 
         ## slotNames in FirehoseData RTCGAToolbox class
         targets <- c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene",
@@ -82,21 +79,23 @@ buildMultiAssayExperiments <- function(TCGAcodes, dataType =
 
         dataFiles <- list.files(cancerFolder, full.names = TRUE,
             pattern = "rds$")
-        ObjNames <- .cleanFileNames(dataFiles, "-", 1L)
-        ## Select targets from dataTypes
-        fileDatType <- .cleanFileNames(ObjNames, "_", 2L)
-        ## Select only those dataTypes specified
-        subTargets <- match(dataType, fileDatType)
+
+        dataMap <- data.frame(
+            Rpath = dataFiles,
+            dataType = .cleanFileNames(dataFiles, "-|_", 2L),
+            ObjName = .cleanFileNames(dataFiles, "-", 1L),
+            stringsAsFactors = FALSE
+        )
+        subTargets <- match(dataType, dataMap[["dataType"]])
+        dataMap <- dataMap[subTargets, ]
+
         ## Load targets to memory
-        dataList <- lapply(dataFiles[subTargets], readRDS)
-        names(dataList) <- ObjNames[subTargets]
-        dataListIdx <- seq_along(dataList)
-        names(dataListIdx) <- names(dataList)
-        ## Run TCGAextract on filtered dataTypes
-        dataList <- lapply(dataListIdx, function(i, dlist) {
-            dattype <- .cleanFileNames(names(dlist[i]), "_|-", 2L)
-            RTCGAToolbox::biocExtract(dlist[[i]], dattype)
-        }, dlist = dataList)
+        dataList <- lapply(dataMap[["Rpath"]], readRDS)
+        names(dataList) <- dataMap[["ObjName"]]
+
+        dataList <- Map(function(x, y) {
+            RTCGAToolbox::biocExtract(x, y)
+            }, dataList, dataMap[["dataType"]])
 
         ## Filter by zero length
         dataFull <- Filter(length, dataList)
@@ -110,7 +109,7 @@ buildMultiAssayExperiments <- function(TCGAcodes, dataType =
         }
 
         # sampleMap - generate by getting all colnames
-        sampMap <- generateMap(dataFull, clinicalData, TCGAbarcode)
+        sampMap <- generateMap(dataFull, clinicalData, TCGAutils::TCGAbarcode)
 
         # ExperimentList
         dataFull <- MultiAssayExperiment:::.harmonize(
@@ -133,19 +132,22 @@ buildMultiAssayExperiments <- function(TCGAcodes, dataType =
 
         # add colData, sampleMap, and metadata to ExperimentList
         if (length(dataFull[["experiments"]]))
-        allObjects <- c(as(dataFull[["experiments"]], "list"), mustData)
+            allObjects <- c(as(dataFull[["experiments"]], "list"), mustData)
 
         # save rda files and upload them to S3
-        saveNupload(allObjects, cancer, directory = "data/bits",
-            upload = upload)
+        saveNupload(allObjects, cancer, directory = outDataDir, upload = upload)
+
         # update MAEOinfo.csv
-        lapply(seq_along(allObjects), function(i, dataElement, code, file) {
-        if (!names(dataElement[i]) %in% mustNames)
-           updateInfo(dataElement[i], code, file)
-        }, dataElement = allObjects, code = cancer, file = "MAEOinfo.csv")
+        lapply(seq_along(allObjects),
+            function(i, dataElement, code, file) {
+                if (!names(dataElement[i]) %in% mustNames)
+                   updateInfo(dataElement[i], code, file)
+            },
+        dataElement = allObjects, code = cancer, file = "MAEOinfo.csv")
     }
 }
 
 # call buildMultiAssayExperiments function
-buildMultiAssayExperiments(TCGAcodes, dataDirectory = dataDirectory)
+buildMultiAssayExperiments(TCGAcodes)
+buildMultiAssayExperiments("GBM", dataType = "Methylation", upload = FALSE)
 
