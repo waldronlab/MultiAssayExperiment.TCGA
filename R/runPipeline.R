@@ -17,11 +17,6 @@ names(TCGAcodes) <- TCGAcodes
 # If subset needs to be run, replace cancer code with last unsuccessful attempt
 TCGAcodes <- TCGAcodes[which(TCGAcodes == "ACC"):length(TCGAcodes)]
 
-# write header row to csv file for unit tests
-header <- cbind.data.frame("cancerCode", "assay", "class", "nrow", "ncol")
-write.table(header, file = "MAEOinfo.csv", sep = ",",
-            row.names = FALSE, col.names = FALSE)
-
 # buildMultiAssayExperiments function definition
 buildMultiAssayExperiments <-
     function(
@@ -98,6 +93,7 @@ buildMultiAssayExperiments <-
         dataList <- Map(function(x, y) {
             RTCGAToolbox::biocExtract(x, y)
             }, dataList, dataMap[["dataType"]])
+        names(dataList) <- paste0(names(dataList), "-", runDate)
 
         ## Filter by zero length
         dataFull <- Filter(length, dataList)
@@ -150,6 +146,4 @@ buildMultiAssayExperiments <-
 }
 
 # call buildMultiAssayExperiments function
-# buildMultiAssayExperiments(TCGAcodes)
-buildMultiAssayExperiments("GBM", upload = FALSE)
-
+buildMultiAssayExperiments(TCGAcodes)
