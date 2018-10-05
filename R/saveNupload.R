@@ -2,9 +2,11 @@
     folder <- unique(dirname(filepaths))
     stopifnot(length(folder) == 1L)
     h5exts <- c("assays.h5", "se.rds")
-    HDF5Array::saveHDF5SummarizedExperiment(
-        x = get(objname, parent.frame()), dir = folder, replace = TRUE)
-    file.rename(file.path(folder, h5exts), filepaths)
+    if (!all(file.exists(filepaths))) {
+        HDF5Array::saveHDF5SummarizedExperiment(
+            x = get(objname, parent.frame()), dir = folder, replace = TRUE)
+        file.rename(file.path(folder, h5exts), filepaths)
+    }
     filepaths
 }
 
