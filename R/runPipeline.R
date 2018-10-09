@@ -80,7 +80,7 @@ buildMultiAssayExperiments <-
         dataMap <- data.frame(
             Rpath = dataFiles,
             dataType = .cleanFileNames(dataFiles, "-|_", 2L),
-            ObjName = .cleanFileNames(dataFiles, "-", 1L),
+            ObjName = gsub("\\.rds", "", basename(dataFiles)),
             stringsAsFactors = FALSE
         )
         subTargets <- match(dataType, dataMap[["dataType"]])
@@ -93,7 +93,6 @@ buildMultiAssayExperiments <-
         dataList <- Map(function(x, y) {
             RTCGAToolbox::biocExtract(x, y)
             }, dataList, dataMap[["dataType"]])
-        names(dataList) <- paste0(names(dataList), "-", runDate)
 
         ## Filter by zero length
         dataFull <- Filter(length, dataList)
