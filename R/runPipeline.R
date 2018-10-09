@@ -80,7 +80,7 @@ buildMultiAssayExperiments <-
         dataMap <- data.frame(
             Rpath = dataFiles,
             dataType = .cleanFileNames(dataFiles, "-|_", 2L),
-            ObjName = gsub("\\.rds", "", basename(dataFiles)),
+            ObjName = .cleanFileNames(dataFiles, "-", 1L),
             stringsAsFactors = FALSE
         )
         subTargets <- match(dataType, dataMap[["dataType"]])
@@ -98,12 +98,10 @@ buildMultiAssayExperiments <-
         dataFull <- Filter(length, dataList)
 
         isList <- vapply(dataFull, is.list, logical(1L))
-        if (any(isList)) {
-            # dataFull <- unlist(dataFull, use.names = TRUE)
+        if (any(isList))
             dataFull <- unlist(lapply(dataFull, unlist, use.names = TRUE))
-            names(dataFull) <- paste0(gsub("\\.", "_", names(dataFull)),
-                "-", runDate)
-        }
+        names(dataFull) <- paste0(gsub("\\.", "_", names(dataFull)),
+            "-", runDate)
 
         # sampleMap - generate by getting all colnames
         sampMap <- generateMap(dataFull, clinicalData, TCGAutils::TCGAbarcode)
