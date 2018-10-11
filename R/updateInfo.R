@@ -1,32 +1,43 @@
-## Update metadata from data bits
-updateInfo <- function(dataElement, cancerCode, filePath = "MAEOinfo.csv") {
+.getElementMetaData <- function(dataElementList, cancerCode) {
     colnames <- c("cancerCode", "assay", "class", "nrow", "ncol")
-    if (!file.exists(filePath)) {
-        MAEOinfo <- structure(
-            vector("list", length(colnames)),
-            .Names = colnames,
-            class = "data.frame"
-        )
-    } else {
-        MAEOinfo <- read.csv(filePath, stringsAsFactors = FALSE)
+    mustNames <- c("colData", "sampleMap", "metadata")
+    dataNames <- names(dataElementList)
+    mustLogic <- apply(vapply(mustNames, function(x)
+        grepl(x, dataNames), logical(length(dataNames))), 1, any)
+    dataNames <- dataNames[!mustLogic]
+    listFrame <- lapply(dataNames,
+        function(elementName, dataElement) {
+            dataObject <- dataElement[[elementName]]
+            assayName <- elementName
+            className <- class(dataObject)
+            numberRow <- dim(dataObject)[[1L]]
+            numberCol <- dim(dataObject)[[2L]]
+            structure(
+                list(cancerCode, assayName, className, numberRow, numberCol),
+                .Names = colnames,
+                row.names = 1L,
+                class = "data.frame"
+            )
+        }, dataElement = dataElementList)
+    do.call(rbind.data.frame, listFrame)
+}
+
+## Update metadata from data bits
+updateInfo <- function(dataList, cancerCode, filePath = "MAEOinfo.csv") {
+    MAEOinfo <- .getElementMetaData(dataList, cancerCode)
+    if (file.exists(filePath)) {
+    storedInfo <- read.csv(filePath, stringsAsFactors = FALSE)
+
+    regLines <- storedInfo[["cancerCode"]] %in% cancerCode &
+        storedInfo[["assay"]] %in% names(dataList)
+
+    if (any(regLines))
+        storedInfo <- storedInfo[!regLines, ]
+
+    MAEOinfo <- rbind.data.frame(storedInfo, MAEOinfo,
+        stringsAsFactors = FALSE)
+
     }
-    dataObject <- dataElement[[1L]]
-    assayName <- names(dataElement)
-    stopifnot(S4Vectors::isSingleString(assayName))
-    className <- class(dataObject)
-    numberRow <- dim(dataObject)[[1L]]
-    numberCol <- dim(dataObject)[[2L]]
-    newRow <- structure(
-        list(cancerCode, assayName, className, numberRow, numberCol),
-        .Names = colnames, row.names = 1L, class = "data.frame")
-
-    oldRow <- MAEOinfo[["assay"]] == assayName
-    if (any(oldRow))
-        MAEOinfo[oldRow, ] <- newRow
-    else
-        MAEOinfo <- rbind.data.frame(MAEOinfo, newRow,
-            stringsAsFactors = FALSE)
-
     write.table(MAEOinfo, file = filePath, sep = ",",
-                append = TRUE, row.names = FALSE, col.names = FALSE)
+        row.names = FALSE, col.names = FALSE)
 }

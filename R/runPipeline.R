@@ -25,7 +25,8 @@ buildMultiAssayExperiments <-
         "CNVSNP", "CNASeq", "CNACGH", "Methylation", "mRNAArray", "miRNAArray",
         "RPPAArray", "Mutation", "GISTIC"),
     runDate = "20160128", analyzeDate = "20160128", serialDir = "data/raw",
-    outDataDir = "data/bits", upload = TRUE, force = FALSE)
+    outDataDir = "data/bits", metadataFile = "MAEOinfo.csv", upload = TRUE,
+    force = FALSE)
 {
     if (!dir.exists(outDataDir))
         dir.create(outDataDir)
@@ -133,12 +134,8 @@ buildMultiAssayExperiments <-
         saveNupload(allObjects, cancer, directory = outDataDir, upload = upload)
 
         # update MAEOinfo.csv
-        lapply(seq_along(allObjects),
-            function(i, dataElement, code, file) {
-                if (!names(dataElement[i]) %in% mustNames)
-                   updateInfo(dataElement[i], code, file)
-            },
-        dataElement = allObjects, code = cancer, file = "MAEOinfo.csv")
+        updateInfo(dataList = allObjects, cancerCode = cancer,
+            filePath = metadataFile)
     }
 }
 
