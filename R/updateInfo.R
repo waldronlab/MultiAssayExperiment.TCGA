@@ -23,21 +23,23 @@
 }
 
 ## Update metadata from data bits
-updateInfo <- function(dataList, cancerCode, filePath = "MAEOinfo.csv") {
+updateInfo <-
+function(dataList, cancerCode, filePath = "MAEOinfo.csv", noRows = TRUE)
+{
     MAEOinfo <- .getElementMetaData(dataList, cancerCode)
     if (file.exists(filePath)) {
-    storedInfo <- read.csv(filePath, stringsAsFactors = FALSE)
+        storedInfo <- read.csv(filePath, stringsAsFactors = FALSE)
 
-    regLines <- storedInfo[["cancerCode"]] %in% cancerCode &
-        storedInfo[["assay"]] %in% names(dataList)
+        regLines <- storedInfo[["cancerCode"]] %in% cancerCode &
+            storedInfo[["assay"]] %in% names(dataList)
 
-    if (any(regLines))
-        storedInfo <- storedInfo[!regLines, ]
+        if (any(regLines))
+            storedInfo <- storedInfo[!regLines, ]
 
-    MAEOinfo <- rbind.data.frame(storedInfo, MAEOinfo,
-        stringsAsFactors = FALSE)
-
+        MAEOinfo <- rbind.data.frame(storedInfo, MAEOinfo,
+            stringsAsFactors = FALSE)
+        noRows <- FALSE
     }
     write.table(MAEOinfo, file = filePath, sep = ",",
-        row.names = FALSE, col.names = FALSE)
+        append = !noRows, row.names = FALSE, col.names = noRows)
 }
