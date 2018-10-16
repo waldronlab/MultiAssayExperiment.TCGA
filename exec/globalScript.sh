@@ -1,8 +1,10 @@
 #!/bin/bash
-# export R_LIBS="/scratch/$USER/R_libs"
 # source start.sh
+
+cd exec/
 
 ulimit -s unlimited
 
-time /home/$USER/src/svn/r-devel/R/bin/Rscript ../R/globalScript.R --verbose
+time R_LIBS_USER=/home/$USER/R/x86_64-pc-linux-gnu-library/bioc-devel \
+/home/$USER/src/svn/r-release/R/bin/Rscript ../R/globalScript.R --verbose
 
