@@ -28,7 +28,8 @@ function(dataList, cancerCode, filePath = "MAEOinfo.csv", noRows = TRUE)
 {
     MAEOinfo <- .getElementMetaData(dataList, cancerCode)
     if (file.exists(filePath)) {
-        storedInfo <- read.csv(filePath, stringsAsFactors = FALSE)
+        storedInfo <- read.csv(filePath, stringsAsFactors = FALSE,
+            header = TRUE)
 
         regLines <- storedInfo[["cancerCode"]] %in% cancerCode &
             storedInfo[["assay"]] %in% names(dataList)
