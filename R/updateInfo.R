@@ -28,8 +28,8 @@ function(dataList, cancerCode, filePath = "MAEOinfo.csv", noRows = TRUE)
 {
     MAEOinfo <- .getElementMetaData(dataList, cancerCode)
     if (file.exists(filePath)) {
-        storedInfo <- read.csv(filePath, stringsAsFactors = FALSE,
-            header = TRUE)
+        message("File found: ", filePath)
+        storedInfo <- readr::read_csv(filePath)
 
         regLines <- storedInfo[["cancerCode"]] %in% cancerCode &
             storedInfo[["assay"]] %in% names(dataList)
@@ -41,6 +41,6 @@ function(dataList, cancerCode, filePath = "MAEOinfo.csv", noRows = TRUE)
             stringsAsFactors = FALSE)
         noRows <- FALSE
     }
-    write.table(MAEOinfo, file = filePath, sep = ",",
-        append = !noRows, row.names = FALSE, col.names = noRows)
+    message("Writing table...")
+    readr::write_csv(MAEOinfo, path = filePath, append = !noRows)
 }
