@@ -24,7 +24,7 @@
 
 ## Update metadata from data bits
 updateInfo <-
-function(dataList, cancerCode, filePath = "MAEOinfo.csv", noRows = TRUE)
+function(dataList, cancerCode, filePath = "MAEOinfo.csv")
 {
     MAEOinfo <- .getElementMetaData(dataList, cancerCode)
     if (file.exists(filePath)) {
@@ -39,8 +39,7 @@ function(dataList, cancerCode, filePath = "MAEOinfo.csv", noRows = TRUE)
 
         MAEOinfo <- rbind.data.frame(storedInfo, MAEOinfo,
             stringsAsFactors = FALSE)
-        noRows <- FALSE
     }
     message("Writing table...")
-    readr::write_csv(MAEOinfo, path = filePath, append = !noRows)
+    readr::write_csv(MAEOinfo, path = filePath)
 }
