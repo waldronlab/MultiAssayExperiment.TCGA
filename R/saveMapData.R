@@ -8,7 +8,7 @@ saveMapData <- function(data_list, clinical_frame, FUN = TCGAutils::TCGAbarcode,
     mapFiles <- list.files(path = mapDir, pattern = "_map.csv",
         full.names = TRUE)
     assayNames <- gsub("_map.csv", "", basename(mapFiles))
-    splitNames <- if (force) TRUE else !names(splitMap) %in% assayNames
+    splitNames <- if (force) TRUE else { !names(splitMap) %in% assayNames }
     newAssays <- names(splitMap)[splitNames]
 
     for (assay in newAssays)

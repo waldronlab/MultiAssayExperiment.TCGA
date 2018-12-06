@@ -1,4 +1,4 @@
-loadData <- function(cancer, dataType, runDate, serialDir, mapDir) {
+loadData <- function(cancer, dataType, runDate, serialDir, mapDir, force) {
     cancerFolder <- file.path(serialDir, cancer)
 
     clinicalPath <- file.path(

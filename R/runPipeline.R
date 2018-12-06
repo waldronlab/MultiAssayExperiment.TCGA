@@ -10,6 +10,8 @@ source("R/saveRTCGAdata.R")
 source("R/saveNupload.R")
 ## Load function for saving map pieces
 source("R/saveMapData.R")
+## Load function for reading and loading data from files
+source("R/loadData.R")
 
 # Create MultiAssayExperiments for each TCGA disease code
 TCGAcodes <- diseaseCodes[diseaseCodes[["Available"]] == "Yes",
@@ -51,8 +53,9 @@ buildMultiAssayExperiments <-
         saveRTCGAdata(runDate, cancer, dataType = dataType,
             analyzeDate = analyzeDate, directory = serialDir,
             force = force)
-        fullData <- loadData(cancer = cancer, dataType = dataType,
-            runDate = runDate, serialDir = serialDir, mapDir = mapDir)
+        dataFull <- loadData(cancer = cancer, dataType = dataType,
+            runDate = runDate, serialDir = serialDir, mapDir = mapDir,
+            force = force)
         # builddate
         buildDate <- Sys.time()
         # metadata
