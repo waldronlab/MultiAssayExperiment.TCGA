@@ -8,6 +8,7 @@ ACC,ACC_RPPAArray-20160128,SummarizedExperiment,192,46
 ACC,ACC_Mutation-20160128,RaggedExperiment,20166,90
 ACC,ACC_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,90
 ACC,ACC_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,90
+ACC,ACC_GISTIC_Peaks-20160128,RangedSummarizedExperiment,42,90
 BLCA,BLCA_RNASeqGene-20160128,SummarizedExperiment,20502,67
 BLCA,BLCA_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,427
 BLCA,BLCA_miRNASeqGene-20160128,SummarizedExperiment,1046,429
@@ -19,6 +20,7 @@ BLCA,BLCA_RPPAArray-20160128,SummarizedExperiment,208,344
 BLCA,BLCA_Mutation-20160128,RaggedExperiment,39312,130
 BLCA,BLCA_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,408
 BLCA,BLCA_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,408
+BLCA,BLCA_GISTIC_Peaks-20160128,RangedSummarizedExperiment,71,408
 BRCA,BRCA_RNASeqGene-20160128,SummarizedExperiment,20502,878
 BRCA,BRCA_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,1212
 BRCA,BRCA_miRNASeqGene-20160128,SummarizedExperiment,1046,849
@@ -32,6 +34,7 @@ BRCA,BRCA_RPPAArray-20160128,SummarizedExperiment,226,937
 BRCA,BRCA_Mutation-20160128,RaggedExperiment,90490,993
 BRCA,BRCA_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,1080
 BRCA,BRCA_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,1080
+BRCA,BRCA_GISTIC_Peaks-20160128,RangedSummarizedExperiment,70,1080
 CESC,CESC_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,309
 CESC,CESC_miRNASeqGene-20160128,SummarizedExperiment,1046,312
 CESC,CESC_CNASNP-20160128,RaggedExperiment,267855,586
@@ -42,6 +45,7 @@ CESC,CESC_RPPAArray-20160128,SummarizedExperiment,192,173
 CESC,CESC_Mutation-20160128,RaggedExperiment,46547,194
 CESC,CESC_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,295
 CESC,CESC_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,295
+CESC,CESC_GISTIC_Peaks-20160128,RangedSummarizedExperiment,60,295
 CHOL,CHOL_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,45
 CHOL,CHOL_miRNASeqGene-20160128,SummarizedExperiment,1046,45
 CHOL,CHOL_CNASNP-20160128,RaggedExperiment,39698,85
@@ -51,6 +55,7 @@ CHOL,CHOL_RPPAArray-20160128,SummarizedExperiment,192,30
 CHOL,CHOL_Mutation-20160128,RaggedExperiment,6755,35
 CHOL,CHOL_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,36
 CHOL,CHOL_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,36
+CHOL,CHOL_GISTIC_Peaks-20160128,SummarizedExperiment,20,36
 COAD,COAD_RNASeqGene-20160128,SummarizedExperiment,20502,10
 COAD,COAD_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,191
 COAD,COAD_miRNASeqGene-20160128,SummarizedExperiment,705,221
@@ -64,6 +69,7 @@ COAD,COAD_RPPAArray-20160128,SummarizedExperiment,208,360
 COAD,COAD_Mutation-20160128,RaggedExperiment,62530,154
 COAD,COAD_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,449
 COAD,COAD_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,449
+COAD,COAD_GISTIC_Peaks-20160128,RangedSummarizedExperiment,66,449
 DLBC,DLBC_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,48
 DLBC,DLBC_miRNASeqGene-20160128,SummarizedExperiment,1046,47
 DLBC,DLBC_CNASNP-20160128,RaggedExperiment,44725,94
@@ -73,6 +79,7 @@ DLBC,DLBC_RPPAArray-20160128,SummarizedExperiment,192,33
 DLBC,DLBC_Mutation-20160128,RaggedExperiment,16918,48
 DLBC,DLBC_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,48
 DLBC,DLBC_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,48
+DLBC,DLBC_GISTIC_Peaks-20160128,RangedSummarizedExperiment,39,48
 ESCA,ESCA_RNASeqGene-20160128,SummarizedExperiment,26120,198
 ESCA,ESCA_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,196
 ESCA,ESCA_miRNASeqGene-20160128,SummarizedExperiment,1046,198
@@ -84,6 +91,7 @@ ESCA,ESCA_RPPAArray-20160128,SummarizedExperiment,192,126
 ESCA,ESCA_Mutation-20160128,RaggedExperiment,58602,185
 ESCA,ESCA_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,184
 ESCA,ESCA_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,184
+ESCA,ESCA_GISTIC_Peaks-20160128,RangedSummarizedExperiment,77,184
 GBM,GBM_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,166
 GBM,GBM_miRNASeqGene-20160128,SummarizedExperiment,1046,0
 GBM,GBM_CNASNP-20160128,RaggedExperiment,602338,1104
@@ -92,7 +100,8 @@ GBM,GBM_CNACGH_CGH_hg_244a-20160128,RaggedExperiment,81512,438
 GBM,GBM_CNACGH_CGH_hg_415k_g4124a-20160128,RaggedExperiment,57975,338
 GBM,GBM_Methylation_methyl27-20160128,SummarizedExperiment,27578,285
 GBM,GBM_Methylation_methyl450-20160128,SummarizedExperiment,485577,154
-GBM,GBM_mRNAArray_TX_g4502a-20160128,SummarizedExperiment,17814,502
+GBM,GBM_mRNAArray_TX_g4502a-20160128,SummarizedExperiment,17814,101
+GBM,GBM_mRNAArray_TX_g4502a_1-20160128,SummarizedExperiment,17814,401
 GBM,GBM_mRNAArray_TX_ht_hg_u133a-20160128,SummarizedExperiment,12042,528
 GBM,GBM_mRNAArray_huex-20160128,SummarizedExperiment,18632,431
 GBM,GBM_miRNAArray-20160128,SummarizedExperiment,534,565
@@ -100,6 +109,7 @@ GBM,GBM_RPPAArray-20160128,SummarizedExperiment,208,244
 GBM,GBM_Mutation-20160128,RaggedExperiment,22073,290
 GBM,GBM_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,577
 GBM,GBM_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,577
+GBM,GBM_GISTIC_Peaks-20160128,RangedSummarizedExperiment,68,577
 HNSC,HNSC_RNASeqGene-20160128,SummarizedExperiment,20502,294
 HNSC,HNSC_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,566
 HNSC,HNSC_miRNASeqGene-20160128,SummarizedExperiment,1046,532
@@ -111,6 +121,7 @@ HNSC,HNSC_RPPAArray-20160128,SummarizedExperiment,160,212
 HNSC,HNSC_Mutation-20160128,RaggedExperiment,51799,279
 HNSC,HNSC_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,522
 HNSC,HNSC_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,522
+HNSC,HNSC_GISTIC_Peaks-20160128,RangedSummarizedExperiment,72,522
 KICH,KICH_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,91
 KICH,KICH_miRNASeqGene-20160128,SummarizedExperiment,1046,91
 KICH,KICH_CNASNP-20160128,RaggedExperiment,57729,132
@@ -120,6 +131,7 @@ KICH,KICH_RPPAArray-20160128,SummarizedExperiment,193,63
 KICH,KICH_Mutation-20160128,RaggedExperiment,7559,66
 KICH,KICH_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,66
 KICH,KICH_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,66
+KICH,KICH_GISTIC_Peaks-20160128,RangedSummarizedExperiment,2,66
 KIRC,KIRC_RNASeqGene-20160128,SummarizedExperiment,20502,537
 KIRC,KIRC_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,606
 KIRC,KIRC_miRNASeqGene-20160128,SummarizedExperiment,1046,326
@@ -132,6 +144,7 @@ KIRC,KIRC_RPPAArray-20160128,SummarizedExperiment,217,478
 KIRC,KIRC_Mutation-20160128,RaggedExperiment,26369,437
 KIRC,KIRC_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,528
 KIRC,KIRC_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,528
+KIRC,KIRC_GISTIC_Peaks-20160128,SummarizedExperiment,27,528
 KIRP,KIRP_RNASeqGene-20160128,SummarizedExperiment,20502,14
 KIRP,KIRP_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,323
 KIRP,KIRP_miRNASeqGene-20160128,SummarizedExperiment,1046,326
@@ -144,6 +157,7 @@ KIRP,KIRP_RPPAArray-20160128,SummarizedExperiment,195,216
 KIRP,KIRP_Mutation-20160128,RaggedExperiment,15585,161
 KIRP,KIRP_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,288
 KIRP,KIRP_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,288
+KIRP,KIRP_GISTIC_Peaks-20160128,RangedSummarizedExperiment,28,288
 LAML,LAML_RNASeqGene-20160128,SummarizedExperiment,19990,179
 LAML,LAML_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,173
 LAML,LAML_CNASNP-20160128,RaggedExperiment,874897,392
@@ -151,6 +165,7 @@ LAML,LAML_CNVSNP-20160128,RaggedExperiment,28324,380
 LAML,LAML_Methylation_methyl27-20160128,SummarizedExperiment,27578,194
 LAML,LAML_Methylation_methyl450-20160128,SummarizedExperiment,485577,194
 LAML,LAML_Mutation-20160128,RaggedExperiment,2585,197
+LAML,LAML_GISTIC-20160128,RangedSummarizedExperiment,16,191
 LGG,LGG_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,530
 LGG,LGG_miRNASeqGene-20160128,SummarizedExperiment,1046,526
 LGG,LGG_CNASNP-20160128,RaggedExperiment,411918,1015
@@ -162,6 +177,7 @@ LGG,LGG_RPPAArray-20160128,SummarizedExperiment,201,435
 LGG,LGG_Mutation-20160128,RaggedExperiment,9885,286
 LGG,LGG_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,513
 LGG,LGG_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,513
+LGG,LGG_GISTIC_Peaks-20160128,RangedSummarizedExperiment,46,513
 LIHC,LIHC_RNASeqGene-20160128,SummarizedExperiment,20502,26
 LIHC,LIHC_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,423
 LIHC,LIHC_miRNASeqGene-20160128,SummarizedExperiment,1046,424
@@ -172,6 +188,7 @@ LIHC,LIHC_RPPAArray-20160128,SummarizedExperiment,219,184
 LIHC,LIHC_Mutation-20160128,RaggedExperiment,27892,198
 LIHC,LIHC_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,370
 LIHC,LIHC_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,370
+LIHC,LIHC_GISTIC_Peaks-20160128,RangedSummarizedExperiment,59,370
 LUAD,LUAD_RNASeqGene-20160128,SummarizedExperiment,20502,162
 LUAD,LUAD_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,576
 LUAD,LUAD_miRNASeqGene-20160128,SummarizedExperiment,1046,498
@@ -185,6 +202,7 @@ LUAD,LUAD_RPPAArray-20160128,SummarizedExperiment,223,365
 LUAD,LUAD_Mutation-20160128,RaggedExperiment,72541,230
 LUAD,LUAD_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,516
 LUAD,LUAD_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,516
+LUAD,LUAD_GISTIC_Peaks-20160128,RangedSummarizedExperiment,73,516
 LUSC,LUSC_RNASeqGene-20160128,SummarizedExperiment,20502,240
 LUSC,LUSC_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,552
 LUSC,LUSC_miRNASeqGene-20160128,SummarizedExperiment,1046,387
@@ -200,6 +218,7 @@ LUSC,LUSC_RPPAArray-20160128,SummarizedExperiment,223,328
 LUSC,LUSC_Mutation-20160128,RaggedExperiment,65305,178
 LUSC,LUSC_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,501
 LUSC,LUSC_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,501
+LUSC,LUSC_GISTIC_Peaks-20160128,RangedSummarizedExperiment,78,501
 MESO,MESO_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,87
 MESO,MESO_miRNASeqGene-20160128,SummarizedExperiment,1046,87
 MESO,MESO_CNASNP-20160128,RaggedExperiment,90003,173
@@ -208,6 +227,7 @@ MESO,MESO_Methylation-20160128,SummarizedExperiment,485577,87
 MESO,MESO_RPPAArray-20160128,SummarizedExperiment,193,63
 MESO,MESO_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,87
 MESO,MESO_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,87
+MESO,MESO_GISTIC_Peaks-20160128,RangedSummarizedExperiment,21,87
 OV,OV_RNASeqGene-20160128,SummarizedExperiment,19990,299
 OV,OV_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,307
 OV,OV_miRNASeqGene-20160128,SummarizedExperiment,705,461
@@ -217,7 +237,8 @@ OV,OV_CNACGH_CGH_hg_244a-20160128,RaggedExperiment,128946,472
 OV,OV_CNACGH_CGH_hg_415k_g4124a-20160128,RaggedExperiment,245847,674
 OV,OV_Methylation_methyl27-20160128,SummarizedExperiment,27578,591
 OV,OV_Methylation_methyl450-20160128,SummarizedExperiment,485577,10
-OV,OV_mRNAArray_TX_g4502a-20160128,SummarizedExperiment,17814,577
+OV,OV_mRNAArray_TX_g4502a-20160128,SummarizedExperiment,17814,31
+OV,OV_mRNAArray_TX_g4502a_1-20160128,SummarizedExperiment,17814,546
 OV,OV_mRNAArray_TX_ht_hg_u133a-20160128,SummarizedExperiment,12042,524
 OV,OV_mRNAArray_huex-20160128,SummarizedExperiment,18632,575
 OV,OV_miRNAArray-20160128,SummarizedExperiment,821,573
@@ -225,6 +246,7 @@ OV,OV_RPPAArray-20160128,SummarizedExperiment,208,427
 OV,OV_Mutation-20160128,RaggedExperiment,20219,316
 OV,OV_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,573
 OV,OV_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,573
+OV,OV_GISTIC_Peaks-20160128,RangedSummarizedExperiment,70,573
 PAAD,PAAD_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,183
 PAAD,PAAD_miRNASeqGene-20160128,SummarizedExperiment,1046,183
 PAAD,PAAD_CNASNP-20160128,RaggedExperiment,203871,368
@@ -234,6 +256,7 @@ PAAD,PAAD_RPPAArray-20160128,SummarizedExperiment,195,123
 PAAD,PAAD_Mutation-20160128,RaggedExperiment,30357,150
 PAAD,PAAD_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,184
 PAAD,PAAD_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,184
+PAAD,PAAD_GISTIC_Peaks-20160128,SummarizedExperiment,53,184
 PCPG,PCPG_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,187
 PCPG,PCPG_miRNASeqGene-20160128,SummarizedExperiment,1046,187
 PCPG,PCPG_CNASNP-20160128,RaggedExperiment,297329,360
@@ -243,6 +266,7 @@ PCPG,PCPG_RPPAArray-20160128,SummarizedExperiment,192,82
 PCPG,PCPG_Mutation-20160128,RaggedExperiment,4662,184
 PCPG,PCPG_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,162
 PCPG,PCPG_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,162
+PCPG,PCPG_GISTIC_Peaks-20160128,RangedSummarizedExperiment,27,162
 PRAD,PRAD_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,550
 PRAD,PRAD_miRNASeqGene-20160128,SummarizedExperiment,1046,547
 PRAD,PRAD_CNASNP-20160128,RaggedExperiment,573776,1029
@@ -253,6 +277,7 @@ PRAD,PRAD_RPPAArray-20160128,SummarizedExperiment,195,352
 PRAD,PRAD_Mutation-20160128,RaggedExperiment,12348,332
 PRAD,PRAD_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,492
 PRAD,PRAD_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,492
+PRAD,PRAD_GISTIC_Peaks-20160128,RangedSummarizedExperiment,58,492
 READ,READ_RNASeqGene-20160128,SummarizedExperiment,20502,72
 READ,READ_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,72
 READ,READ_miRNASeqGene-20160128,SummarizedExperiment,705,76
@@ -266,6 +291,7 @@ READ,READ_RPPAArray-20160128,SummarizedExperiment,208,131
 READ,READ_Mutation-20160128,RaggedExperiment,22075,69
 READ,READ_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,165
 READ,READ_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,165
+READ,READ_GISTIC_Peaks-20160128,RangedSummarizedExperiment,55,165
 SARC,SARC_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,265
 SARC,SARC_miRNASeqGene-20160128,SummarizedExperiment,1046,263
 SARC,SARC_CNASNP-20160128,RaggedExperiment,337377,516
@@ -275,6 +301,7 @@ SARC,SARC_RPPAArray-20160128,SummarizedExperiment,192,226
 SARC,SARC_Mutation-20160128,RaggedExperiment,20376,247
 SARC,SARC_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,257
 SARC,SARC_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,257
+SARC,SARC_GISTIC_Peaks-20160128,RangedSummarizedExperiment,64,257
 SKCM,SKCM_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,473
 SKCM,SKCM_miRNASeqGene-20160128,SummarizedExperiment,1046,452
 SKCM,SKCM_CNASNP-20160128,RaggedExperiment,452114,938
@@ -283,6 +310,7 @@ SKCM,SKCM_CNASeq-20160128,RaggedExperiment,31416,238
 SKCM,SKCM_Methylation-20160128,SummarizedExperiment,485577,475
 SKCM,SKCM_RPPAArray-20160128,SummarizedExperiment,208,355
 SKCM,SKCM_Mutation-20160128,RaggedExperiment,290322,345
+SKCM,SKCM_GISTIC-20160128,RangedSummarizedExperiment,53,367
 STAD,STAD_RNASeqGene-20160128,SummarizedExperiment,26120,36
 STAD,STAD_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,450
 STAD,STAD_miRNASeqGene-20160128,SummarizedExperiment,1046,430
@@ -295,6 +323,7 @@ STAD,STAD_RPPAArray-20160128,SummarizedExperiment,195,357
 STAD,STAD_Mutation-20160128,RaggedExperiment,148520,289
 STAD,STAD_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,441
 STAD,STAD_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,441
+STAD,STAD_GISTIC_Peaks-20160128,RangedSummarizedExperiment,84,441
 TGCT,TGCT_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,139
 TGCT,TGCT_miRNASeqGene-20160128,SummarizedExperiment,1046,139
 TGCT,TGCT_CNASNP-20160128,RaggedExperiment,137968,271
@@ -304,6 +333,7 @@ TGCT,TGCT_RPPAArray-20160128,SummarizedExperiment,192,107
 TGCT,TGCT_Mutation-20160128,RaggedExperiment,14672,138
 TGCT,TGCT_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,134
 TGCT,TGCT_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,134
+TGCT,TGCT_GISTIC_Peaks-20160128,RangedSummarizedExperiment,48,134
 THCA,THCA_RNASeqGene-20160128,SummarizedExperiment,20502,4
 THCA,THCA_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,568
 THCA,THCA_miRNASeqGene-20160128,SummarizedExperiment,1046,569
@@ -315,6 +345,7 @@ THCA,THCA_RPPAArray-20160128,SummarizedExperiment,175,224
 THCA,THCA_Mutation-20160128,RaggedExperiment,7458,405
 THCA,THCA_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,499
 THCA,THCA_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,499
+THCA,THCA_GISTIC_Peaks-20160128,SummarizedExperiment,39,499
 THYM,THYM_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,122
 THYM,THYM_miRNASeqGene-20160128,SummarizedExperiment,1046,126
 THYM,THYM_CNASNP-20160128,RaggedExperiment,105646,248
@@ -324,6 +355,7 @@ THYM,THYM_RPPAArray-20160128,SummarizedExperiment,192,90
 THYM,THYM_Mutation-20160128,RaggedExperiment,3064,123
 THYM,THYM_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,123
 THYM,THYM_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,123
+THYM,THYM_GISTIC_Peaks-20160128,RangedSummarizedExperiment,16,123
 UCEC,UCEC_RNASeqGene-20160128,SummarizedExperiment,20502,269
 UCEC,UCEC_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,380
 UCEC,UCEC_miRNASeqGene-20160128,SummarizedExperiment,1046,433
@@ -337,6 +369,7 @@ UCEC,UCEC_RPPAArray-20160128,SummarizedExperiment,208,440
 UCEC,UCEC_Mutation-20160128,RaggedExperiment,184861,248
 UCEC,UCEC_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,539
 UCEC,UCEC_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,539
+UCEC,UCEC_GISTIC_Peaks-20160128,RangedSummarizedExperiment,98,539
 UCS,UCS_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,57
 UCS,UCS_miRNASeqGene-20160128,SummarizedExperiment,1046,56
 UCS,UCS_CNASNP-20160128,RaggedExperiment,54944,111
@@ -346,6 +379,7 @@ UCS,UCS_RPPAArray-20160128,SummarizedExperiment,192,48
 UCS,UCS_Mutation-20160128,RaggedExperiment,11339,57
 UCS,UCS_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,56
 UCS,UCS_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,56
+UCS,UCS_GISTIC_Peaks-20160128,SummarizedExperiment,57,56
 UVM,UVM_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,80
 UVM,UVM_miRNASeqGene-20160128,SummarizedExperiment,1046,80
 UVM,UVM_CNASNP-20160128,RaggedExperiment,69487,160
@@ -356,3 +390,4 @@ UVM,UVM_RPPAArray-20160128,SummarizedExperiment,192,12
 UVM,UVM_Mutation-20160128,RaggedExperiment,2174,80
 UVM,UVM_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,80
 UVM,UVM_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,80
+UVM,UVM_GISTIC_Peaks-20160128,RangedSummarizedExperiment,21,80
