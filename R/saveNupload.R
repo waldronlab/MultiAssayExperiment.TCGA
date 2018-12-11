@@ -1,32 +1,28 @@
-.saveMethylHDF5 <- function(objname, filepaths) {
-    folder <- unique(dirname(filepaths))
-    stopifnot(length(folder) == 1L)
-    h5exts <- c("assays.h5", "se.rds")
-    if (!all(file.exists(filepaths))) {
-        HDF5Array::saveHDF5SummarizedExperiment(
-            x = get(objname, parent.frame()), dir = folder, replace = TRUE)
-        file.rename(file.path(folder, h5exts), filepaths)
-    }
-    filepaths
+.saveMethylHDF5 <- function(objName, foldername) {
+    stopifnot(length(foldername) == 1L)
+    methylexts <- c("_assays.h5", "_se.rds")
+    HDF5Array::saveHDF5SummarizedExperiment(
+        x = get(objName, parent.frame()),
+        dir = file.path(foldername, objName),
+        prefix = paste0(objName, "_"), replace = TRUE
+    )
+    file.path(foldername, objName, methylexts)
 }
 
 saveNupload <- function(dataList, cancer, directory = "data/bits",
-    upload = TRUE) {
+    upload = TRUE, fileExt = ".rda") {
     cancerSubdir <- file.path(directory, cancer)
     if (!dir.exists(cancerSubdir))
         dir.create(cancerSubdir, recursive = TRUE)
-    filetype <- ".rda"
-    methylext <- c(".h5", ".rds")
     dataNames <- names(dataList)
     stopifnot(!is.null(dataNames))
     for (objname in dataNames) {
         assign(x = objname, value = dataList[[objname]])
         if (grepl("Methyl", objname, ignore.case = TRUE)) {
             mfolder <- file.path(cancerSubdir, objname)
-            filenames <- file.path(mfolder, paste0(objname, methylext))
-            fnames <- .saveMethylHDF5(objname, filenames)
+            fnames <- .saveMethylHDF5(objname, mfolder)
         } else {
-            fnames <- file.path(cancerSubdir, paste0(objname, filetype))
+            fnames <- file.path(cancerSubdir, paste0(objname, fileExt))
             save(list = objname, file = fnames, compress = "bzip2")
         }
         if (upload)
