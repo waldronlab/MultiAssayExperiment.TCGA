@@ -6,7 +6,7 @@
         dir = file.path(foldername, objName),
         prefix = paste0(objName, "_"), replace = TRUE
     )
-    file.path(foldername, objName, methylexts)
+    file.path(foldername, paste0(objName, methylexts))
 }
 
 saveNupload <- function(dataList, cancer, directory = "data/bits",
