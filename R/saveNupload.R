@@ -3,7 +3,7 @@
     methylexts <- c("_assays.h5", "_se.rds")
     HDF5Array::saveHDF5SummarizedExperiment(
         x = get(objName, parent.frame()),
-        dir = file.path(foldername, objName),
+        dir = foldername,
         prefix = paste0(objName, "_"), replace = TRUE
     )
     file.path(foldername, paste0(objName, methylexts))
