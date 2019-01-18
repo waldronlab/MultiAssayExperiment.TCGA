@@ -24,3 +24,5 @@ data/*
 !curationAvailable.Rda
 !clinicalColnames.rds
 
+data-raw/.httr-oauth
+
