@@ -1,11 +1,11 @@
 ## Read and split curation to small data.frames
 
 # Download from Dropbox
-# rdrop2::drop_get("The Cancer Genome Atlas/Script/subtypes_curation.txt", local_file =
-#                      "data-raw/subtypes_curation.txt", overwrite = TRUE)
+# rdrop2::drop_download("The Cancer Genome Atlas/Script/subtypes_curation.txt",
+#    local_path = "subtypes_curation.txt", overwrite = TRUE)
 
 # Readlines from TXT file downloaded from Dropbox
-ST <- readLines("data-raw/subtypes_curation.txt")
+ST <- readLines("subtypes_curation.txt")
 
 # Create a list of data.frames
 subMap <- list()
