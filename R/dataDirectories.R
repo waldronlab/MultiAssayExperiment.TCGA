@@ -1,3 +1,13 @@
+#' Create necessary folders for pipeline
+#'
+#' This convenience function automatically creates directories needed
+#' for file processing in the pipeline.
+#'
+#' @param create logical (default FALSE) Whether to create folders in
+#' current package directory
+#'
+#' @return A character vector of created directories
+#' @export
 dataDirectories <- function(create=FALSE) {
     extData <- "inst/extdata/"
     clinicalData <- file.path(extData, "Clinical")
