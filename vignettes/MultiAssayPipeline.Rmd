@@ -1,0 +1,56 @@
+---
+title: "Building MultiAssayExperiment from Firehose"
+author: "Marcel Ramos"
+date: "April 5, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+```
+
+
+# Create all directories needed in repository
+
+```{r}
+dataDirectories(create = TRUE)
+```
+
+
+## Download all available resources
+
+```{r}
+source("data-raw/getClinicalData.R")
+source("data-raw/downloadExtraClinical.R")
+```
+
+## Download SubType data from DropBox
+
+Note. Authentication required using `rdrop2`
+
+ALTERNATIVELY: You can download files manually and put them in
+`inst/extdata/allsubtypes`
+
+```{r}
+source("data-raw/downloadSubtypeDrop.R")
+```
+
+## Merge curated data to clinical data
+
+```{r}
+source("data-raw/mergeSubtypeCuration.R")
+```
+
+## Clean merged data files
+
+```{r}
+source("data-raw/cleanMerged.R")
+```
+
+## Build and upload MultiAssayExperiment data
+
+```{r}
+TCGAcodes <- "ACC"
+buildMultiAssayExperiments(TCGAcodes)
+```
+

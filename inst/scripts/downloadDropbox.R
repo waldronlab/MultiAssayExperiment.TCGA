@@ -1,6 +1,4 @@
-## R/dataDirectories.R should be run first
-source("R/dataDirectories.R")
-source("R/getDiseaseCodes.R")
+## dataDirectories and getDiseaseCodes should be run first
 dirList <- dataDirectories()
 TCGAcode <- getDiseaseCodes()
 

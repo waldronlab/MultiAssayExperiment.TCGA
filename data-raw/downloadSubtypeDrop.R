@@ -1,5 +1,5 @@
 ## Get function for downloading
-source("R/downloadDropbox.R")
+source("inst/scripts/downloadDropbox.R")
 
 ## Authenticate to Dropbox API at FIRST RUN
 # drop_auth()
