@@ -31,3 +31,4 @@ Imports:
 License: Artistic-2.0
 URL: https://github.com/waldronlab/MultiAssayExperiment.TCGA
 BugReports: https://github.com/waldronlab/MultiAssayExperiment.TCGA/issues
+RoxygenNote: 6.1.1

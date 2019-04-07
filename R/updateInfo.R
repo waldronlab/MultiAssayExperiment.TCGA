@@ -1,4 +1,4 @@
-.getElementMetaData <- function(dataElementList, cancerCode) {
+.getElementMetaData <- function(dataElementList, cancer) {
     colnames <- c("cancerCode", "assay", "class", "nrow", "ncol")
     mustNames <- c("colData", "sampleMap", "metadata")
     dataNames <- names(dataElementList)
@@ -13,7 +13,7 @@
             numberRow <- dim(dataObject)[[1L]]
             numberCol <- dim(dataObject)[[2L]]
             structure(
-                list(cancerCode, assayName, className, numberRow, numberCol),
+                list(cancer, assayName, className, numberRow, numberCol),
                 .Names = colnames,
                 row.names = 1L,
                 class = "data.frame"
@@ -22,16 +22,28 @@
     do.call(rbind.data.frame, listFrame)
 }
 
-## Update metadata from data bits
+#' Update metadata from data bits
+#'
+#' This functoin takes a list of data objects, cancer code, and a file path
+#' to document the metadata in 'filePath'
+#'
+#' @param dataList A List of experiment data for a MultiAssayExperiment
+#' @param cancer A single string indicating the TCGA cancer code
+#' @param filePath A single string pointing to the file where metadata should
+#' be saved
+#'
+#' @return Function saves a file in filePath
+#'
+#' @export
 updateInfo <-
-function(dataList, cancerCode, filePath = "MAEOinfo.csv")
+function(dataList, cancer, filePath = "MAEOinfo.csv")
 {
-    MAEOinfo <- .getElementMetaData(dataList, cancerCode)
+    MAEOinfo <- .getElementMetaData(dataList, cancer)
     if (file.exists(filePath)) {
         message("File found: ", filePath)
         storedInfo <- readr::read_csv(filePath)
 
-        regLines <- storedInfo[["cancerCode"]] %in% cancerCode &
+        regLines <- storedInfo[["cancer"]] %in% cancer &
             storedInfo[["assay"]] %in% names(dataList)
 
         if (any(regLines))

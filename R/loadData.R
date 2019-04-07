@@ -1,3 +1,22 @@
+#' Load and assemble MultiAssayExperiments from files
+#'
+#' loadData takes cancer, data type, and storage inputs to piece together a
+#' working MultiAssayExperiment object
+#'
+#' @param cancer A single character string indicating the TCGA disease code
+#' @param dataType A character vector of TCGA assay types
+#' @param runDate A single string indicating the Firehose run date, usually
+#' '20160128'
+#' @param serialDir The directory corresponding to the serialized data from
+#' RTCGAToolbox
+#' @param mapDir A single string indicating the directory where sampleMaps
+#' are stored from `saveMapData`
+#' @param force (logical) Whether to resave all sample maps to the map
+#' directory
+#'
+#' @return A harmonized MultiAssayExperiment object
+#'
+#' @export
 loadData <- function(cancer, dataType, runDate, serialDir, mapDir, force) {
     cancerFolder <- file.path(serialDir, cancer)
 
@@ -44,8 +63,6 @@ loadData <- function(cancer, dataType, runDate, serialDir, mapDir, force) {
 
     ## Filter by zero length
     dataFull <- Filter(length, dataList)
-    if (!length(dataFull))
-        next
 
     isList <- vapply(dataFull, is.list, logical(1L))
     if (any(isList))
@@ -63,4 +80,3 @@ loadData <- function(cancer, dataType, runDate, serialDir, mapDir, force) {
         clinicalData,
         sampMap)
 }
-

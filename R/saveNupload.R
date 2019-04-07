@@ -9,6 +9,18 @@
     file.path(foldername, paste0(objName, methylexts))
 }
 
+
+#' A function to save serialized objects and upload to ExperimentHub
+#'
+#' This function requires the user to obtain AWS CLI credentials to
+#' ExperimentHub for it to work.
+#'
+#' @inheritParams updateInfo
+#' @param directory The file location for saving serialized data pieces
+#'
+#' @return Function saves and uploads data to the ExperimentHub AWS S3 bucket
+#'
+#' @export
 saveNupload <- function(dataList, cancer, directory = "data/bits",
     upload = TRUE, fileExt = ".rda") {
     cancerSubdir <- file.path(directory, cancer)

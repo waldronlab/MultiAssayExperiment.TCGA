@@ -1,7 +1,3 @@
-## Source dataDirectories function
-source("R/dataDirectories.R")
-load("data/curationAvailable.rda")
-
 ## Helper function for reading clinical variable curation files
 .readClinicalCuration <- function(diseaseCode) {
     clinicalCuration <- dataDirectories()[["clinicalCurationPath"]]
@@ -182,7 +178,7 @@ load("data/curationAvailable.rda")
 }
 
 ## Read clinical and merge subtype information
-.mergeSubtypeClinical <- function(diseaseCode, runDate, curationAvailable) {
+.mergeSubtypeClinical <- function(diseaseCode, runDate) {
     clinicalData <-
         readr::read_csv(
             file.path(
@@ -190,6 +186,10 @@ load("data/curationAvailable.rda")
                 paste(runDate, paste0(diseaseCode, ".csv"), sep = "-")
             )
         )
+    cur <- new.env()
+    data("curationAvailable", package = "MultiAssayExperiment.TCGA",
+        envir = cur)
+    curationAvailable <- cur[["curationAvailable"]]
     if (diseaseCode %in% curationAvailable) {
         subtypeCuration <- .readSubtypeData(diseaseCode)
         BarcodeColName <- .findBarcodeCol(subtypeCuration)

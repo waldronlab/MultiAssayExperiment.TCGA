@@ -1,27 +1,21 @@
-## Load libraries
-source("R/loadLibraries.R")
-## Load supporting functions
-source("data-raw/helpers.R")
-## Load function for updating metadata
-source("R/updateInfo.R")
-## Load function for downloading raw data
-source("R/saveRTCGAdata.R")
-## Load function for saving results and uploading to S3
-source("R/saveNupload.R")
-## Load function for saving map pieces
-source("R/saveMapData.R")
-## Load function for reading and loading data from files
-source("R/loadData.R")
-
-# Create MultiAssayExperiments for each TCGA disease code
-TCGAcodes <- diseaseCodes[diseaseCodes[["Available"]] == "Yes",
-    "Study.Abbreviation"]
-names(TCGAcodes) <- TCGAcodes
-
-# If subset needs to be run, replace cancer code with last unsuccessful attempt
-TCGAcodes <- TCGAcodes[which(TCGAcodes == "ACC"):length(TCGAcodes)]
-
-# buildMultiAssayExperiments function definition
+#' A unifying pipeline function for building MultiAssayExperiment objects
+#'
+#' This is the main function of the package. It brings together all of the
+#' exported functions to load, create, and save data objects on ExperimentHub
+#' and return documented metadata
+#'
+#' @inheritParams loadData
+#' @param TCGAcodes A character vector of TCGA cancer codes
+#' @param analyzeDate The GDAC Firehose analysis run date, only '20160128' is
+#' supported
+#' @param outDataDir The single string indicating piecewise data product save
+#' location
+#' @param metadataFile A single string pointing to the CSV file in which to
+#' save metadata
+#' @param upload logical (default TRUE) Whether to save data products to the
+#' cloud infrastructure, namely AWS S3 ExperimentHub bucket
+#'
+#' @export
 buildMultiAssayExperiments <-
     function(
     TCGAcodes,
@@ -78,10 +72,7 @@ buildMultiAssayExperiments <-
         saveNupload(allObjects, cancer, directory = outDataDir, upload = upload)
 
         # update MAEOinfo.csv
-        updateInfo(dataList = allObjects, cancerCode = cancer,
+        updateInfo(dataList = allObjects, cancer = cancer,
             filePath = metadataFile)
     }
 }
-
-# call buildMultiAssayExperiments function
-buildMultiAssayExperiments(TCGAcodes)
