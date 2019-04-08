@@ -1,14 +1,13 @@
 ## Load libraries
 library(MultiAssayExperiment)
+library(MultiAssayExperiment.TCGA)
 library(RTCGAToolbox)
 library(TCGAutils)
 library(devtools)
 library(readr)
 
 setwd("../")
-stopifnot(identical(basename(getwd()), "MultiAssayExperiment-TCGA"))
-source("R/getDiseaseCodes.R")
-source("R/saveRTCGAdata.R")
+stopifnot(identical(basename(getwd()), "MultiAssayExperiment.TCGA"))
 
 TCGAcodes <- getDiseaseCodes()
 runDate <- "20160128"

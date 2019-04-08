@@ -29,6 +29,11 @@ buildMultiAssayExperiments <-
     if (!dir.exists(outDataDir))
         dir.create(outDataDir)
 
+    if (missing(TCGAcodes)) {
+        TCGAcodes <- getDiseaseCodes()
+    } else if (!all(TCGAcodes %in% getDiseaseCodes()))
+        stop("Provide valid and available TCGA disease codes: 'TCGAcodes'")
+
     for (cancer in TCGAcodes) {
         message("\n######\n",
                 "\nProcessing ", cancer, " : )\n",
