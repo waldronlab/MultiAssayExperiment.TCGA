@@ -8,7 +8,6 @@
 inst/extdata/allsubtypes/*
 inst/extdata/Clinical/*
 inst/extdata/TCGA_Curation_Cancer_Types/*
-rawdata/*
 data/*
 *.tar.gz
 *.xlsx

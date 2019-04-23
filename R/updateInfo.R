@@ -43,7 +43,7 @@ function(dataList, cancer, filePath = "MAEOinfo.csv")
         message("File found: ", filePath)
         storedInfo <- readr::read_csv(filePath)
 
-        regLines <- storedInfo[["cancer"]] %in% cancer &
+        regLines <- storedInfo[["cancerCode"]] %in% cancer &
             storedInfo[["assay"]] %in% names(dataList)
 
         if (any(regLines))

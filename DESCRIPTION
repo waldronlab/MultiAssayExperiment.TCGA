@@ -17,7 +17,8 @@ Depends:
     R (>= 3.5.0),
     MultiAssayExperiment,
     RTCGAToolbox,
-    TCGAutils
+    TCGAutils,
+    magrittr
 Imports:
     AnnotationHubData,
     BiocParallel,
