@@ -1,2 +1,17 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^MAEOinfo2\.csv$
+^maeoINFO\.rds$
+^metadataChecks\.Rds$
+^data/bits$
+^data/built$
+^data/Clinical$
+^data/maps$
+^data/old$
+^data/raw$
+^tmp$
+^inst/extdata/allsubtypes$
+^inst/extdata/Clinical$
+^inst/extdata/curatedSubtypes$
+^inst/extdata/TCGA_Clinical_curation$
+
