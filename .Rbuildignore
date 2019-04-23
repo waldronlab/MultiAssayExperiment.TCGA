@@ -3,6 +3,7 @@
 ^MAEOinfo2\.csv$
 ^maeoINFO\.rds$
 ^metadataChecks\.Rds$
+^data-raw$
 ^data/bits$
 ^data/built$
 ^data/Clinical$
