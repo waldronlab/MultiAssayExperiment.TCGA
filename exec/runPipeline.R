@@ -1,5 +1,13 @@
-setwd("~/MultiAssayExperiment.TCGA")
+setwd("~/github/MultiAssayExperiment.TCGA")
 message("Using: ", getwd())
+
+args <- commandArgs(trailingOnly=TRUE)
+
+ccode <- args[[1L]]
+cancerCodes <- getDiseaseCodes()
+
+if (!is.null(ccode))
+    cancerCodes <- cancerCodes[which(cancerCodes == ccode):length(cancerCodes)]
 
 creds <- readLines("~/data/aws/sts.txt")
 config <- strsplit(creds, "\t")[[1L]]
@@ -18,6 +26,11 @@ for (i in 1:3) {
 
 writeLines(renv, con = file("~/.Renviron"))
 
+library(BiocParallel)
 library(MultiAssayExperiment.TCGA)
 
-buildMultiAssayExperiments()
+bplapply(cancerCodes, function(cancer) {
+
+    buildMultiAssayExperiments(TCGAcode = cancer)
+
+})
