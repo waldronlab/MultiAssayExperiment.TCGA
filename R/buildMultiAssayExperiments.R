@@ -32,48 +32,48 @@ buildMultiAssayExperiments <-
     if (missing(TCGAcode))
         stop("Provide a valid and available TCGA disease code: 'TCGAcode'")
 
-        message("\n######\n",
-                "\nProcessing ", TCGAcode, " : )\n",
-                "\n######\n")
+    message("\n######\n",
+            "\nProcessing ", TCGAcode, " : )\n",
+            "\n######\n")
 
-        ## slotNames in FirehoseData RTCGAToolbox class
-        targets <- c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene",
-            "CNASNP", "CNVSNP", "CNASeq", "CNACGH", "Methylation",
-            "mRNAArray", "miRNAArray", "RPPAArray", "Mutation",
-            "GISTIC")
+    ## slotNames in FirehoseData RTCGAToolbox class
+    targets <- c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene",
+        "CNASNP", "CNVSNP", "CNASeq", "CNACGH", "Methylation",
+        "mRNAArray", "miRNAArray", "RPPAArray", "Mutation",
+        "GISTIC")
 
-        dataType <- match.arg(dataType, targets, several.ok = TRUE)
-        names(dataType) <- dataType
+    dataType <- match.arg(dataType, targets, several.ok = TRUE)
+    names(dataType) <- dataType
 
-        ## Download raw data if not already serialized
-        saveRTCGAdata(runDate, TCGAcode, dataType = dataType,
-            analyzeDate = analyzeDate, directory = serialDir,
-            force = force)
-        dataFull <- loadData(cancer = TCGAcode, dataType = dataType,
-            runDate = runDate, serialDir = serialDir, mapDir = mapDir,
-            force = force)
-        # builddate
-        buildDate <- Sys.time()
-        # metadata
-        metadata <- list(buildDate, TCGAcode, runDate, analyzeDate,
-            devtools::session_info())
-        names(metadata) <- c("buildDate", "cancerCode", "runDate",
-            "analyzeDate", "session_info")
+    ## Download raw data if not already serialized
+    saveRTCGAdata(runDate, TCGAcode, dataType = dataType,
+        analyzeDate = analyzeDate, directory = serialDir,
+        force = force)
+    dataFull <- loadData(cancer = TCGAcode, dataType = dataType,
+        runDate = runDate, serialDir = serialDir, mapDir = mapDir,
+        force = force)
+    # builddate
+    buildDate <- Sys.time()
+    # metadata
+    metadata <- list(buildDate, TCGAcode, runDate, analyzeDate,
+        devtools::session_info())
+    names(metadata) <- c("buildDate", "cancerCode", "runDate",
+        "analyzeDate", "session_info")
 
-        mustData <- list(dataFull[["colData"]], dataFull[["sampleMap"]],
-            metadata)
-        mustNames <- paste0(TCGAcode, "_",
-            c("colData", "sampleMap", "metadata"), "-", runDate)
-        names(mustData) <- mustNames
+    mustData <- list(dataFull[["colData"]], dataFull[["sampleMap"]],
+        metadata)
+    mustNames <- paste0(TCGAcode, "_",
+        c("colData", "sampleMap", "metadata"), "-", runDate)
+    names(mustData) <- mustNames
 
-        # add colData, sampleMap, and metadata to ExperimentList
-        if (length(dataFull[["experiments"]]))
-            allObjects <- c(as(dataFull[["experiments"]], "list"), mustData)
+    # add colData, sampleMap, and metadata to ExperimentList
+    if (length(dataFull[["experiments"]]))
+        allObjects <- c(as(dataFull[["experiments"]], "list"), mustData)
 
-        # save rda files and upload them to S3
-        saveNupload(allObjects, TCGAcode, directory = outDataDir, upload = upload)
+    # save rda files and upload them to S3
+    saveNupload(allObjects, TCGAcode, directory = outDataDir, upload = upload)
 
-        # update MAEOinfo.csv
-        updateInfo(dataList = allObjects, cancer = TCGAcode,
-            filePath = metadataFile)
+    # update MAEOinfo.csv
+    updateInfo(dataList = allObjects, cancer = TCGAcode,
+        filePath = metadataFile)
 }
