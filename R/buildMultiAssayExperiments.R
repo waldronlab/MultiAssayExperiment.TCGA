@@ -18,7 +18,7 @@
 #' @export
 buildMultiAssayExperiments <-
     function(
-    TCGAcodes,
+    TCGAcode,
     dataType = c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene", "CNASNP",
         "CNVSNP", "CNASeq", "CNACGH", "Methylation", "mRNAArray", "miRNAArray",
         "RPPAArray", "Mutation", "GISTIC"),
@@ -29,14 +29,11 @@ buildMultiAssayExperiments <-
     if (!dir.exists(outDataDir))
         dir.create(outDataDir)
 
-    if (missing(TCGAcodes)) {
-        TCGAcodes <- getDiseaseCodes()
-    } else if (!all(TCGAcodes %in% getDiseaseCodes()))
-        stop("Provide valid and available TCGA disease codes: 'TCGAcodes'")
+    if (missing(TCGAcode))
+        stop("Provide a valid and available TCGA disease code: 'TCGAcode'")
 
-    for (cancer in TCGAcodes) {
         message("\n######\n",
-                "\nProcessing ", cancer, " : )\n",
+                "\nProcessing ", TCGAcode, " : )\n",
                 "\n######\n")
 
         ## slotNames in FirehoseData RTCGAToolbox class
@@ -49,23 +46,23 @@ buildMultiAssayExperiments <-
         names(dataType) <- dataType
 
         ## Download raw data if not already serialized
-        saveRTCGAdata(runDate, cancer, dataType = dataType,
+        saveRTCGAdata(runDate, TCGAcode, dataType = dataType,
             analyzeDate = analyzeDate, directory = serialDir,
             force = force)
-        dataFull <- loadData(cancer = cancer, dataType = dataType,
+        dataFull <- loadData(cancer = TCGAcode, dataType = dataType,
             runDate = runDate, serialDir = serialDir, mapDir = mapDir,
             force = force)
         # builddate
         buildDate <- Sys.time()
         # metadata
-        metadata <- list(buildDate, cancer, runDate, analyzeDate,
+        metadata <- list(buildDate, TCGAcode, runDate, analyzeDate,
             devtools::session_info())
         names(metadata) <- c("buildDate", "cancerCode", "runDate",
             "analyzeDate", "session_info")
 
         mustData <- list(dataFull[["colData"]], dataFull[["sampleMap"]],
             metadata)
-        mustNames <- paste0(cancer, "_",
+        mustNames <- paste0(TCGAcode, "_",
             c("colData", "sampleMap", "metadata"), "-", runDate)
         names(mustData) <- mustNames
 
@@ -74,10 +71,9 @@ buildMultiAssayExperiments <-
             allObjects <- c(as(dataFull[["experiments"]], "list"), mustData)
 
         # save rda files and upload them to S3
-        saveNupload(allObjects, cancer, directory = outDataDir, upload = upload)
+        saveNupload(allObjects, TCGAcode, directory = outDataDir, upload = upload)
 
         # update MAEOinfo.csv
-        updateInfo(dataList = allObjects, cancer = cancer,
+        updateInfo(dataList = allObjects, cancer = TCGAcode,
             filePath = metadataFile)
-    }
 }
