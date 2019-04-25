@@ -11,6 +11,8 @@
 #' intermediary datasets
 #' @param force logical (default FALSE) whether to force redownload of
 #' resources
+#'
+#' @export
 saveRTCGAdata <- function(runDate = "20160128", diseaseCode,
     dataType = c("RNASeqGene", "miRNASeqGene", "RNASeq2GeneNorm", "CNASNP",
     "CNVSNP", "CNASeq", "CNACGH", "Methylation", "Mutation", "mRNAArray",
