@@ -72,7 +72,7 @@ loadData <- function(cancer, dataType, runDate, serialDir, mapDir, force) {
 
     # sampleMap - generate by getting all colnames
     sampMap <- saveMapData(dataFull, clinicalData, TCGAutils::TCGAbarcode,
-    cancer = cancer, force = force, directory = mapDir)
+        cancer = cancer, force = force, directory = mapDir)
 
     # ExperimentList
     MultiAssayExperiment:::.harmonize(

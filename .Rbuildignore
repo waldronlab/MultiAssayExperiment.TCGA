@@ -15,4 +15,4 @@
 ^inst/extdata/Clinical$
 ^inst/extdata/curatedSubtypes$
 ^inst/extdata/TCGA_Clinical_curation$
-
+^\.httr-oauth$

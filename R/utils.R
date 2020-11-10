@@ -18,13 +18,14 @@
         stop("provide data directory name from dataDirectories()")
     clinicalLoc <- dataDirectories()[[dataDir]]
     clinicalData <- readr::read_csv(
-        file.path(clinicalLoc, paste(runDate,
-                                     paste0(diseaseCode,
-                                            if (dataDir == "mergedClinical") {
-                                                "_merged.csv"
-                                            } else { ".csv" } ),
-                                     sep = "-")
-        ))
+        file.path(clinicalLoc, paste(runDate, paste0(diseaseCode,
+            if (dataDir == "mergedClinical") {
+                "_merged.csv"
+            } else {
+                ".csv"
+            }), sep = "-")
+        )
+    )
     clinicalData
 }
 
@@ -57,25 +58,25 @@
     subtypePath <- dataDirectories()[["subtypePath"]]
     subtypeFile <- BoxSubTypes[grepl(paste0(diseaseCode, ".csv"),
                                      basename(BoxSubTypes), fixed = TRUE)]
-    if (rdrop2::drop_get(subtypeFile, local_file =
-                         file.path(subtypePath, basename(subtypeFile)),
-                         overwrite = overwrite))
+    if (rdrop2::drop_get(
+        subtypeFile, local_file = file.path(subtypePath,
+        basename(subtypeFile)), overwrite = overwrite
+    ))
         message("download successful")
 }
 
 ## Download Clinical Curation File
 .getClinicalFile <- function(diseaseCode, overwrite=TRUE) {
     invisible(BoxClinicalCuration <-
-                  drop_dir("The Cancer Genome Atlas/TCGA_Clinical_Curation")[["path"]])
+        drop_dir("The Cancer Genome Atlas/TCGA_Clinical_Curation")[["path"]])
     clinicalCurationPath <- dataDirectories()[["clinicalCurationPath"]]
     clinicalFile <-
         BoxClinicalCuration[grepl(paste0("TCGA_Variable_Curation_",
-                                         diseaseCode, ".xlsx"),
-                                  basename(BoxClinicalCuration))]
-    if (rdrop2::drop_get(clinicalFile,
-                         local_file = file.path(clinicalCurationPath,
-                                                basename(clinicalFile)),
-                         overwrite = overwrite))
+            diseaseCode, ".xlsx"), basename(BoxClinicalCuration))]
+    if (rdrop2::drop_get(
+        clinicalFile, local_file = file.path(clinicalCurationPath,
+        basename(clinicalFile)), overwrite = overwrite
+    ))
         message("download successful")
 }
 
@@ -83,14 +84,14 @@
 ## Helper to read small df - subtypeMap
 .readSubtypeMap <- function(diseaseCode) {
     subtypeMapFile <- file.path(dataDirectories()[["curatedMaps"]],
-                                paste0(diseaseCode, "_subtypeMap.csv"))
+        paste0(diseaseCode, "_subtypeMap.csv"))
     readr::read_csv(subtypeMapFile)
 }
 
 ## Helper to read original subtype file
 .readSubtypeData <- function(diseaseCode) {
     subtypeDataFile <- file.path(dataDirectories()[["subtypePath"]],
-                                 paste0(diseaseCode, ".csv"))
+        paste0(diseaseCode, ".csv"))
     subtypeData <- readr::read_csv(subtypeDataFile)
     names(subtypeData) <- make.names(names(subtypeData))
     subtypeData
@@ -124,9 +125,7 @@
     extracl <- as.data.frame(t(extracl), stringsAsFactors = FALSE)
     colnames(extracl) <- tolower(colnames(extracl))
     rownames(extracl) <- toupper(rownames(extracl))
-    if (requireNamespace("readr", quietly = TRUE)) {
-        extracl <- readr::type_convert(extracl)
-    }
+    extracl <- readr::type_convert(extracl)
     extracl <- extracl[,!grepl("patient_barcode", colnames(extracl))]
     extracl
 }
@@ -187,9 +186,10 @@
             )
         )
     cur <- new.env()
-    data("curationAvailable", package = "MultiAssayExperiment.TCGA",
-        envir = cur)
-    curationAvailable <- cur[["curationAvailable"]]
+    data("diseaseCodes", package = "TCGAutils", envir = cur)
+    dxcodes <- cur[["diseaseCodes"]]
+    curationAvailable <-
+        dxcodes[dxcodes$SubtypeData == "Yes", "Study.Abbreviation"]
     if (diseaseCode %in% curationAvailable) {
         subtypeCuration <- .readSubtypeData(diseaseCode)
         BarcodeColName <- .findBarcodeCol(subtypeCuration)

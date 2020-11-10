@@ -1,6 +1,6 @@
 ## Script for removing NA from merged data
 source("R/getDiseaseCodes.R")
-source("data-raw/helpers.R")
+source("R/utils.R")
 
 TCGAcodes <- getDiseaseCodes()
 

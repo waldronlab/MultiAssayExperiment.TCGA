@@ -1,6 +1,7 @@
 ## Load libraries
 library(MultiAssayExperiment)
-library(MultiAssayExperiment.TCGA)
+devtools::load_all()
+# library(MultiAssayExperiment.TCGA)
 library(RTCGAToolbox)
 library(TCGAutils)
 library(devtools)
@@ -14,5 +15,11 @@ runDate <- "20160128"
 analyzeDate <- "20160128"
 directory <- "data/raw"
 
-for(code in TCGAcodes)
-    saveRTCGAdata(runDate, code, analyzeDate = analyzeDate, directory = directory)
+library(BiocParallel)
+registered()
+params <- MulticoreParam(
+    workers = 17, stop.on.error = FALSE, progressbar = TRUE
+)
+bplapply(X = TCGAcodes, FUN = function(x) {
+    saveRTCGAdata(runDate, x, analyzeDate = analyzeDate, directory = directory, force = TRUE)
+}, BPPARAM = params)

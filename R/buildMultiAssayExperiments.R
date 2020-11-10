@@ -5,13 +5,18 @@
 #' and return documented metadata
 #'
 #' @inheritParams loadData
-#' @param TCGAcodes A character vector of TCGA cancer codes
+#'
+#' @param TCGAcodes character(1) A single TCGA cancer code
+#'
 #' @param analyzeDate The GDAC Firehose analysis run date, only '20160128' is
 #' supported
+#'
+#' @param version character(1) A version string for versioning data runs
+#' (such as "1.0.0")
+#'
 #' @param outDataDir The single string indicating piecewise data product save
 #' location
-#' @param metadataFile A single string pointing to the CSV file in which to
-#' save metadata
+#'
 #' @param upload logical (default TRUE) Whether to save data products to the
 #' cloud infrastructure, namely AWS S3 ExperimentHub bucket
 #'
@@ -19,15 +24,18 @@
 buildMultiAssayExperiments <-
     function(
     TCGAcode,
-    dataType = c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene", "CNASNP",
-        "CNVSNP", "CNASeq", "CNACGH", "Methylation", "mRNAArray", "miRNAArray",
-        "RPPAArray", "Mutation", "GISTIC"),
-    runDate = "20160128", analyzeDate = "20160128",
+    dataType = c("RNASeqGene", "RNASeq2Gene", "RNASeq2GeneNorm",
+        "miRNASeqGene", "CNASNP", "CNVSNP", "CNASeq", "CNACGH", "Methylation",
+        "mRNAArray", "miRNAArray", "RPPAArray", "Mutation", "GISTIC"),
+    runDate = "20160128", analyzeDate = "20160128", version = NULL,
     serialDir = "data/raw", outDataDir = "data/bits", mapDir = "data/maps",
-    metadataFile = "MAEOinfo.csv", upload = TRUE, force = FALSE)
+    upload = TRUE, force = FALSE)
 {
+    if (!is.null(version))
+        outDataDir <- file.path(outDataDir, paste0("v", version))
+
     if (!dir.exists(outDataDir))
-        dir.create(outDataDir)
+        dir.create(outDataDir, recursive = TRUE)
 
     if (missing(TCGAcode))
         stop("Provide a valid and available TCGA disease code: 'TCGAcode'")
@@ -37,10 +45,10 @@ buildMultiAssayExperiments <-
             "\n######\n")
 
     ## slotNames in FirehoseData RTCGAToolbox class
-    targets <- c("RNASeqGene", "RNASeq2GeneNorm", "miRNASeqGene",
-        "CNASNP", "CNVSNP", "CNASeq", "CNACGH", "Methylation",
-        "mRNAArray", "miRNAArray", "RPPAArray", "Mutation",
-        "GISTIC")
+    targets <- c("RNASeqGene", "RNASeq2Gene", "RNASeq2GeneNorm",
+        "miRNASeqGene", "CNASNP", "CNVSNP", "CNASeq", "CNACGH",
+        "Methylation", "mRNAArray", "miRNAArray", "RPPAArray",
+        "Mutation", "GISTIC")
 
     dataType <- match.arg(dataType, targets, several.ok = TRUE)
     names(dataType) <- dataType
@@ -74,6 +82,7 @@ buildMultiAssayExperiments <-
     saveNupload(allObjects, TCGAcode, directory = outDataDir, upload = upload)
 
     # update MAEOinfo.csv
-    updateInfo(dataList = allObjects, cancer = TCGAcode,
-        filePath = metadataFile)
+    updateInfo(
+        dataList = allObjects, cancer = TCGAcode, folderPath = outDataDir
+    )
 }

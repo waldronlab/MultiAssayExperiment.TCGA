@@ -1,4 +1,6 @@
 cancerCode,assay,class,nrow,ncol
+LAML,LAML_GISTIC-20160128,RangedSummarizedExperiment,16,191
+SKCM,SKCM_GISTIC-20160128,RangedSummarizedExperiment,53,367
 ACC,ACC_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,79
 ACC,ACC_miRNASeqGene-20160128,SummarizedExperiment,1046,80
 ACC,ACC_CNASNP-20160128,RaggedExperiment,79861,180
@@ -158,7 +160,6 @@ KIRP,KIRP_Mutation-20160128,RaggedExperiment,15585,161
 KIRP,KIRP_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,288
 KIRP,KIRP_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,288
 KIRP,KIRP_GISTIC_Peaks-20160128,RangedSummarizedExperiment,28,288
-LAML,LAML_GISTIC-20160128,RangedSummarizedExperiment,16,191
 LAML,LAML_RNASeqGene-20160128,SummarizedExperiment,19990,179
 LAML,LAML_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,173
 LAML,LAML_CNASNP-20160128,RaggedExperiment,874897,392
@@ -305,7 +306,6 @@ SARC,SARC_Mutation-20160128,RaggedExperiment,20376,247
 SARC,SARC_GISTIC_AllByGene-20160128,SummarizedExperiment,24776,257
 SARC,SARC_GISTIC_ThresholdedByGene-20160128,SummarizedExperiment,24776,257
 SARC,SARC_GISTIC_Peaks-20160128,RangedSummarizedExperiment,64,257
-SKCM,SKCM_GISTIC-20160128,RangedSummarizedExperiment,53,367
 SKCM,SKCM_RNASeq2GeneNorm-20160128,SummarizedExperiment,20501,473
 SKCM,SKCM_miRNASeqGene-20160128,SummarizedExperiment,1046,452
 SKCM,SKCM_CNASNP-20160128,RaggedExperiment,452114,938

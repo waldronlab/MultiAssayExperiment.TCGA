@@ -1,5 +1,5 @@
 ## Code to create "enhancedClinical" data
-source("data-raw/helpers.R")
+source("R/utils.R")
 source("R/getDiseaseCodes.R")
 TCGAcodes <- getDiseaseCodes()
 
@@ -9,13 +9,20 @@ writeClinicalData <- function(diseaseCode, runDate = "20160128", force=FALSE) {
     fileName <- file.path(enhancedPath,
                           paste(runDate, paste0(diseaseCode, ".csv"), sep = "-"))
     if (!file.exists(fileName) || force) {
-    dataset <- .mergeClinicalData(diseaseCode, runDate = runDate)
-    readr::write_csv(dataset, path = fileName)
-    message(dataset, " with extra columns created")
-    rm(dataset)
+        dataset <- .mergeClinicalData(diseaseCode, runDate = runDate)
+        readr::write_csv(dataset, file = fileName)
+        message(diseaseCode, " with extra columns created")
+        rm(dataset); gc()
     }
     message("\n", fileName, " available")
 }
 
-for (code in TCGAcodes)
-    writeClinicalData(code, force = TRUE)
+# bpm <- MulticoreParam(workers = 36, stop.on.error = FALSE, progressbar = TRUE)
+# writes <- BiocParallel::bplapply(
+#     setNames(nm = TCGAcodes), writeClinicalData, force = TRUE, BPPARAM = bpm
+# )
+
+for (i in TCGAcodes) {
+    writeClinicalData(i, force = TRUE)
+    gc()
+}

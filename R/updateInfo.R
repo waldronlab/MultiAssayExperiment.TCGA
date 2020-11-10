@@ -29,29 +29,21 @@
 #'
 #' @param dataList A List of experiment data for a MultiAssayExperiment
 #' @param cancer A single string indicating the TCGA cancer code
-#' @param filePath A single string pointing to the file where metadata should
-#' be saved
+#' @param folderPath A single string pointing to the folder where metadata
+#' information for each cancer is to be saved
 #'
 #' @return Function saves a file in filePath
 #'
 #' @export
 updateInfo <-
-function(dataList, cancer, filePath = "MAEOinfo.csv")
+    function(dataList, cancer, folderPath)
 {
+    metafile <- file.path(folderPath, cancer, "metadata.csv")
     MAEOinfo <- .getElementMetaData(dataList, cancer)
-    if (file.exists(filePath)) {
-        message("File found: ", filePath)
-        storedInfo <- readr::read_csv(filePath)
 
-        regLines <- storedInfo[["cancerCode"]] %in% cancer &
-            storedInfo[["assay"]] %in% names(dataList)
+    if (file.exists(metafile))
+        file.remove(metafile)
 
-        if (any(regLines))
-            storedInfo <- storedInfo[!regLines, ]
-
-        MAEOinfo <- rbind.data.frame(storedInfo, MAEOinfo,
-            stringsAsFactors = FALSE)
-    }
-    message("Writing table...")
-    readr::write_csv(MAEOinfo, path = filePath)
+    message("Writing to : ", metafile)
+    readr::write_csv(MAEOinfo, file = metafile)
 }

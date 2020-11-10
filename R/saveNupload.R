@@ -16,13 +16,24 @@
 #' ExperimentHub for it to work.
 #'
 #' @inheritParams updateInfo
+#'
+#' @inheritParams buildMultiAssayExperiments
+#'
 #' @param directory The file location for saving serialized data pieces
+#'
+#' @param upload logical(1) Whether to upload the data to the AWS S3 bucket
+#'
+#' @param fileExt character(1) The character pattern for matching files in
+#' the directory location for upload
 #'
 #' @return Function saves and uploads data to the ExperimentHub AWS S3 bucket
 #'
 #' @export
-saveNupload <- function(dataList, cancer, directory = "data/bits",
-    upload = TRUE, fileExt = ".rda") {
+saveNupload <-
+    function(
+        dataList, cancer, directory, version, upload, fileExt = ".rda"
+    )
+{
     cancerSubdir <- file.path(directory, cancer)
     if (!dir.exists(cancerSubdir))
         dir.create(cancerSubdir, recursive = TRUE)
@@ -37,9 +48,17 @@ saveNupload <- function(dataList, cancer, directory = "data/bits",
             fnames <- file.path(cancerSubdir, paste0(objname, fileExt))
             save(list = objname, file = fnames, compress = "bzip2")
         }
+
+        if (missing(version))
+            stop("Provide a valid version folder for current run")
+        else
+            version <- paste0("v", version)
+
         if (upload)
-            AnnotationHubData:::upload_to_S3(file = fnames,
+            AnnotationHubData:::upload_to_S3(
+                file = fnames,
                 remotename = basename(fnames),
-                bucket = "experimenthub/curatedTCGAData")
+                bucket = paste0("experimenthub/curatedTCGAData", version)
+            )
     }
 }

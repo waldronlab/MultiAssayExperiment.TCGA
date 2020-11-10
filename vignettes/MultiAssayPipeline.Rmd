@@ -9,6 +9,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 ```
 
+```{r}
+library(MultiAssayExperiment.TCGA)
+```
 
 # Create all directories needed in repository
 
@@ -16,10 +19,10 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 dataDirectories(create = TRUE)
 ```
 
-
 ## Download all available resources
 
 ```{r}
+source("R/dataDirectories.R")
 source("data-raw/getClinicalData.R")
 source("data-raw/downloadExtraClinical.R")
 ```
@@ -47,10 +50,26 @@ source("data-raw/mergeSubtypeCuration.R")
 source("data-raw/cleanMerged.R")
 ```
 
+```{r}
+source("R/saveRTCGAdata.R")
+```
+
 ## Build and upload MultiAssayExperiment data
 
 ```{r}
-TCGAcodes <- "ACC"
-buildMultiAssayExperiments(TCGAcodes)
+setwd("..")
+devtools::load_all()
+TCGAcodes <- getDiseaseCodes()
+library(BiocParallel)
+registered()
+params <- MulticoreParam(
+    workers = 33, stop.on.error = FALSE, progressbar = TRUE
+)
+res <- bptry({
+    bplapply(X = TCGAcodes, FUN = function(code) {
+        devtools::load_all("~/gh/MultiAssayExperiment.TCGA")
+        buildMultiAssayExperiments(code, upload = FALSE, version = "2.0.0")
+    }, BPPARAM = params)
+})
 ```
 
