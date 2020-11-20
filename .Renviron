@@ -1,0 +1,8 @@
+## settings used for uploading data to the experimenthub bucket
+## users should make sure they have upload access
+## check using aws s3 ls s3://experimenthub/curatedTCGAData/
+
+AWS_DEFAULT_REGION="us-east-1"
+AWS_ACCESS_KEY_ID=ALPHANUMERICKEY
+AWS_SECRET_ACCESS_KEY=alphanumerickeywithsymbols
+
