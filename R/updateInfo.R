@@ -1,4 +1,4 @@
-.getElementMetaData <- function(dataElementList, cancer) {
+.getElementMetaData <- function(dataElementList, cancer, version) {
     colnames <- c("cancerCode", "assay", "class", "nrow", "ncol")
     mustNames <- c("colData", "sampleMap", "metadata")
     dataNames <- names(dataElementList)
@@ -28,16 +28,24 @@
 #' to document the metadata in 'filePath'
 #'
 #' @param dataList A List of experiment data for a MultiAssayExperiment
+#'
 #' @param cancer A single string indicating the TCGA cancer code
+#'
 #' @param folderPath A single string pointing to the folder where metadata
 #' information for each cancer is to be saved
+#'
+#' @param version character(1) A version string for versioning data runs
+#' (such as "1.0.0")
 #'
 #' @return Function saves a file in filePath
 #'
 #' @export
 updateInfo <-
-    function(dataList, cancer, folderPath)
+    function(dataList, cancer, folderPath, version)
 {
+    if (!missing(version))
+        folderPath <- file.path(folderPath, paste0("v", version))
+
     metafile <- file.path(folderPath, cancer, "metadata.csv")
     MAEOinfo <- .getElementMetaData(dataList, cancer)
 

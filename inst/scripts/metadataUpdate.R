@@ -1,16 +1,7 @@
 setwd("../..")
-## Load libraries
-source("R/loadLibraries.R")
-## Get TCGA cancer codes
-source("R/getDiseaseCodes.R")
-## Source updateInfo function
-source("R/updateInfo.R")
-
+devtools::load_all()
 TCGAcodes <- getDiseaseCodes()
 
-header <- cbind.data.frame("cancerCode", "assay", "class", "nrow", "ncol")
-write.table(header, file = "MAEOinfo.csv", sep = ",",
-            row.names = FALSE, col.names = FALSE)
 
 lapply(TCGAcodes, function(cancer) {
     maeoFile <- paste0(tolower(cancer), "MAEO.rds")

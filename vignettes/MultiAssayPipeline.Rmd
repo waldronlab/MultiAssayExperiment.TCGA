@@ -68,7 +68,7 @@ params <- MulticoreParam(
 res <- bptry({
     bplapply(X = TCGAcodes, FUN = function(code) {
         devtools::load_all("~/gh/MultiAssayExperiment.TCGA")
-        buildMultiAssayExperiments(code, upload = FALSE, version = "2.0.0")
+        buildMultiAssayExperiment(code, upload = TRUE, version = "2.0.0")
     }, BPPARAM = params)
 })
 ```

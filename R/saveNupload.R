@@ -24,7 +24,8 @@
 #' @param upload logical(1) Whether to upload the data to the AWS S3 bucket
 #'
 #' @param fileExt character(1) The character pattern for matching files in
-#' the directory location for upload
+#' the directory location for upload (excludes 'Methylation' datasets which
+#' are handled separately)
 #'
 #' @return Function saves and uploads data to the ExperimentHub AWS S3 bucket
 #'
@@ -34,11 +35,19 @@ saveNupload <-
         dataList, cancer, directory, version, upload, fileExt = ".rda"
     )
 {
+    if (missing(version))
+        stop("Provide a valid version folder for current run")
+
+    version <- paste0("v", version)
+    directory <- file.path(directory, version)
     cancerSubdir <- file.path(directory, cancer)
+
     if (!dir.exists(cancerSubdir))
         dir.create(cancerSubdir, recursive = TRUE)
+
     dataNames <- names(dataList)
     stopifnot(!is.null(dataNames))
+
     for (objname in dataNames) {
         assign(x = objname, value = dataList[[objname]])
         if (grepl("Methyl", objname, ignore.case = TRUE)) {
@@ -49,16 +58,16 @@ saveNupload <-
             save(list = objname, file = fnames, compress = "bzip2")
         }
 
-        if (missing(version))
-            stop("Provide a valid version folder for current run")
-        else
-            version <- paste0("v", version)
-
         if (upload)
             AnnotationHubData:::upload_to_S3(
                 file = fnames,
                 remotename = basename(fnames),
-                bucket = paste0("experimenthub/curatedTCGAData", version)
+                bucket = file.path("experimenthub/curatedTCGAData", version)
             )
     }
 }
+
+## TODO:
+## compare sync'd resources with created ones and only send off only those
+## that are new based on md5sum
+

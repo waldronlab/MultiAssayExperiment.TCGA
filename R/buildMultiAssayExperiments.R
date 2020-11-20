@@ -17,26 +17,20 @@
 #' @param outDataDir The single string indicating piecewise data product save
 #' location
 #'
-#' @param upload logical (default TRUE) Whether to save data products to the
+#' @param upload logical (default FALSE) Whether to save data products to the
 #' cloud infrastructure, namely AWS S3 ExperimentHub bucket
 #'
 #' @export
-buildMultiAssayExperiments <-
+buildMultiAssayExperiment <-
     function(
     TCGAcode,
     dataType = c("RNASeqGene", "RNASeq2Gene", "RNASeq2GeneNorm",
         "miRNASeqGene", "CNASNP", "CNVSNP", "CNASeq", "CNACGH", "Methylation",
         "mRNAArray", "miRNAArray", "RPPAArray", "Mutation", "GISTIC"),
-    runDate = "20160128", analyzeDate = "20160128", version = NULL,
+    runDate = "20160128", analyzeDate = "20160128", version,
     serialDir = "data/raw", outDataDir = "data/bits", mapDir = "data/maps",
-    upload = TRUE, force = FALSE)
+    upload = FALSE, force = FALSE)
 {
-    if (!is.null(version))
-        outDataDir <- file.path(outDataDir, paste0("v", version))
-
-    if (!dir.exists(outDataDir))
-        dir.create(outDataDir, recursive = TRUE)
-
     if (missing(TCGAcode))
         stop("Provide a valid and available TCGA disease code: 'TCGAcode'")
 
@@ -79,10 +73,14 @@ buildMultiAssayExperiments <-
         allObjects <- c(as(dataFull[["experiments"]], "list"), mustData)
 
     # save rda files and upload them to S3
-    saveNupload(allObjects, TCGAcode, directory = outDataDir, upload = upload)
+    saveNupload(
+        dataList = allObjects, cancer = TCGAcode, directory = outDataDir,
+        version = version, upload = upload
+    )
 
     # update MAEOinfo.csv
     updateInfo(
-        dataList = allObjects, cancer = TCGAcode, folderPath = outDataDir
+        dataList = allObjects, cancer = TCGAcode,
+        folderPath = outDataDir, version = version
     )
 }
