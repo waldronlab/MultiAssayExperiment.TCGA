@@ -1,13 +1,11 @@
-setwd("../..")
-devtools::load_all()
-TCGAcodes <- getDiseaseCodes()
+message(getwd())
+repodir <- file.path(Sys.getenv("HOME"), "gh/MultiAssayExperiment.TCGA")
+setwd(repodir)
 
+stopifnot(identical(getwd(), repodir))
 
-lapply(TCGAcodes, function(cancer) {
-    maeoFile <- paste0(tolower(cancer), "MAEO.rds")
-    location <- "data/built"
-    builtMAEO <- file.path(location, maeoFile)
-    MultiAssay <- readRDS(builtMAEO)
-    updateInfo(MultiAssay, cancer)
-})
+metas <- list.files(
+    "data/bits/v2.0.1", pattern = "metadata.csv", recursive = TRUE, full.names = TRUE
+)
 
+do.call(rbind, lapply(metas, read.csv))

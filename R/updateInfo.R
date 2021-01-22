@@ -24,8 +24,8 @@
 
 #' Update metadata from data bits
 #'
-#' This functoin takes a list of data objects, cancer code, and a file path
-#' to document the metadata in 'filePath'
+#' This function takes a list of data objects, cancer code, file path, and
+#' version to document the metadata in 'filePath'
 #'
 #' @param dataList A List of experiment data for a MultiAssayExperiment
 #'
@@ -37,7 +37,7 @@
 #' @param version character(1) A version string for versioning data runs
 #' (such as "1.0.0")
 #'
-#' @return Function saves a file in filePath
+#' @return A CSV file saved in the data folder
 #'
 #' @export
 updateInfo <-

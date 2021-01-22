@@ -3,7 +3,7 @@ message(getwd())
 setwd("..")
 stopifnot(identical(getwd(),
     paste0("/home/", Sys.getenv("USER"),
-        "/Documents/github/MultiAssayExperiment-TCGA")))
+        "/Documents/gh/MultiAssayExperiment-TCGA")))
 
 # Update RTCGAToolbox objects
 library(TCGAutils)

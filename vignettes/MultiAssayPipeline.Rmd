@@ -57,7 +57,7 @@ source("R/saveRTCGAdata.R")
 ## Build and upload MultiAssayExperiment data
 
 ```{r}
-setwd("..")
+setwd("~/gh/MultiAssayExperiment.TCGA")
 devtools::load_all()
 TCGAcodes <- getDiseaseCodes()
 library(BiocParallel)
@@ -68,8 +68,29 @@ params <- MulticoreParam(
 res <- bptry({
     bplapply(X = TCGAcodes, FUN = function(code) {
         devtools::load_all("~/gh/MultiAssayExperiment.TCGA")
-        buildMultiAssayExperiment(code, upload = TRUE, version = "2.0.0")
+        buildMultiAssayExperiment(
+            code, upload = TRUE, version = "2.0.1", update = TRUE
+        )
     }, BPPARAM = params)
 })
 ```
 
+```{r,eval=FALSE}
+setwd("~/gh/MultiAssayExperiment.TCGA")
+devtools::load_all()
+library(BiocParallel)
+registered()
+params <- MulticoreParam(
+    workers = 5, stop.on.error = FALSE, progressbar = TRUE
+)
+## currently failing
+restCodes <- c("KIRC", "CHOL", "PAAD", "THCA", "UCS")
+retest <- bptry({
+    bplapply(X = restCodes, FUN = function(code) {
+        devtools::load_all("~/gh/MultiAssayExperiment.TCGA")
+        buildMultiAssayExperiment(
+            code, upload = TRUE, version = "2.0.1", update = TRUE
+        )
+    }, BPPARAM = params)
+})
+```

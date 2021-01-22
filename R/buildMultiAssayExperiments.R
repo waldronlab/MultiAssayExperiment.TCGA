@@ -20,6 +20,9 @@
 #' @param upload logical (default FALSE) Whether to save data products to the
 #' cloud infrastructure, namely AWS S3 ExperimentHub bucket
 #'
+#' @param update logical (default TRUE) Whether to update the metadata data
+#' from the data pooled by the function
+#'
 #' @export
 buildMultiAssayExperiment <-
     function(
@@ -29,7 +32,7 @@ buildMultiAssayExperiment <-
         "mRNAArray", "miRNAArray", "RPPAArray", "Mutation", "GISTIC"),
     runDate = "20160128", analyzeDate = "20160128", version,
     serialDir = "data/raw", outDataDir = "data/bits", mapDir = "data/maps",
-    upload = FALSE, force = FALSE)
+    upload = FALSE, update = TRUE, force = FALSE)
 {
     if (missing(TCGAcode))
         stop("Provide a valid and available TCGA disease code: 'TCGAcode'")
@@ -79,8 +82,10 @@ buildMultiAssayExperiment <-
     )
 
     # update MAEOinfo.csv
-    updateInfo(
-        dataList = allObjects, cancer = TCGAcode,
-        folderPath = outDataDir, version = version
-    )
+    if (update)
+        updateInfo(
+            dataList = allObjects, cancer = TCGAcode,
+            folderPath = outDataDir, version = version
+        )
+    allObjects
 }
