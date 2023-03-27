@@ -13,9 +13,12 @@ https://github.com/waldronlab/MultiAssayExperiment.TCGA
 \usage{
 data("curationAvailable")
 }
+\value{
+A named `character` vector
+}
 \description{
-A character vector indication what TCGA cancer codes have
-  associated curation data obtained from publications.
+A character vector indication what TCGA cancer codes have associated curation
+data obtained from publications.
 }
 \examples{
 
@@ -25,4 +28,4 @@ data("curationAvailable")
 \author{
 Marcel Ramos <marcel.ramos@roswellpark.org>
 }
-\keyword{data}
+\keyword{datasets}
