@@ -68,7 +68,8 @@ buildMultiAssayExperiment <-
     # builddate
     buildDate <- Sys.time()
     # dataLinks
-    dataLinks <- getDataLinks(TCGAcode, data_date = runDate, dataType = targets)
+    dataLinks <-
+        getDataLinks(TCGAcode, data_date = runDate, dataTypes = targets)
     # metadata
     metadata <- list(
         buildDate, TCGAcode, runDate, analyzeDate, dataLinks,
