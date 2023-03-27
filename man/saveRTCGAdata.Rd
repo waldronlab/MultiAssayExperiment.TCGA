@@ -4,11 +4,17 @@
 \alias{saveRTCGAdata}
 \title{A function to save data from RTCGAToolbox}
 \usage{
-saveRTCGAdata(runDate = "20160128", diseaseCode,
-  dataType = c("RNASeqGene", "miRNASeqGene", "RNASeq2GeneNorm", "CNASNP",
-  "CNVSNP", "CNASeq", "CNACGH", "Methylation", "Mutation", "mRNAArray",
-  "miRNAArray", "RPPAArray", "GISTIC"), analyzeDate = "20160128",
-  directory, force = FALSE)
+saveRTCGAdata(
+  runDate = "20160128",
+  diseaseCode,
+  dataType = c("RNASeqGene", "RNASeq2Gene", "miRNASeqGene", "RNASeq2GeneNorm", "CNASNP",
+    "CNVSNP", "CNASeq", "CNACGH", "Methylation", "Mutation", "mRNAArray", "miRNAArray",
+    "RPPAArray", "GISTIC"),
+  analyzeDate = "20160128",
+  directory,
+  rawDir = "tmp",
+  force = FALSE
+)
 }
 \arguments{
 \item{runDate}{The GDAC Firehose run date, only '20160128' is available}
@@ -19,6 +25,9 @@ saveRTCGAdata(runDate = "20160128", diseaseCode,
 
 \item{analyzeDate}{The GDAC Firehose analyze run date, only '20160128' is
 available}
+
+\item{rawDir}{Directory location where to save data from the
+`RTCGAToolbox::getFirehoseData` function}
 
 \item{force}{logical (default FALSE) whether to force redownload of
 resources}
