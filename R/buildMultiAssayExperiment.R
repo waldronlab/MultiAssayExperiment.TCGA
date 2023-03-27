@@ -59,11 +59,15 @@ buildMultiAssayExperiment <-
         force = force)
     # builddate
     buildDate <- Sys.time()
+    # dataLinks
+    dataLinks <- getDataLinks(TCGAcode, data_date = runDate, dataType = targets)
     # metadata
-    metadata <- list(buildDate, TCGAcode, runDate, analyzeDate,
-        devtools::session_info())
+    metadata <- list(
+        buildDate, TCGAcode, runDate, analyzeDate, dataLinks,
+        devtools::session_info()
+    )
     names(metadata) <- c("buildDate", "cancerCode", "runDate",
-        "analyzeDate", "session_info")
+        "analyzeDate", "dataLinks", "session_info")
 
     mustData <- list(dataFull[["colData"]], dataFull[["sampleMap"]],
         metadata)
