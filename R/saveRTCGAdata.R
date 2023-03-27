@@ -34,17 +34,18 @@ saveRTCGAdata <- function(runDate = "20160128", diseaseCode,
             gistic <- grepl("^GIST", dataType, ignore.case = TRUE)
             if (gistic) {
                 dateType <- "gistic2Date"
-                args <- list(diseaseCode, analyzeDate, TRUE)
-                names(args) <- c("dataset", dateType, dataType)
+                args <- list(analyzeDate, TRUE)
+                names(args) <- c(dateType, dataType)
             } else {
                 dateType <- "runDate"
-                args <- list(diseaseCode, runDate, TRUE)
-                names(args) <- c("dataset", dateType, dataType)
+                args <- list(runDate, TRUE)
+                names(args) <- c(dateType, dataType)
             }
                 dataPiece <- do.call(
                     RTCGAToolbox::getFirehoseData,
                     args = c(
                         list(
+                            dataset = diseaseCode,
                             clinical = FALSE, destdir = rawDir,
                             forceDownload = force, fileSizeLimit = Inf
                         ),
