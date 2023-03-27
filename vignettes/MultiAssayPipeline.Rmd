@@ -9,8 +9,12 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 ```
 
-```{r}
+```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
 library(MultiAssayExperiment.TCGA)
+library(BiocParallel)
+params <- MulticoreParam(
+    workers = 33, stop.on.error = FALSE, progressbar = TRUE
+)
 ```
 
 # Create all directories needed in repository
@@ -22,9 +26,9 @@ dataDirectories(create = TRUE)
 ## Download all available resources
 
 ```{r}
-source("R/dataDirectories.R")
-source("data-raw/getClinicalData.R")
-source("data-raw/downloadExtraClinical.R")
+TCGAcodes <- getDiseaseCodes()
+getClinicalData(TCGAcodes = TCGAcodes, nworkers = 34)
+downloadExtraClinical(TCGAcodes = TCGAcodes)
 ```
 
 ## Download SubType data from DropBox
@@ -35,41 +39,37 @@ ALTERNATIVELY: You can download files manually and put them in
 `inst/extdata/allsubtypes`
 
 ```{r}
-source("data-raw/downloadSubtypeDrop.R")
+## Authenticate to Dropbox API at FIRST RUN
+# drop_auth()
+# drop_acc() %>% select(uid, display_name, email_verified, quota_info.quota)
+
+downloadSubtypeDrop(TCGAcodes = TCGAcodes)
 ```
 
 ## Merge curated data to clinical data
 
 ```{r}
-source("data-raw/mergeSubtypeCuration.R")
+mergeSubtypeCuration(TCGAcodes = TCGAcodes)
 ```
 
 ## Clean merged data files
 
 ```{r}
-source("data-raw/cleanMerged.R")
-```
-
-```{r}
-source("R/saveRTCGAdata.R")
+cleanMerged(TCGAcodes = TCGAcodes, runDate = "20160128", nworkers = 34)
 ```
 
 ## Build and upload MultiAssayExperiment data
 
 ```{r}
 setwd("~/gh/MultiAssayExperiment.TCGA")
-devtools::load_all()
-TCGAcodes <- getDiseaseCodes()
-library(BiocParallel)
-registered()
-params <- MulticoreParam(
-    workers = 33, stop.on.error = FALSE, progressbar = TRUE
-)
 res <- bptry({
     bplapply(X = TCGAcodes, FUN = function(code) {
-        devtools::load_all("~/gh/MultiAssayExperiment.TCGA")
         buildMultiAssayExperiment(
-            code, upload = TRUE, version = "2.0.1", update = TRUE
+            code,
+            dataType = "miRNASeqGene",
+            version = "2.1.0",
+            upload = TRUE,
+            update = TRUE
         )
     }, BPPARAM = params)
 })
