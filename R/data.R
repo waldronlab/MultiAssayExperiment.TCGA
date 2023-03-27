@@ -15,5 +15,4 @@
 #'
 #' data("curationAvailable")
 #'
-#' @export
 "curationAvailable"
