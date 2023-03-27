@@ -63,35 +63,17 @@ cleanMerged(TCGAcodes = TCGAcodes, runDate = "20160128", nworkers = 34)
 ```{r}
 setwd("~/gh/MultiAssayExperiment.TCGA")
 res <- bptry({
-    bplapply(X = TCGAcodes, FUN = function(code) {
+    bplapply(X = TCGAcodes, FUN = function(cancer) {
         buildMultiAssayExperiment(
-            code,
+            cancer,
             dataType = "miRNASeqGene",
             version = "2.1.0",
             upload = FALSE,
             update = TRUE,
-            force = TRUE
+            force = TRUE,
+            include = "metadata"
         )
     }, BPPARAM = params)
 })
 ```
 
-```{r,eval=FALSE}
-setwd("~/gh/MultiAssayExperiment.TCGA")
-devtools::load_all()
-library(BiocParallel)
-registered()
-params <- MulticoreParam(
-    workers = 5, stop.on.error = FALSE, progressbar = TRUE
-)
-## currently failing
-restCodes <- c("KIRC", "CHOL", "PAAD", "THCA", "UCS")
-retest <- bptry({
-    bplapply(X = restCodes, FUN = function(code) {
-        devtools::load_all("~/gh/MultiAssayExperiment.TCGA")
-        buildMultiAssayExperiment(
-            code, upload = TRUE, version = "2.0.1", update = TRUE
-        )
-    }, BPPARAM = params)
-})
-```
