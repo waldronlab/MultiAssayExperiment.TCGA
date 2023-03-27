@@ -1,5 +1,7 @@
-saveMapData <- function(data_list, clinical_frame, FUN = TCGAutils::TCGAbarcode,
-    cancer, force, directory) {
+saveMapData <- function(
+    data_list, clinical_frame, FUN = TCGAutils::TCGAbarcode,
+    cancer, force, directory
+) {
     sampMap <- generateMap(data_list, clinical_frame, FUN)
     splitMap <- splitAsList(sampMap, sampMap[["assay"]])
     mapDir <- file.path(directory, cancer)
