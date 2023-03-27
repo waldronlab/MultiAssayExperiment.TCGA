@@ -4,8 +4,7 @@
 \alias{saveNupload}
 \title{A function to save serialized objects and upload to ExperimentHub}
 \usage{
-saveNupload(dataList, cancer, directory = "data/bits", upload = TRUE,
-  fileExt = ".rda")
+saveNupload(dataList, cancer, directory, version, upload, fileExt = ".rda")
 }
 \arguments{
 \item{dataList}{A List of experiment data for a MultiAssayExperiment}
@@ -13,6 +12,15 @@ saveNupload(dataList, cancer, directory = "data/bits", upload = TRUE,
 \item{cancer}{A single string indicating the TCGA cancer code}
 
 \item{directory}{The file location for saving serialized data pieces}
+
+\item{version}{character(1) A version string for versioning data runs
+(such as "1.0.0")}
+
+\item{upload}{logical(1) Whether to upload the data to the AWS S3 bucket}
+
+\item{fileExt}{character(1) The character pattern for matching files in
+the directory location for upload (excludes 'Methylation' datasets which
+are handled separately)}
 }
 \value{
 Function saves and uploads data to the ExperimentHub AWS S3 bucket

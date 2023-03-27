@@ -4,20 +4,23 @@
 \alias{updateInfo}
 \title{Update metadata from data bits}
 \usage{
-updateInfo(dataList, cancer, filePath = "MAEOinfo.csv")
+updateInfo(dataList, cancer, folderPath, version)
 }
 \arguments{
 \item{dataList}{A List of experiment data for a MultiAssayExperiment}
 
 \item{cancer}{A single string indicating the TCGA cancer code}
 
-\item{filePath}{A single string pointing to the file where metadata should
-be saved}
+\item{folderPath}{A single string pointing to the folder where metadata
+information for each cancer is to be saved}
+
+\item{version}{character(1) A version string for versioning data runs
+(such as "1.0.0")}
 }
 \value{
-Function saves a file in filePath
+A CSV file saved in the data folder
 }
 \description{
-This functoin takes a list of data objects, cancer code, and a file path
-to document the metadata in 'filePath'
+This function takes a list of data objects, cancer code, file path, and
+version to document the metadata in 'filePath'
 }
