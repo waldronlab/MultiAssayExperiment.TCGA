@@ -1,7 +1,5 @@
 ## Code to check file metadata
 ## (including dimensions and proportion of cells missing)
-source("R/getDiseaseCodes.R")
-source("R/dataDirectories.R")
 TCGAcodes <- getDiseaseCodes()
 dirList <- dataDirectories()
 

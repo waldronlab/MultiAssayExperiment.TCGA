@@ -44,8 +44,10 @@ saveRTCGAdata <- function(runDate = "20160128", diseaseCode,
                 dataPiece <- do.call(
                     RTCGAToolbox::getFirehoseData,
                     args = c(
-                        list(clinical = FALSE, destdir = rawDir,
-                            fileSizeLimit = Inf),
+                        list(
+                            clinical = FALSE, destdir = rawDir,
+                            forceDownload = TRUE, fileSizeLimit = Inf
+                        ),
                         args
                     )
                 )

@@ -214,4 +214,3 @@
     fileNames <- gsub("\\.rd[as]", "", basename(fileNames))
     strsplit(fileNames, splitDelim) %>% vapply(., `[`, character(1L), position)
 }
-
