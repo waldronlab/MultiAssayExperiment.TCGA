@@ -23,6 +23,10 @@
 #' @param update logical (default TRUE) Whether to update the metadata data
 #' from the data pooled by the function
 #'
+#' @param include character() A vector of metadata names to include. It must
+#' include any or all of "colData", "sampleMap", or "metadata". This allows
+#' to only publish changed data.
+#'
 #' @export
 buildMultiAssayExperiment <-
     function(
@@ -32,8 +36,9 @@ buildMultiAssayExperiment <-
         "mRNAArray", "miRNAArray", "RPPAArray", "Mutation", "GISTIC"),
     runDate = "20160128", analyzeDate = "20160128", version,
     serialDir = "data/raw", outDataDir = "data/bits", mapDir = "data/maps",
-    upload = FALSE, update = TRUE, force = FALSE)
-{
+    upload = FALSE, update = TRUE, force = FALSE,
+    include = c("colData", "sampleMap", "metadata")
+) {
     if (missing(TCGAcode))
         stop("Provide a valid and available TCGA disease code: 'TCGAcode'")
 
@@ -46,9 +51,12 @@ buildMultiAssayExperiment <-
         "miRNASeqGene", "CNASNP", "CNVSNP", "CNASeq", "CNACGH",
         "Methylation", "mRNAArray", "miRNAArray", "RPPAArray",
         "Mutation", "GISTIC")
-
     dataType <- match.arg(dataType, targets, several.ok = TRUE)
     names(dataType) <- dataType
+
+    metas <- c("colData", "sampleMap", "metadata")
+    includes <- match.arg(include, metas, several.ok = TRUE)
+    names(includes) <- includes
 
     ## Download raw data if not already serialized
     saveRTCGAdata(runDate, TCGAcode, dataType = dataType,
@@ -74,6 +82,7 @@ buildMultiAssayExperiment <-
     mustNames <- paste0(TCGAcode, "_",
         c("colData", "sampleMap", "metadata"), "-", runDate)
     names(mustData) <- mustNames
+    mustData <- mustData[grepl(paste(include, sep = "|"), names(mustData))]
 
     # add colData, sampleMap, and metadata to ExperimentList
     if (length(dataFull[["experiments"]]))
