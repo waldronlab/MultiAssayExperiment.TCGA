@@ -15,6 +15,7 @@ library(BiocParallel)
 params <- MulticoreParam(
     workers = 34, stop.on.error = FALSE, progressbar = TRUE
 )
+TCGAcodes <- getDiseaseCodes()
 ```
 
 # Create all directories needed in repository
@@ -26,7 +27,6 @@ dataDirectories(create = TRUE)
 ## Download all available resources
 
 ```{r}
-TCGAcodes <- getDiseaseCodes()
 getClinicalData(TCGAcodes = TCGAcodes, nworkers = 34)
 downloadExtraClinical(TCGAcodes = TCGAcodes)
 ```

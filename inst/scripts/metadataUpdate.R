@@ -4,8 +4,11 @@ setwd(repodir)
 
 stopifnot(identical(getwd(), repodir))
 
+version <- "2.1.0"
 metas <- list.files(
-    "data/bits/v2.0.1", pattern = "metadata.csv", recursive = TRUE, full.names = TRUE
+    paste0("data/bits/v", version),
+    pattern = "metadata.csv",
+    recursive = TRUE, full.names = TRUE
 )
 
 do.call(rbind, lapply(metas, read.csv))
