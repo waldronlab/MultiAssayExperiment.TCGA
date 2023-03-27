@@ -4,22 +4,25 @@
 \name{curationAvailable}
 \alias{curationAvailable}
 \title{TCGA disease codes that have been curated}
-\format{An object of class \code{character} of length 19.}
+\format{
+An named `character` vector of length 19
+}
 \source{
-https://github.com/waldronlab/multiassayexperiment-tcga
+https://github.com/waldronlab/MultiAssayExperiment.TCGA
 }
 \usage{
-curationAvailable
+data("curationAvailable")
 }
 \description{
-A character vector indication what TCGA cancer codes have associated
-curation data obtained from publications.
+A character vector indication what TCGA cancer codes have
+  associated curation data obtained from publications.
 }
 \examples{
-data('curationAvailable')
+
+data("curationAvailable")
 
 }
 \author{
-Marcel Ramos \email{marcel.ramos@roswellpark.org}
+Marcel Ramos <marcel.ramos@roswellpark.org>
 }
 \keyword{data}
