@@ -1,6 +1,6 @@
 Package: MultiAssayExperiment.TCGA
 Title: Pipeline for the integration of multi-omics experiments in Bioconductor
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person("Marcel", "Ramos", email = "marcel.ramos@roswellpark.org",
         role = c("aut", "cre")),
