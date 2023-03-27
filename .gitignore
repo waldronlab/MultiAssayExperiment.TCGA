@@ -20,7 +20,7 @@ data/*
 *.orig
 
 # Don't ignore
-!curationAvailable.Rda
+!data/curationAvailable.Rda
 !clinicalColnames.rds
 
 data-raw/.httr-oauth
