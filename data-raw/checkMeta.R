@@ -4,13 +4,13 @@ TCGAcodes <- getDiseaseCodes()
 dirList <- dataDirectories()
 
 checkMeta <- function(diseaseCode) {
-    listDirs <- dirList[c("basicClinical", "enhancedClinical",
-                          "mergedClinical")]
+    listDirs <-
+        dirList[c("basicClinical", "enhancedClinical", "mergedClinical")]
     resolvePaths <- lapply(listDirs, function(directory) {
-                               hits <- list.files(directory, full.names = TRUE,
-                                                  pattern = paste0("^", diseaseCode))
-                               hits[!grepl("dropped.rds$", basename(hits))]
-                          })
+        hits <-
+            list.files(directory, full.names = TRUE, pattern = diseaseCode)
+        hits[!grepl("dropped.rds$", basename(hits))]
+    })
     locations <- unlist(resolvePaths)
     names(locations) <- c("basic", "enhanced", "merged", "reduced")
     metadata <- lapply(locations, function(fileLocation) {

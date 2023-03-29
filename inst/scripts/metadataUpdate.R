@@ -1,6 +1,6 @@
-message(getwd())
 repodir <- file.path(Sys.getenv("HOME"), "gh/MultiAssayExperiment.TCGA")
 setwd(repodir)
+message(getwd())
 
 stopifnot(identical(getwd(), repodir))
 
