@@ -31,6 +31,6 @@ library(MultiAssayExperiment.TCGA)
 
 bplapply(cancerCodes, function(cancer) {
 
-    buildMultiAssayExperiments(TCGAcode = cancer)
+    buildMultiAssayExperiment(TCGAcode = cancer)
 
 })
