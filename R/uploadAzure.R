@@ -44,6 +44,8 @@ uploadAzure <- function(
     dfiles <- gsub(paste0(dataFolder, .Platform$file.sep), "", files)
     destfiles <- file.path(package, dfiles)
     message("Uploading to ", file.path(container, package), " folder")
+    old_opt <- options(azure_storage_progress_bar = TRUE)
+    on.exit(options(old_opt))
 
     stopifnot(
         identical(length(files), length(destfiles)),
