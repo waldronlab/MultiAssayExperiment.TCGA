@@ -41,6 +41,7 @@ saveRTCGAdata <- function(runDate = "20160128", diseaseCode,
                 args <- list(runDate, TRUE)
                 names(args) <- c(dateType, dataType)
             }
+            message("Obtaining data with RTCGAToolbox::getFirehoseData...")
                 dataPiece <- do.call(
                     RTCGAToolbox::getFirehoseData,
                     args = c(
