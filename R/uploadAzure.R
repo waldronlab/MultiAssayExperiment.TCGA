@@ -30,8 +30,8 @@ uploadAzure <- function(
     sas, url = .BIOCONDUCTOR_BLOB_STORE_URL, container, files, dataFolder,
     version, file_ext, package
 ) {
-    ep <- storage_endpoint(url, sas = sas)
-    stor <- storage_container(ep, container)
+    ep <- AzureStor::storage_endpoint(url, sas = sas)
+    stor <- AzureStor::storage_container(ep, container)
     if (missing(files)) {
         src_dir <- file.path(dataFolder, version)
         files <- list.files(
@@ -43,11 +43,12 @@ uploadAzure <- function(
 
     up_files <- gsub(paste0(dataFolder, .Platform$file.sep), "", files)
     dest <- file.path(package, up_files)
+    message("Uploading to ", file.path(container, package), " folder")
 
     stopifnot(
         identical(length(files), length(dest)),
         all(startsWith(dest, package))
     )
 
-    storage_multiupload(container, src=src, dest=dest)
+    AzureStor::storage_multiupload(container = stor, src = src, dest = dest)
 }
