@@ -70,6 +70,7 @@ res <- bptry({
             dataType = c("miRNASeqGene", "RNASeq2GeneNorm"),
             version = "2.1.0",
             upload = FALSE,
+            uploadFolder = "staginghub",
             update = TRUE,
             force = TRUE,
             include = "metadata"

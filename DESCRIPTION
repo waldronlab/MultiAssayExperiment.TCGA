@@ -21,6 +21,7 @@ Depends:
     magrittr
 Imports:
     AnnotationHubData,
+    AzureStor,
     BiocParallel,
     Biobase,
     data.table,

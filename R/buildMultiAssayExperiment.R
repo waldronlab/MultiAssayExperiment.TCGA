@@ -6,26 +6,29 @@
 #'
 #' @inheritParams loadData
 #'
-#' @param TCGAcodes character(1) A single TCGA cancer code
+#' @param TCGAcodes `character(1)` A single TCGA cancer code
 #'
-#' @param analyzeDate The GDAC Firehose analysis run date, only '20160128' is
-#' supported
+#' @param analyzeDate `character(1)` The GDAC Firehose analysis run date, only
+#'   '20160128' is supported
 #'
-#' @param version character(1) A version string for versioning data runs
-#' (such as "1.0.0")
+#' @param version `character(1)` A version string for versioning data runs (such
+#'   as "1.0.0")
 #'
-#' @param outDataDir The single string indicating piecewise data product save
-#' location
+#' @param outDataDir `character(1)` The single string indicating piecewise data
+#'   product save location
 #'
-#' @param upload logical (default FALSE) Whether to save data products to the
-#' cloud infrastructure, namely AWS S3 ExperimentHub bucket
+#' @param upload `logical(1)` (default FALSE) Whether to save data products to
+#'   the cloud infrastructure, namely the Azure Blob Storage location.
 #'
-#' @param update logical (default TRUE) Whether to update the metadata data
-#' from the data pooled by the function
+#' @param uploadFolder `character(1)` The folder where to upload the data
+#'   (default "staginghub")
 #'
-#' @param include character() A vector of metadata names to include. It must
-#' include any or all of "colData", "sampleMap", or "metadata". This allows
-#' to only publish changed data.
+#' @param update `logical(1)` (default TRUE) Whether to update the metadata data
+#'   from the data pooled by the function
+#'
+#' @param include `character()` A vector of metadata names to include. It must
+#'   include any or all of "colData", "sampleMap", or "metadata". This allows to
+#'   only publish changed data.
 #'
 #' @export
 buildMultiAssayExperiment <-
@@ -36,7 +39,7 @@ buildMultiAssayExperiment <-
         "mRNAArray", "miRNAArray", "RPPAArray", "Mutation", "GISTIC"),
     runDate = "20160128", analyzeDate = "20160128", version,
     serialDir = "data/raw", outDataDir = "data/bits", mapDir = "data/maps",
-    upload = FALSE, update = TRUE, force = FALSE,
+    upload = FALSE, uploadFolder, update = TRUE, force = FALSE,
     include = c("colData", "sampleMap", "metadata")
 ) {
     if (missing(TCGAcode))
@@ -92,7 +95,7 @@ buildMultiAssayExperiment <-
     # save rda files and upload them to S3
     saveNupload(
         dataList = allObjects, cancer = TCGAcode, directory = outDataDir,
-        version = version, upload = upload
+        version = version, upload = upload, container = uploadFolder
     )
 
     # update MAEOinfo.csv

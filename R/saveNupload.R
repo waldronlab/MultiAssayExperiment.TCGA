@@ -16,8 +16,8 @@
 #' ExperimentHub for it to work.
 #'
 #' @inheritParams updateInfo
-#'
-#' @inheritParams buildMultiAssayExperiments
+#' @inheritParams uploadAzure
+#' @inheritParams buildMultiAssayExperiment
 #'
 #' @param directory The file location for saving serialized data pieces
 #'
@@ -32,19 +32,20 @@
 #' @export
 saveNupload <-
     function(
-        dataList, cancer, directory, version, upload, fileExt = ".rda"
+        dataList, cancer, directory, version, upload,
+        fileExt = ".rda", container
     )
 {
     if (missing(version))
         stop("Provide a valid version folder for current run")
 
     version <- paste0("v", version)
-    directory <- file.path(directory, version)
-    cancerSubdir <- file.path(directory, cancer)
+    cancerSubdir <- file.path(directory, version, cancer)
 
     if (!dir.exists(cancerSubdir))
         dir.create(cancerSubdir, recursive = TRUE)
 
+    file_ext <- gsub("\\.", "", fileExt)
     dataNames <- names(dataList)
     stopifnot(!is.null(dataNames))
 
@@ -59,10 +60,14 @@ saveNupload <-
         }
 
         if (upload)
-            AnnotationHubData:::upload_to_S3(
-                file = fnames,
-                remotename = basename(fnames),
-                bucket = file.path("experimenthub/curatedTCGAData", version)
+            uploadAzure(
+                sas = .getSASToken(),
+                container = container,
+                files = fnames,
+                version = version,
+                dataFolder = directory,
+                file_ext = file_ext,
+                package = "curatedTCGAData"
             )
     }
 }
@@ -71,3 +76,11 @@ saveNupload <-
 ## compare sync'd resources with created ones and only send off only those
 ## that are new based on md5sum
 
+.getSASToken <- function() {
+    opt <- Sys.getenv("BIOCONDUCTOR_SAS_TOKEN")
+    opt <- getOption("BIOCONDUCTOR_SAS_TOKEN", opt)
+    if (!nzchar(opt))
+        stop("Set a 'BIOCONDUCTOR_SAS_TOKEN' option or environment variable")
+
+    opt
+}

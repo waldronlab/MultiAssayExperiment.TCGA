@@ -4,7 +4,15 @@
 \alias{saveNupload}
 \title{A function to save serialized objects and upload to ExperimentHub}
 \usage{
-saveNupload(dataList, cancer, directory, version, upload, fileExt = ".rda")
+saveNupload(
+  dataList,
+  cancer,
+  directory,
+  version,
+  upload,
+  fileExt = ".rda",
+  container
+)
 }
 \arguments{
 \item{dataList}{A List of experiment data for a MultiAssayExperiment}
@@ -21,6 +29,8 @@ saveNupload(dataList, cancer, directory, version, upload, fileExt = ".rda")
 \item{fileExt}{character(1) The character pattern for matching files in
 the directory location for upload (excludes 'Methylation' datasets which
 are handled separately)}
+
+\item{container}{`character(1)` The name of the container on Azure}
 }
 \value{
 Function saves and uploads data to the ExperimentHub AWS S3 bucket

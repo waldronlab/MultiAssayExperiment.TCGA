@@ -16,6 +16,7 @@ buildMultiAssayExperiment(
   outDataDir = "data/bits",
   mapDir = "data/maps",
   upload = FALSE,
+  uploadFolder,
   update = TRUE,
   force = FALSE,
   include = c("colData", "sampleMap", "metadata")
@@ -27,35 +28,38 @@ buildMultiAssayExperiment(
 \item{runDate}{A single string indicating the Firehose run date, usually
 '20160128'}
 
-\item{analyzeDate}{The GDAC Firehose analysis run date, only '20160128' is
-supported}
+\item{analyzeDate}{`character(1)` The GDAC Firehose analysis run date, only
+'20160128' is supported}
 
-\item{version}{character(1) A version string for versioning data runs
-(such as "1.0.0")}
+\item{version}{`character(1)` A version string for versioning data runs (such
+as "1.0.0")}
 
 \item{serialDir}{The directory corresponding to the serialized data from
 RTCGAToolbox}
 
-\item{outDataDir}{The single string indicating piecewise data product save
-location}
+\item{outDataDir}{`character(1)` The single string indicating piecewise data
+product save location}
 
 \item{mapDir}{A single string indicating the directory where sampleMaps
 are stored from `saveMapData`}
 
-\item{upload}{logical (default FALSE) Whether to save data products to the
-cloud infrastructure, namely AWS S3 ExperimentHub bucket}
+\item{upload}{`logical(1)` (default FALSE) Whether to save data products to
+the cloud infrastructure, namely the Azure Blob Storage location.}
 
-\item{update}{logical (default TRUE) Whether to update the metadata data
+\item{uploadFolder}{`character(1)` The folder where to upload the data
+(default "staginghub")}
+
+\item{update}{`logical(1)` (default TRUE) Whether to update the metadata data
 from the data pooled by the function}
 
 \item{force}{(logical) Whether to resave all sample maps to the map
 directory}
 
-\item{include}{character() A vector of metadata names to include. It must
-include any or all of "colData", "sampleMap", or "metadata". This allows
-to only publish changed data.}
+\item{include}{`character()` A vector of metadata names to include. It must
+include any or all of "colData", "sampleMap", or "metadata". This allows to
+only publish changed data.}
 
-\item{TCGAcodes}{character(1) A single TCGA cancer code}
+\item{TCGAcodes}{`character(1)` A single TCGA cancer code}
 }
 \description{
 This is the main function of the package. It brings together all of the
