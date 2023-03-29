@@ -13,7 +13,8 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 library(MultiAssayExperiment.TCGA)
 library(BiocParallel)
 params <- MulticoreParam(
-    workers = 34, stop.on.error = FALSE, progressbar = TRUE
+    workers = 34, stop.on.error = FALSE, progressbar = TRUE,
+    jobname = "MAEPipeline"
 )
 TCGAcodes <- getDiseaseCodes()
 ```
