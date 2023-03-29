@@ -46,9 +46,11 @@ uploadAzure <- function(
     message("Uploading to ", file.path(container, package), " folder")
 
     stopifnot(
-        identical(length(files), length(dest)),
+        identical(length(up_files), length(dest)),
         all(startsWith(dest, package))
     )
 
-    AzureStor::storage_multiupload(container = stor, src = src, dest = dest)
+    AzureStor::storage_multiupload(
+        container = stor, src = up_files, dest = dest
+    )
 }
