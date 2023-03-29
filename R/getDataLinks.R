@@ -8,6 +8,7 @@ getDataLinks <- function(TCGAcode, data_date, dataTypes) {
             args = c(
                 datatype,
                 dataset = TCGAcode,
+                RNAseq2Norm = "RSEM_normalized_log2",
                 data_date = data_date
             )
         )
