@@ -66,7 +66,7 @@ res <- bptry({
     bplapply(X = TCGAcodes, FUN = function(cancer) {
         buildMultiAssayExperiment(
             cancer,
-            dataType = "miRNASeqGene",
+            dataType = c("miRNASeqGene", "RNASeq2GeneNorm"),
             version = "2.1.0",
             upload = FALSE,
             update = TRUE,
