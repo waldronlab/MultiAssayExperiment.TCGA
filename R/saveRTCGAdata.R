@@ -54,6 +54,8 @@ saveRTCGAdata <- function(runDate = "20160128", diseaseCode,
                         args
                     )
                 )
+                if (identical(dataType, "miRNASeqGene"))
+                    dataPiece@miRNASeqGene <- log2(dataPiece@miRNASeqGene)
                 saveRDS(dataPiece, file = rdsPath, compress = "bzip2")
                 message(basename(rdsPath), " saved in ", dirname(rdsPath))
         } else { message(diseaseCode, "_", dataType, " data exists") }
