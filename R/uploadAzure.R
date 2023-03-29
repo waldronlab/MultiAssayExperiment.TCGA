@@ -41,16 +41,17 @@ uploadAzure <- function(
     if (!all(startsWith(files, dataFolder)))
         stop("'files' must start with the 'dataFolder' name")
 
-    up_files <- gsub(paste0(dataFolder, .Platform$file.sep), "", files)
-    dest <- file.path(package, up_files)
+    dfiles <- gsub(paste0(dataFolder, .Platform$file.sep), "", files)
+    destfiles <- file.path(package, dfiles)
     message("Uploading to ", file.path(container, package), " folder")
 
     stopifnot(
-        identical(length(up_files), length(dest)),
-        all(startsWith(dest, package))
+        identical(length(files), length(destfiles)),
+        all(startsWith(destfiles, package)),
+        all(file.exists(files))
     )
 
     AzureStor::storage_multiupload(
-        container = stor, src = up_files, dest = dest
+        container = stor, src = files, dest = destfiles
     )
 }
