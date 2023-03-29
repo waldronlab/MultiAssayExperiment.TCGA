@@ -46,6 +46,8 @@ saveRTCGAdata <- function(runDate = "20160128", diseaseCode,
                     args = c(
                         list(
                             dataset = diseaseCode,
+                            miRNASeqGeneType = "reads_per_million_miRNA_mapped",
+                            RNAseq2Norm = "RSEM_normalized_log2",
                             clinical = FALSE, destdir = rawDir,
                             forceDownload = force, fileSizeLimit = Inf
                         ),
