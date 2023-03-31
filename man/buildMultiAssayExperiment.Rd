@@ -19,6 +19,7 @@ buildMultiAssayExperiment(
   uploadFolder,
   update = TRUE,
   force = FALSE,
+  forceDownload = FALSE,
   include = c("colData", "sampleMap", "metadata")
 )
 }
@@ -54,6 +55,9 @@ from the data pooled by the function}
 
 \item{force}{(logical) Whether to resave all sample maps to the map
 directory}
+
+\item{forceDownload}{`logical(1)` Whether to re-download existing resources
+that were previously saved as Rds files in `saveRTCGAdata` (default FALSE)}
 
 \item{include}{`character()` A vector of metadata names to include. It must
 include any or all of "colData", "sampleMap", or "metadata". This allows to

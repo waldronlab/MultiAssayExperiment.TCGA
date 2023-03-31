@@ -26,6 +26,9 @@
 #' @param update `logical(1)` (default TRUE) Whether to update the metadata data
 #'   from the data pooled by the function
 #'
+#' @param forceDownload `logical(1)` Whether to re-download existing resources
+#'   that were previously saved as Rds files in `saveRTCGAdata` (default FALSE)
+#'
 #' @param include `character()` A vector of metadata names to include. It must
 #'   include any or all of "colData", "sampleMap", or "metadata". This allows to
 #'   only publish changed data.
@@ -39,7 +42,8 @@ buildMultiAssayExperiment <-
         "mRNAArray", "miRNAArray", "RPPAArray", "Mutation", "GISTIC"),
     runDate = "20160128", analyzeDate = "20160128", version,
     serialDir = "data/raw", outDataDir = "data/bits", mapDir = "data/maps",
-    upload = FALSE, uploadFolder, update = TRUE, force = FALSE,
+    upload = FALSE, uploadFolder, update = TRUE,
+    force = FALSE, forceDownload = FALSE,
     include = c("colData", "sampleMap", "metadata")
 ) {
     if (missing(TCGAcode))
@@ -64,7 +68,7 @@ buildMultiAssayExperiment <-
     ## Download raw data if not already serialized
     saveRTCGAdata(runDate, TCGAcode, dataType = dataType,
         analyzeDate = analyzeDate, directory = serialDir,
-        force = force)
+        force = forceDownload)
     dataFull <- loadData(cancer = TCGAcode, dataType = dataType,
         runDate = runDate, serialDir = serialDir, mapDir = mapDir,
         force = force)
