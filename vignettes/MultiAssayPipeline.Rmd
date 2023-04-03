@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 ```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
 library(MultiAssayExperiment.TCGA)
 library(BiocParallel)
+Sys.setenv(R_DEFAULT_INTERNET_TIMEOUT = 300)
 params <- MulticoreParam(
     workers = 34, stop.on.error = FALSE, progressbar = TRUE,
     jobname = "MAEPipeline"
@@ -69,13 +70,32 @@ res <- bptry({
             cancer,
             dataType = c("miRNASeqGene", "RNASeq2GeneNorm"),
             version = "2.1.0",
-            upload = FALSE,
+            upload = TRUE,
             uploadFolder = "staginghub",
             update = TRUE,
+            forceDownload = TRUE,
             force = TRUE,
             include = "metadata"
         )
     }, BPPARAM = params)
+})
+```
+
+```{r}
+res <- bptry({
+    bplapply(X = TCGAcodes, FUN = function(cancer) {
+        buildMultiAssayExperiment(
+            cancer,
+            dataType = c("miRNASeqGene", "RNASeq2GeneNorm"),
+            version = "2.1.0",
+            upload = TRUE,
+            uploadFolder = "staginghub",
+            update = TRUE,
+            forceDownload = TRUE,
+            force = TRUE,
+            include = "metadata"
+        )
+    }, BPREDO = res, BPPARAM = params)
 })
 ```
 
