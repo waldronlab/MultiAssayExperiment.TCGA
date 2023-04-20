@@ -42,7 +42,7 @@ uploadAzure <- function(
         stop("'files' must start with the 'dataFolder' name")
 
     dfiles <- basename(files)
-    destfiles <- file.path(package, dfiles)
+    destfiles <- file.path(package, version, dfiles)
     message("Uploading to ", file.path(container, package), " folder")
     old_opt <- options(azure_storage_progress_bar = TRUE)
     on.exit(options(old_opt))
