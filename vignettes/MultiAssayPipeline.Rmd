@@ -67,7 +67,7 @@ setwd("~/gh/MultiAssayExperiment.TCGA")
 res <- bptry({
     bplapply(X = TCGAcodes, FUN = function(cancer) {
         buildMultiAssayExperiment(
-            cancer,
+            TCGAcode = cancer,
             dataType = c("miRNASeqGene", "RNASeq2GeneNorm"),
             version = "2.1.0",
             upload = TRUE,
