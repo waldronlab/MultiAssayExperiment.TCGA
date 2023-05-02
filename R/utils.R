@@ -53,13 +53,16 @@
 
 ## Download Subtype file from allsubtypes
 .getSubtypeFile <- function(diseaseCode, overwrite=TRUE) {
-    invisible(BoxSubTypes <-
-                  rdrop2::drop_dir("The Cancer Genome Atlas/Script/allsubtypes")[["path"]])
+    invisible(
+        BoxSubTypes <- rdrop2::drop_dir(
+            "The Cancer Genome Atlas/Script/allsubtypes"
+        )[["path_display"]]
+    )
     subtypePath <- dataDirectories()[["subtypePath"]]
     subtypeFile <- BoxSubTypes[grepl(paste0(diseaseCode, ".csv"),
                                      basename(BoxSubTypes), fixed = TRUE)]
-    if (rdrop2::drop_get(
-        subtypeFile, local_file = file.path(subtypePath,
+    if (rdrop2::drop_download(
+        subtypeFile, local_path = file.path(subtypePath,
         basename(subtypeFile)), overwrite = overwrite
     ))
         message("download successful")

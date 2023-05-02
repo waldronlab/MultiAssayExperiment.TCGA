@@ -5,7 +5,7 @@
 #    local_path = "subtypes_curation.txt", overwrite = TRUE)
 
 # Readlines from TXT file downloaded from Dropbox
-ST <- readLines("subtypes_curation.txt")
+ST <- readLines("data-raw/subtypes_curation.txt")
 
 # Create a list of data.frames
 subMap <- list()

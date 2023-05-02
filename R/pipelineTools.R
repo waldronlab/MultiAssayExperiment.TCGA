@@ -139,6 +139,6 @@ cleanMerged <-
 }
 
 ### Merging subtype files with clinical data
-mergeSubtypeCuration <- function(TCGAcodes) {
-    BiocParallel::bplapply(TCGAcodes, writeMergedClinical)
+mergeSubtypeCuration <- function(TCGAcodes, ...) {
+    BiocParallel::bplapply(TCGAcodes, writeMergedClinical, ...)
 }

@@ -1,6 +1,5 @@
 ## Script to check subtype data against the maps
 library(dplyr)
-source("data-raw/helpers.R")
 load("data/curationAvailable.rda")
 
 ## How to figure out which datasets don't have matching columns
