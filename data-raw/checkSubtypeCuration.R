@@ -29,7 +29,7 @@ findCorruptBarcodes <- function(diseaseCode) {
     } else {
         message(diseaseCode, " barcodes OK")
     }
-    return(dplyr::data_frame())
+    return(dplyr::tibble())
 }
 
 ## Find what curated disease don't pass the check

@@ -39,7 +39,7 @@ clinicalData <- readr::read_csv(paste0("inst/extdata/Clinical/", diseaseCode, ".
 
 rowToDataFrame <- function(DataFrame) {
   columnIndex <- seq_len(which(names(DataFrame) == "Priority")-1)
-  dplyr::data_frame(variable = as.character(DataFrame[columnIndex]),
+  dplyr::tibble(variable = as.character(DataFrame[columnIndex]),
              priority = as.character(DataFrame[-columnIndex]))
 }
 
