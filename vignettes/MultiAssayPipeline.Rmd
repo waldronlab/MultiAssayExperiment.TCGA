@@ -81,6 +81,10 @@ res <- bptry({
 })
 ```
 
+## Version 2.1.0
+
+* Includes updates to `miRNASeqGene` and `RNASeq2GeneNorm`
+
 ```{r}
 res <- bptry({
     bplapply(X = TCGAcodes, FUN = function(cancer) {
@@ -99,3 +103,22 @@ res <- bptry({
 })
 ```
 
+## Version 2.1.1
+
+* Update `colData` objects with the appropriate subtype curation data
+
+```{r}
+res <- bptry({
+    bplapply(X = c("OV", "SKCM"), FUN = function(cancer) {
+        buildMultiAssayExperiment(
+            TCGAcode = cancer,
+            dataType = NULL,
+            version = "2.1.1",
+            upload = FALSE,
+            uploadFolder = "staginghub",
+            update = TRUE,
+            include = "colData"
+        )
+    }, BPPARAM = params)
+})
+```
