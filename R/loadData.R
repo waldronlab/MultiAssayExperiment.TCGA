@@ -1,3 +1,28 @@
+.loadClinicalData <- function(cancer, runDate) {
+    clinicalPath <- file.path(
+        dataDirectories()[["mergedClinical"]],
+        paste(runDate, paste0(cancer, "_reduced.csv"), sep = "-"))
+    stopifnot(file.exists(clinicalPath))
+    clinicalData <- read.csv(clinicalPath, header=TRUE,
+        stringsAsFactors=FALSE)
+    clinicalData <- clinicalData[!duplicated(clinicalData[["patientID"]]), ]
+    rownames(clinicalData) <- clinicalData[["patientID"]]
+    clinicalData <- S4Vectors::DataFrame(clinicalData)
+    metadata(clinicalData)[["droppedColumns"]] <-
+        readRDS(file.path(
+            dataDirectories()[["mergedClinical"]],
+            paste(runDate, paste0(cancer, "_dropped.rds"), sep = "-")))
+
+    ### Add subtype maps where available
+    subtypeMapFile <- file.path(dataDirectories()[["curatedMaps"]],
+        paste0(cancer, "_subtypeMap.csv"))
+    if (file.exists(subtypeMapFile)) {
+        curatedMap <- read.csv(subtypeMapFile)
+        metadata(clinicalData)[["subtypes"]] <- curatedMap
+    }
+    clinicalData
+}
+
 #' Load and assemble MultiAssayExperiments from files
 #'
 #' loadData takes cancer, data type, and storage inputs to piece together a
@@ -19,28 +44,7 @@
 #' @export
 loadData <- function(cancer, dataType, runDate, serialDir, mapDir, force) {
     cancerFolder <- file.path(serialDir, cancer)
-
-    clinicalPath <- file.path(
-        dataDirectories()[["mergedClinical"]],
-        paste(runDate, paste0(cancer, "_reduced.csv"), sep = "-"))
-    stopifnot(file.exists(clinicalPath))
-    clinicalData <- read.csv(clinicalPath, header=TRUE,
-        stringsAsFactors=FALSE)
-    rownames(clinicalData) <- clinicalData[["patientID"]]
-    clinicalData <- S4Vectors::DataFrame(clinicalData)
-    metadata(clinicalData)[["droppedColumns"]] <-
-        readRDS(file.path(
-            dataDirectories()[["mergedClinical"]],
-            paste(runDate, paste0(cancer, "_dropped.rds"), sep = "-")))
-
-    ### Add subtype maps where available
-    subtypeMapFile <- file.path(dataDirectories()[["curatedMaps"]],
-        paste0(cancer, "_subtypeMap.csv"))
-    if (file.exists(subtypeMapFile)) {
-        curatedMap <- read.csv(subtypeMapFile)
-        metadata(clinicalData)[["subtypes"]] <- curatedMap
-    }
-
+    clinicalData <- .loadClinicalData(cancer = cancer, runDate = runDate)
     dataFiles <- list.files(cancerFolder, full.names = TRUE,
         pattern = "rds$")
 

@@ -53,60 +53,73 @@ buildMultiAssayExperiment <-
             "\nProcessing ", TCGAcode, " : )\n",
             "\n######\n")
 
+    metas <- c("colData", "sampleMap", "metadata")
+    includes <- match.arg(include, metas, several.ok = TRUE)
+    names(includes) <- includes
     ## slotNames in FirehoseData RTCGAToolbox class
     targets <- c("RNASeqGene", "RNASeq2Gene", "RNASeq2GeneNorm",
         "miRNASeqGene", "CNASNP", "CNVSNP", "CNASeq", "CNACGH",
         "Methylation", "mRNAArray", "miRNAArray", "RPPAArray",
         "Mutation", "GISTIC")
-    dataType <- match.arg(dataType, targets, several.ok = TRUE)
-    names(dataType) <- dataType
-
-    metas <- c("colData", "sampleMap", "metadata")
-    includes <- match.arg(include, metas, several.ok = TRUE)
-    names(includes) <- includes
-
-    ## Download raw data if not already serialized
-    saveRTCGAdata(runDate, TCGAcode, dataType = dataType,
-        analyzeDate = analyzeDate, directory = serialDir,
-        force = forceDownload)
-    dataFull <- loadData(cancer = TCGAcode, dataType = dataType,
-        runDate = runDate, serialDir = serialDir, mapDir = mapDir,
-        force = force)
     # builddate
     buildDate <- Sys.time()
-    # dataLinks
-    dataLinks <-
-        getDataLinks(TCGAcode, data_date = runDate, dataTypes = targets)
-    # metadata
-    metadata <- list(
-        buildDate, TCGAcode, runDate, analyzeDate, dataLinks,
-        devtools::session_info()
-    )
-    names(metadata) <- c("buildDate", "cancerCode", "runDate",
-        "analyzeDate", "dataLinks", "session_info")
 
-    mustData <- list(dataFull[["colData"]], dataFull[["sampleMap"]],
-        metadata)
-    mustNames <- paste0(TCGAcode, "_",
-        c("colData", "sampleMap", "metadata"), "-", runDate)
+    if (!is.null(dataType)) {
+        dataType <- match.arg(dataType, targets, several.ok = TRUE)
+        names(dataType) <- dataType
+
+        ## Download raw data if not already serialized
+        saveRTCGAdata(
+            runDate, TCGAcode, dataType = dataType, analyzeDate = analyzeDate,
+            directory = serialDir, force = forceDownload
+        )
+        dataFull <- loadData(
+            cancer = TCGAcode, dataType = dataType, runDate = runDate,
+            serialDir = serialDir, mapDir = mapDir, force = force
+        )
+        # dataLinks
+        dataLinks <-
+            getDataLinks(TCGAcode, data_date = runDate, dataTypes = targets)
+        # metadata
+        metadata <- list(
+            buildDate, TCGAcode, runDate, analyzeDate, dataLinks,
+            devtools::session_info()
+        )
+        names(metadata) <- c("buildDate", "cancerCode", "runDate",
+            "analyzeDate", "dataLinks", "session_info")
+    } else {
+        dataFull <- list(
+            colData = .loadClinicalData(cancer = TCGAcode, runDate = runDate)
+        )
+        metadata <- list(
+            buildDate, TCGAcode, runDate, analyzeDate, devtools::session_info()
+        )
+        names(metadata) <- c("buildDate", "cancerCode", "runDate",
+            "analyzeDate", "session_info")
+    }
+
+    mustData <- list(dataFull[["colData"]], dataFull[["sampleMap"]], metadata)
+    mustNames <- paste0(
+        TCGAcode, "_", c("colData", "sampleMap", "metadata"), "-", runDate
+    )
     names(mustData) <- mustNames
     mustData <- mustData[grepl(paste(include, sep = "|"), names(mustData))]
 
     # add colData, sampleMap, and metadata to ExperimentList
     if (length(dataFull[["experiments"]]))
-        allObjects <- c(as(dataFull[["experiments"]], "list"), mustData)
+        mustData <- c(as(dataFull[["experiments"]], "list"), mustData)
 
     # save rda files and upload them to S3
     saveNupload(
-        dataList = allObjects, cancer = TCGAcode, directory = outDataDir,
+        dataList = mustData, cancer = TCGAcode, directory = outDataDir,
         version = version, upload = upload, container = uploadFolder
     )
 
     # update MAEOinfo.csv
     if (update)
         updateInfo(
-            dataList = allObjects, cancer = TCGAcode,
+            dataList = mustData, cancer = TCGAcode,
             folderPath = outDataDir, version = version
         )
-    allObjects
+    mustData
 }
