@@ -93,7 +93,7 @@ writeMergedClinical <-
                           paste0(diseaseCode, "_merged.csv"), sep = "-"))
     if (!file.exists(fileName) || force) {
         mergedData <- .mergeSubtypeClinical(diseaseCode, runDate = runDate)
-        write_csv(x = mergedData, path = fileName)
+        readr::write_csv(x = mergedData, path = fileName)
         message(diseaseCode, " curation merged to clincial data!\n",
         "See: ", fileName)
     }
@@ -129,7 +129,7 @@ cleanMerged <-
                     ))
                 )
             }
-            write_csv(fullClinical[, !NACols], path = fileName)
+            readr::write_csv(fullClinical[, !NACols], path = fileName)
             message(diseaseCode, " saved at ", fileName)
         } else {
             message(diseaseCode, "_reduced.csv already available!")
