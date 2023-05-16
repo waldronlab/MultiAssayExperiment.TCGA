@@ -196,6 +196,8 @@
     if (diseaseCode %in% curationAvailable) {
         subtypeCuration <- .readSubtypeData(diseaseCode)
         BarcodeColName <- .findBarcodeCol(subtypeCuration)
+        barcodes <- RTCGAToolbox:::.stdIDs(subtypeCuration[[BarcodeColName]])
+        subtypeCuration[[BarcodeColName]] <- barcodes
         subtypeCuration[, BarcodeColName] <-
             TCGAutils::TCGAbarcode(subtypeCuration[[BarcodeColName]])
         clinicalData <- merge(clinicalData, subtypeCuration,
