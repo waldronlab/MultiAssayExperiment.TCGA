@@ -16,7 +16,7 @@ processClinicalFirehose <-
         TCGAclin <- cbind(patientID = stdBarcodes, TCGAclin)
         newFile <- file.path(dirList[["basicClinical"]],
             paste(runDate, paste0(diseaseCode, ".csv"), sep = "-"))
-        readr::write_csv(TCGAclin, path = newFile)
+        readr::write_csv(TCGAclin, file = newFile)
     } else {
         message(fileName, " already downloaded and processed")
     }
@@ -93,7 +93,7 @@ writeMergedClinical <-
                           paste0(diseaseCode, "_merged.csv"), sep = "-"))
     if (!file.exists(fileName) || force) {
         mergedData <- .mergeSubtypeClinical(diseaseCode, runDate = runDate)
-        readr::write_csv(x = mergedData, path = fileName)
+        readr::write_csv(x = mergedData, file = fileName)
         message(diseaseCode, " curation merged to clincial data!\n",
         "See: ", fileName)
     }
